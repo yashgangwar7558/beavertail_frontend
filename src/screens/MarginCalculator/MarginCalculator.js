@@ -7,6 +7,8 @@ import RNPrint from 'react-native-print';
 import { AuthContext } from '../../context/AuthContext.js'
 import Header from '../../components/global/Header/index.js';
 import client from '../../utils/ApiConfig'
+import { DatePicker } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
 
 const MarginCalculator = () => {
     const { userInfo, isLoading, logout } = useContext(AuthContext);
@@ -14,12 +16,19 @@ const MarginCalculator = () => {
     const [recipeWiseSales, setRecipeWiseSales] = useState([]);
     const [expandedTypes, setExpandedTypes] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const today = dayjs();
 
     const getRecipesSalesData = async () => {
         try {
             setLoading(true)
-            const user = { userId: userInfo.user.userId };
-            const result = await client.post('/get-recipe-sales-info', user, {
+            const data = {
+                userId: userInfo.user.userId,
+                startDate: startDate,
+                endDate: endDate,
+            };
+            const result = await client.post('/get-recipe-sales-info', data, {
                 headers: { 'Content-Type': 'application/json' },
             })
             setTypeWiseSales(result.data.allTypesSalesDataArray)
@@ -32,7 +41,17 @@ const MarginCalculator = () => {
 
     useEffect(() => {
         getRecipesSalesData();
-    }, []);
+    }, [startDate, endDate]);
+
+    const handleStartDateChange = (date) => {
+        setStartDate(date.format('YYYY-MM-DD'));
+        console.log(date.format('YYYY-MM-DD'));
+    };
+
+    const handleEndDateChange = (date) => {
+        setEndDate(date.format('YYYY-MM-DD'));
+        console.log(date.format('YYYY-MM-DD'));
+    };
 
     const handleTypesToggle = (typeName) => {
         setExpandedTypes((prevExpanded) =>
@@ -71,16 +90,25 @@ const MarginCalculator = () => {
             <View style={styles.container}>
                 <View style={styles.tableNav}>
                     <View style={styles.leftTableButtons}>
-                        <Icon.Button
-                            style={styles.tableNavBtnMidBlue}
-                            name="calendar"
-                            backgroundColor="transparent"
-                            underlayColor="transparent"
-                            iconStyle={{ fontSize: 22, paddingHorizontal: 5 }}
-                            color={"white"}
-                        >
-                            <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>June 26, 2019 - July 24, 2019</Text>
-                        </Icon.Button>
+                        <DatePicker
+                            label="From"
+                            defaultValue={today}
+                            disableFuture
+                            value={startDate}
+                            onChange={handleStartDateChange}
+                            formatDensity="spacious"
+                            slotProps={{ textField: { size: 'small' } }}
+                        />
+                        <Text>  </Text>
+                        <DatePicker
+                            label="To"
+                            defaultValue={today}
+                            disableFuture
+                            value={endDate}
+                            onChange={handleEndDateChange}
+                            formatDensity="spacious"
+                            slotProps={{ textField: { size: 'small' } }}
+                        />
                     </View>
                     <View style={styles.rightTableButtons}>
                         <Icon.Button

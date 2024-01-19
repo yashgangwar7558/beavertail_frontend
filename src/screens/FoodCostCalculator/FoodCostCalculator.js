@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Image, ActivityIndicator, TextInput } from 'react-native';
 import { Button, DataTable } from 'react-native-paper';
-import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import RNPrint from 'react-native-print';
 import { AuthContext } from '../../context/AuthContext.js'
@@ -9,6 +8,7 @@ import Header from '../../components/global/Header/index.js';
 import client from '../../utils/ApiConfig'
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
+import { TextField } from '@mui/material';
 
 const FoodCostCalculator = () => {
     const { userInfo, isLoading, logout } = useContext(AuthContext);
@@ -18,14 +18,15 @@ const FoodCostCalculator = () => {
     const [loading, setLoading] = useState(false);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+    const today = dayjs();
 
     const getRecipesSalesData = async () => {
         try {
             setLoading(true)
             const data = {
                 userId: userInfo.user.userId,
-                startDate: startDate, 
-                endDate: endDate,     
+                startDate: startDate,
+                endDate: endDate,
             };
             console.log(data);
             const result = await client.post('/get-recipe-sales-info', data, {
@@ -41,16 +42,16 @@ const FoodCostCalculator = () => {
 
     useEffect(() => {
         getRecipesSalesData();
-    }, []);
+    }, [startDate, endDate]);
 
     const handleStartDateChange = (date) => {
-        setStartDate(date);
-        console.log(date);
+        setStartDate(date.format('YYYY-MM-DD'));
+        console.log(date.format('YYYY-MM-DD'));
     };
 
     const handleEndDateChange = (date) => {
-        setEndDate(date);
-        console.log(date);
+        setEndDate(date.format('YYYY-MM-DD'));
+        console.log(date.format('YYYY-MM-DD'));
     };
 
     const handleTypesToggle = (typeName) => {
@@ -91,15 +92,30 @@ const FoodCostCalculator = () => {
                     <View style={styles.leftTableButtons}>
                         <DatePicker
                             label="From"
+                            defaultValue={today}
+                            disableFuture
                             value={startDate}
                             onChange={handleStartDateChange}
-                            renderInput={(startProps) => <input {...startProps.inputProps} />}
+                            formatDensity="spacious"
+                            slotProps={{
+                                textField: {
+                                    size: 'small',
+                                }
+                            }}
                         />
+                        <Text>  </Text>
                         <DatePicker
                             label="To"
+                            defaultValue={today}
+                            disableFuture
                             value={endDate}
                             onChange={handleEndDateChange}
-                            renderInput={(endProps) => <input {...endProps.inputProps} />}
+                            formatDensity="spacious"
+                            slotProps={{
+                                textField: {
+                                    size: 'small',
+                                }
+                            }}
                         />
                     </View>
 
@@ -198,7 +214,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#e8e8e8',
     },
     leftTableButtons: {
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     rightTableButtons: {
         flexDirection: 'row'

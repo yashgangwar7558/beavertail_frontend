@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Image, ActivityIndicator, TextInput } from 'react-native';
 import { Button, DataTable } from 'react-native-paper';
-import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/FontAwesome';
 // import Icon from 'react-native-vector-icons/AntDesign';
 import RNPrint from 'react-native-print';

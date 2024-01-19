@@ -1,17 +1,25 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Image, ActivityIndicator, TextInput } from 'react-native';
 import { Button, DataTable } from 'react-native-paper';
+import LoadingScreen from '../../components/LoadingScreen';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import RNPrint from 'react-native-print';
 import { AuthContext } from '../../context/AuthContext.js'
 import Header from '../../components/global/Header/index.js';
 import client from '../../utils/ApiConfig'
+import { useDropzone } from 'react-dropzone';
+import Box from '@mui/material/Box';
+import LinearProgress from '@mui/material/LinearProgress';
 
 const InvoiceTable = () => {
     const { userInfo, isLoading, logout } = useContext(AuthContext);
     const [invoices, setInvoices] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [loadingScreen, setLoadingScreen] = useState(false);
+    const [invoiceFiles, setInvoiceFiles] = useState(null)
+    const [selectedInvoice, setSelectedInvoice] = useState(null);
+    const [openModal, setOpenModal] = useState(false)
 
     const getInvoices = async () => {
         try {
@@ -32,6 +40,68 @@ const InvoiceTable = () => {
         getInvoices();
     }, []);
 
+    const onDrop = (acceptedFiles) => {
+        setInvoiceFiles(acceptedFiles);
+    };
+
+    const { getRootProps, getInputProps } = useDropzone({
+        onDrop,
+        accept: 'image/jpeg, image/png, application/pdf',
+    });
+
+    const handleAddInvoice = async () => {
+        const data = new FormData();
+        data.append('userId', userInfo.user.userId);
+        let result
+        if (invoiceFiles) {
+            setLoadingScreen(true)
+            for (const file of invoiceFiles) {
+                data.append('invoiceFiles', file);
+            }
+
+            result = await client.post('/process-invoice', data, {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                },
+            })
+        } else {
+            alert('No invoices added!')
+        }
+
+        console.log(result.data);
+
+        if (result.data.success == true) {
+            setLoadingScreen(false)
+            setOpenModal(false)
+            setInvoiceFiles(null)
+            getInvoices()
+        } else {
+            alert(result.data.message)
+            setInvoiceFiles(null)
+            setLoadingScreen(false)
+        }
+    }
+
+    const openInvoiceFile = (fileUrl) => {
+        console.log(fileUrl);
+        window.open(fileUrl, '_blank')
+    }
+
+
+
+    const handleInvoiceClick = (invoice) => {
+        setSelectedInvoice(invoice);
+    };
+
+    const closeInvoiceDetails = () => {
+        setSelectedInvoice(null);
+    };
+
+    const closeModal = () => {
+        setOpenModal(false)
+        setInvoiceFiles(null)
+    };
+
     return (
         <View>
             <View style={styles.container}>
@@ -45,6 +115,7 @@ const InvoiceTable = () => {
                                 underlayColor="transparent"
                                 iconStyle={{ fontSize: 22, paddingHorizontal: 5 }}
                                 color={"white"}
+                                onPress={() => setOpenModal(true)}
                             >
                                 <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>Add Invoice</Text>
                             </Icon.Button>
@@ -105,47 +176,129 @@ const InvoiceTable = () => {
                 </View>
             </View>
 
-            <DataTable style={styles.dataTable}>
-                <DataTable.Header style={styles.header}>
-                    <DataTable.Title style={styles.headerCell}><span style={{fontWeight: 'bold', fontSize: '14px', color: 'black'}}>Upload Date</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{fontWeight: 'bold', fontSize: '14px', color: 'black'}}>Vendor</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{fontWeight: 'bold', fontSize: '14px', color: 'black'}}>Invoice Number</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{fontWeight: 'bold', fontSize: '14px', color: 'black'}}>Invoice Date</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{fontWeight: 'bold', fontSize: '14px', color: 'black'}}>Payment</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{fontWeight: 'bold', fontSize: '14px', color: 'black'}}>Status</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{fontWeight: 'bold', fontSize: '14px', color: 'black'}}>Total</span></DataTable.Title>
-                </DataTable.Header>
+            <View style={styles.splitScreenContainer}>
+                <View style={styles.tableContainer} horizontal={true}>
+                    <DataTable style={styles.dataTable}>
+                        <DataTable.Header style={styles.header}>
+                            <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Upload Date</span></DataTable.Title>
+                            <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Vendor</span></DataTable.Title>
+                            <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Invoice Number</span></DataTable.Title>
+                            <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Invoice Date</span></DataTable.Title>
+                            <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Payment</span></DataTable.Title>
+                            <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Status</span></DataTable.Title>
+                            <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Total</span></DataTable.Title>
+                        </DataTable.Header>
 
-                {loading ? (
-                    <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 10 }} />
-                ) : (
-                    invoices.map((item, index) => (
-                        <DataTable.Row
-                            key={index}
-                            style={index % 2 === 0 ? styles.evenRow : styles.oddRow}
-                        >
-                            <DataTable.Cell style={styles.cell}>{item.uploadDate}</DataTable.Cell>
-                            <DataTable.Cell style={styles.cell}>{item.vendor}</DataTable.Cell>
-                            <DataTable.Cell style={styles.cell}>{item.invoiceNumber}</DataTable.Cell>
-                            <DataTable.Cell style={styles.cell}>{item.invoiceDate}</DataTable.Cell>
-                            <DataTable.Cell style={styles.cell}>{item.payment}</DataTable.Cell>
-                            <DataTable.Cell style={styles.cell}>{item.status}</DataTable.Cell>
-                            <DataTable.Cell style={styles.cell}>
-                                ${item.total}
-                                <Icon.Button style={{border: '2px solid #1f82d2', borderRadius: 30, paddingHorizontal: 7, paddingVertical: 4, marginLeft: 50}}
-                                    name="paypal"
+                        {loading ? (
+                            <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 10 }} />
+                        ) : (
+                            invoices.map((item, index) => (
+                                <TouchableOpacity key={index} onPress={() => handleInvoiceClick(item)}>
+                                    <DataTable.Row
+                                        style={index % 2 === 0 ? styles.evenRow : styles.oddRow}
+                                    >
+                                        <DataTable.Cell style={styles.cell}>{item.uploadDate}</DataTable.Cell>
+                                        <DataTable.Cell style={styles.cell}>{item.vendor}</DataTable.Cell>
+                                        <DataTable.Cell style={styles.cell}>{item.invoiceNumber}</DataTable.Cell>
+                                        <DataTable.Cell style={styles.cell}>{item.invoiceDate}</DataTable.Cell>
+                                        <DataTable.Cell style={styles.cell}>{item.payment}</DataTable.Cell>
+                                        <DataTable.Cell style={styles.cell}>{item.status}</DataTable.Cell>
+                                        <DataTable.Cell style={styles.cell}>
+                                            ${item.total}
+                                            <Icon.Button style={{ border: '2px solid #1f82d2', borderRadius: 30, paddingHorizontal: 7, paddingVertical: 4, marginLeft: 50 }}
+                                                name="paypal"
+                                                backgroundColor="transparent"
+                                                underlayColor="transparent"
+                                                color={"#1f82d2"}
+                                                iconStyle={{ padding: 0, marginRight: 5, fontSize: 15 }}>
+                                                <Text style={{ color: '#1f82d2', fontSize: 15, fontWeight: '700' }}>Pay</Text>
+                                            </Icon.Button>
+                                        </DataTable.Cell>
+                                    </DataTable.Row>
+                                </TouchableOpacity>
+                            ))
+                        )
+                        }
+                    </DataTable>
+                </View>
+
+                {selectedInvoice && (
+                    <View style={styles.invoiceContainer}>
+                        <View style={styles.invoiceDetailsNavbar}>
+                            <Icon.Button
+                                name="list-alt"
+                                backgroundColor="transparent"
+                                underlayColor="transparent"
+                                iconStyle={{ fontSize: 20, marginRight: 5, padding: 0 }}
+                                color={"white"}>
+                                <Text style={[styles.uppercaseText, { fontWeight: '500', color: 'white', fontSize: '18px' }]}>{selectedInvoice.invoiceNumber}</Text>
+                            </Icon.Button>
+                            <Icon.Button
+                                name="times"
+                                onPress={closeInvoiceDetails}
+                                backgroundColor="transparent"
+                                underlayColor="transparent"
+                                iconStyle={{ fontSize: 20, padding: 0, margin: 0 }}
+                                color={"white"}>
+                            </Icon.Button>
+                        </View>
+                        <ScrollView>
+                            <View style={styles.invoiceDetailsContainer}>
+                                <View style={styles.invoiceDetails}>
+                                    <Text>Vendor: {selectedInvoice.vendor}</Text>
+                                    <Text>Date: {selectedInvoice.invoiceDate}</Text>
+                                    <Text>Amt. Payable: {selectedInvoice.total}</Text>
+                                </View>
+                                <DataTable>
+                                    {
+                                        selectedInvoice.ingredients.map((item, index) => (
+                                            <DataTable.Row key={index}>
+                                                <DataTable.Cell>{item.name}</DataTable.Cell>
+                                                <DataTable.Cell>{item.quantity}</DataTable.Cell>
+                                                <DataTable.Cell>{item.unit}</DataTable.Cell>
+                                                <DataTable.Cell>{item.unitPrice}</DataTable.Cell>
+                                            </DataTable.Row>
+                                        ))
+                                    }
+                                </DataTable>
+                                <Icon.Button
+                                    style={styles.blueBtn}
+                                    name="external-link"
+                                    onPress={() => { openInvoiceFile(selectedInvoice.invoiceUrl) }}
                                     backgroundColor="transparent"
                                     underlayColor="transparent"
-                                    color={"#1f82d2"}
-                                    iconStyle={{padding: 0, marginRight: 5, fontSize: 15}}>
-                                    <Text style={{ color: '#1f82d2', fontSize: 15, fontWeight: '700'}}>Pay</Text>
+                                    iconStyle={{ fontSize: 18, padding: 0, margin: 0 }}
+                                    color={"white"}>
+                                    <Text style={[{ fontWeight: '500', color: 'white', fontSize: '15px', marginLeft: '3px' }]}>Open Invoice</Text>
                                 </Icon.Button>
-                            </DataTable.Cell>
-                        </DataTable.Row>
-                    ))
-                )
-                }
-            </DataTable>
+                            </View>
+                        </ScrollView>
+                    </View>
+                )}
+            </View>
+
+            <Modal isVisible={openModal} onBackdropPress={() => closeModal()} style={styles.modal}>
+                <View style={styles.modalContainer}>
+                    <View style={{ margin: 50 }}>
+                        <Text>Upload files...</Text>
+                        <div {...getRootProps()} style={styles.dropzone}>
+                            <input {...getInputProps()} />
+                            <p>Drag 'n' drop your files here, or click to select</p>
+                        </div>
+                        {invoiceFiles && (
+                            <Text style={{ color: '#2bb378' }}>Files Added Successfully!</Text>
+                        )}
+                        <Button onPress={() => closeModal()}>Cancel</Button>
+                        <Button onPress={() => handleAddInvoice()}>Submit</Button>
+                    </View>
+                    {
+                        loadingScreen &&
+                        <Box sx={{ width: '100%' }}>
+                            <LinearProgress />
+                        </Box>
+                    }
+                </View>
+            </Modal>
         </View>
     )
 }
@@ -206,6 +359,14 @@ const styles = StyleSheet.create({
     searchIcon: {
         marginLeft: 10,
     },
+    splitScreenContainer: {
+        flex: 1,
+        flexDirection: 'row',
+    },
+    tableContainer: {
+        flex: 1,
+        backgroundColor: 'white',
+    },
     dataTable: {
         // marginTop: 5,
     },
@@ -222,6 +383,56 @@ const styles = StyleSheet.create({
     },
     oddRow: {
         backgroundColor: '#fff',
+    },
+    invoiceContainer: {
+        // width: '50%',
+        // height: '100%',
+        flex: 1,
+        backgroundColor: '#fff',
+        border: '3.5px solid #4697ce',
+        borderRadius: 5,
+        overflow: 'hidden',
+    },
+    invoiceDetailsNavbar: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 5,
+        backgroundColor: '#4697ce',
+        color: '#fff',
+    },
+    blueBtn: {
+        position: "relative",
+        width: 150,
+        height: 35,
+        margin: 8,
+        paddingHorizontal: 5,
+        paddingVertical: 3,
+        borderRadius: 30,
+        backgroundColor: "#0071cd",
+        justifyContent: "center",
+        alignSelf: 'center'
+    },
+    modal: {
+        width: '100%',
+        height: '100%',
+    },
+    modalContainer: {
+        backgroundColor: 'white',
+        // justifyContent: 'center',
+        alignItems: 'center',
+        // margin: 20,
+        borderRadius: 5,
+        width: '50%',
+        // height: '60%',
+        alignSelf: 'center',
+    },
+    dropzone: {
+        border: '2px dashed #cccccc',
+        borderRadius: '4px',
+        padding: '20px',
+        textAlign: 'center',
+        cursor: 'pointer',
     },
 })
 

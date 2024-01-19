@@ -186,7 +186,6 @@ const MenuBuilder = () => {
     const handleSubmit = async () => {
         try {
             setLoading(true)
-            console.log(recipeData);
             const data = new FormData();
             data.append('userId', recipeData.userId);
             data.append('name', recipeData.name);
@@ -230,7 +229,7 @@ const MenuBuilder = () => {
                     menuPrice: '',
                     menuType: '',
                 });
-                navigate('/menuitems');
+                navigate('/menu');
                 setLoading(false)
             } else {
                 setLoading(false)
@@ -331,8 +330,7 @@ const MenuBuilder = () => {
                         <p>Drag 'n' drop your media here, or click to select one</p>
                     </div>
                     {recipeData.photo && (
-                        // <Image source={{ uri: recipeData.photo }} style={styles.imagePreview} />
-                        <Text style={{ color: '#2bb378' }}>Image Uploaded Successfully!</Text>
+                        <Text style={{ color: '#2bb378' }}>Files Added Successfully!</Text>
                     )}
                 </View>
 
