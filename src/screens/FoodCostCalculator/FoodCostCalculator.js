@@ -28,12 +28,14 @@ const FoodCostCalculator = () => {
                 startDate: startDate,
                 endDate: endDate,
             };
-            console.log(data);
-            const result = await client.post('/get-recipe-sales-info', data, {
+            const recipes = await client.post('/get-recipewise-sales', data, {
                 headers: { 'Content-Type': 'application/json' },
             })
-            setTypeWiseSales(result.data.allTypesSalesDataArray)
-            setRecipeWiseSales(result.data.allRecipesSalesData)
+            const types = await client.post('/get-typewise-sales', data, {
+                headers: { 'Content-Type': 'application/json' },
+            })
+            setRecipeWiseSales(recipes.data.allRecipesSalesData)
+            setTypeWiseSales(types.data.allTypesSalesData)
             setLoading(false)
         } catch (error) {
             console.log(`getting recipe sales data error ${error}`);
@@ -78,7 +80,7 @@ const FoodCostCalculator = () => {
                     <DataTable.Cell style={styles.cell}>{item.quantitySold}</DataTable.Cell>
                     <DataTable.Cell style={styles.cell}>${(item.totalFoodCost).toFixed(2)}</DataTable.Cell>
                     <DataTable.Cell style={styles.cell}>${(item.totalSales).toFixed(2)}</DataTable.Cell>
-                    <DataTable.Cell style={styles.cell}>${(item.totalRevenueWomc).toFixed(2)}</DataTable.Cell>
+                    <DataTable.Cell style={styles.cell}>${(item.totalProfitWomc).toFixed(2)}</DataTable.Cell>
                     <DataTable.Cell style={styles.cell}>{(item.theoreticalCostWomc).toFixed(2)}%</DataTable.Cell>
                 </DataTable.Row>
             ))
@@ -153,7 +155,7 @@ const FoodCostCalculator = () => {
                     <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Items Sold</span></DataTable.Title>
                     <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Total Cost</span></DataTable.Title>
                     <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Total Sales</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Total Revenue</span></DataTable.Title>
+                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Total Profit</span></DataTable.Title>
                     <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Theoretical Cost</span></DataTable.Title>
                 </DataTable.Header>
 
@@ -185,7 +187,7 @@ const FoodCostCalculator = () => {
                                 <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>{item.itemsSold}</span></DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalFoodCost).toFixed(2)}</span></DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalSales).toFixed(2)}</span></DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalRevenueWomc).toFixed(2)}</span></DataTable.Cell>
+                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalProfitWomc).toFixed(2)}</span></DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>{(item.theoreticalCostWomc).toFixed(2)}%</span></DataTable.Cell>
                             </DataTable.Row>
 

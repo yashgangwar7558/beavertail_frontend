@@ -49,7 +49,7 @@ const MenuItems = () => {
             console.log(result.data);
             if (result.data.success) {
                 getRecipes();
-                closeModal();
+                closeRecipeDetails();
             }
         } catch (error) {
             console.log(`getting recipes error ${error}`);
@@ -177,8 +177,8 @@ const MenuItems = () => {
                                         <Text style={{ fontsize: '10px', marginBottom: '10px' }}>{selectedRecipe.methodPrep}</Text>
                                     </View>
                                     <View style={styles.imageContainer}>
-                                        {/* <Image source={{ uri: `data:${selectedRecipe.photo.img.contentType};base64,${ImageBase64.encode(selectedRecipe.photo.img.data.data)}` }} style={styles.recipeImage} /> */}
-                                        <Image source={{ uri: `https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGZvb2R8ZW58MHx8MHx8fDA%3D` }} style={styles.recipeImage} />
+                                        {/* <Image source={{ uri: `https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGZvb2R8ZW58MHx8MHx8fDA%3D` }} style={styles.recipeImage} /> */}
+                                        <Image source={{ uri: selectedRecipe.imageUrl }} style={styles.recipeImage} />
                                     </View>
                                 </View>
                             </ScrollView>

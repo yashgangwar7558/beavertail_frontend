@@ -19,6 +19,7 @@ const MenuBuilder = () => {
     const [isFocused, setIsFocused] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [ingredients, setIngredient] = useState([]);
     const [selectedIngredient, setSelectedIngredient] = useState({});
     const [currentCost, setCurrentCost] = useState();
@@ -37,12 +38,24 @@ const MenuBuilder = () => {
         menuType: '',
     });
 
-    const categories = ['Rolls', 'Pizza', 'Burger', 'Chinese', 'Main Course', 'Snacks', 'Mocktail', 'Shakes'];
     const menuTypes = ['Special', 'Breads', 'Breakfast', 'MainCourse', 'Starters', 'Chefs Special', 'Shakes'];
     const yieldUnits = ['Each', 'Serving'];
 
     const editRecipeData = location.state?.editRecipeData || null;
 
+    const getCategories = async () => {
+        try {
+            const user = { userId: userInfo.user.userId };
+            const result = await client.post('/get-types', user, {
+                headers: { 'Content-Type': 'application/json' },
+            })
+            const extractedCategories = result.data.types.map((item) => item.type)
+            setCategories(extractedCategories)
+        } catch (error) {
+            console.log(`getting categories error ${error}`);
+        }
+    }
+    
     const getIngredients = async () => {
         try {
             const user = { userId: userInfo.user.userId };
@@ -93,6 +106,7 @@ const MenuBuilder = () => {
     };
 
     useEffect(() => {
+        getCategories();
         getIngredients();
         getUnitMaps();
         costEstimation();
@@ -202,6 +216,7 @@ const MenuBuilder = () => {
 
             if (editRecipeData && editRecipeData._id) {
                 data.append('recipeId', editRecipeData._id);
+                data.append('imageUrl', editRecipeData.imageUrl);
                 result = await client.post('/update-recipe', data, {
                     headers: {
                         'content-type': 'multipart/form-data'

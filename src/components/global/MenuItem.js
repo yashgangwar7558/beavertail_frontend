@@ -30,7 +30,7 @@
         }
     `
     const MenuItemLabel = styled.span`
-        font-size: 20px;
+        font-size: 19px;
         padding-left: 5px;
     `
 

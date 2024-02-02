@@ -11,6 +11,8 @@ import SplashScreen from '../../screens/SplashScreen';
 import Dashboard from '../../screens/Dashboard';
 import SignIn from '../../screens/SignIn';
 import SignUp from '../../screens/SignUp';
+import AnalyticsSales from '../../screens/AnalyticsSales';
+import AnalyticsPurchases from '../../screens/AnalyticsPurchases';
 import MenuBuilder from '../../screens/MenuBuilder';
 import MenuItems from '../../screens/MenuItems';
 import InvoiceTable from '../../screens/InvoiceTable';
@@ -54,7 +56,9 @@ const Navigation = () => {
             <Content isSidebarCollapsed={isSidebarCollapsed}>
               <Header title={headerTitle} username={userInfo.user.firstName} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
               <Routes>
-                <Route path="/" element={<Dashboard />} />
+                <Route path="/" element={<Dashboard renderCarousel={isSidebarCollapsed}/>} />
+                <Route path="/analytics-sales" element={<AnalyticsSales />} />
+                <Route path="/analytics-purchases" element={<AnalyticsPurchases />} />
                 <Route path="/menu" element={<MenuItems />} />
                 <Route path="/menubuilder" element={<MenuBuilder />} />
                 <Route path="/invoices" element={<InvoiceTable />} />

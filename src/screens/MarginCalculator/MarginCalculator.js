@@ -28,11 +28,14 @@ const MarginCalculator = () => {
                 startDate: startDate,
                 endDate: endDate,
             };
-            const result = await client.post('/get-recipe-sales-info', data, {
+            const recipes = await client.post('/get-recipewise-sales', data, {
                 headers: { 'Content-Type': 'application/json' },
             })
-            setTypeWiseSales(result.data.allTypesSalesDataArray)
-            setRecipeWiseSales(result.data.allRecipesSalesData)
+            const types = await client.post('/get-typewise-sales', data, {
+                headers: { 'Content-Type': 'application/json' },
+            })
+            setRecipeWiseSales(recipes.data.allRecipesSalesData)
+            setTypeWiseSales(types.data.allTypesSalesData)
             setLoading(false)
         } catch (error) {
             console.log(`getting recipe sales data error ${error}`);
@@ -78,7 +81,7 @@ const MarginCalculator = () => {
                     <DataTable.Cell style={styles.cell}>${(item.totalModifierCost).toFixed(2)}</DataTable.Cell>
                     <DataTable.Cell style={styles.cell}>${((item.totalFoodCost + item.totalModifierCost)).toFixed(2)}</DataTable.Cell>
                     <DataTable.Cell style={styles.cell}>${(item.totalSales).toFixed(2)}</DataTable.Cell>
-                    <DataTable.Cell style={styles.cell}>${(item.totalRevenueWmc).toFixed(2)}</DataTable.Cell>
+                    <DataTable.Cell style={styles.cell}>${(item.totalProfitWmc).toFixed(2)}</DataTable.Cell>
                     <DataTable.Cell style={styles.cell}>{(item.theoreticalCostWmc).toFixed(2)}%</DataTable.Cell>
                 </DataTable.Row>
             ))
@@ -145,7 +148,7 @@ const MarginCalculator = () => {
                     <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Modifier Cost</span></DataTable.Title>
                     <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Total Cost</span></DataTable.Title>
                     <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Total Sales</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Total Revenue</span></DataTable.Title>
+                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Total Profit</span></DataTable.Title>
                     <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Theoretical Cost</span></DataTable.Title>
                 </DataTable.Header>
 
@@ -178,7 +181,7 @@ const MarginCalculator = () => {
                                 <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalModifierCost).toFixed(2)}</span></DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalFoodCost + item.totalModifierCost).toFixed(2)}</span></DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalSales).toFixed(2)}</span></DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalRevenueWmc).toFixed(2)}</span></DataTable.Cell>
+                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalProfitWmc).toFixed(2)}</span></DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>{(item.theoreticalCostWmc).toFixed(2)}%</span></DataTable.Cell>
                             </DataTable.Row>
 

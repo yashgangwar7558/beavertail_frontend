@@ -1,50 +1,156 @@
-// HomeScreen.js
-import React, { useContext } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import Spinner from 'react-native-loading-spinner-overlay';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { useNavigate } from 'react-router'
-import { AuthContext } from '../../context/AuthContext.js'
-import Header from '../../components/global/Header/index.js'
-import client from '../../utils/ApiConfig/index.js'
+import React from 'react'
+import StatBox from '../../components/StatBox'
+import { StatBoxData } from '../../utils/StatBoxData'
+import { LineChartHeaderData } from '../../utils/ChartData'
+import { TopRecipesCarouselData, TopTypesCarouselData } from '../../utils/CarouselData'
+import LineChart from '../../components/LineChart'
+import BarChart from '../../components/BarChart'
+import ImageCarousel from '../../components/ImageCarousel'
+import useWindowDimensions from '../../utils/windowDimensions'
+import { Box, Typography } from '@mui/material'
+import { PaidRounded, PointOfSaleRounded } from '@mui/icons-material'
+import styled from 'styled-components'
 
-const Dashboard = () => {
-  const { userInfo, isLoading, logout } = useContext(AuthContext);
-  const navigate = useNavigate({});
+
+const DashboardGrid = styled(Box)`
+	display: grid;
+	grid-template-columns: repeat(12, 1fr);
+	grid-template-rows: 1fr 2fr 2fr;
+	grid-auto-rows: auto;
+	height: calc(100vh - 72px);
+	gap: 10px;
+	margin: 0px 15px;
+
+	@media screen and (max-width: 1024px) {
+		grid-template-columns: repeat(12, 1fr);
+		grid-template-rows: 1fr 2fr 2fr 2fr 2fr;
+    }
+
+	@media screen and (max-width: 770px) {
+		grid-template-columns: repeat(12, 1fr);
+		grid-template-rows: 1fr 1fr 2fr 2fr 2fr 2fr;
+    }
+
+	@media screen and (max-width: 600px) {
+		grid-template-columns: repeat(12, 1fr);
+		grid-template-rows: 1fr 1fr 1fr 1fr 2fr 2fr 2fr 2fr;
+    }
+`
+const StatBoxGrid = styled(Box)`
+	grid-column: span 3;
+	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	border-radius: 20px;
+
+	@media screen and (max-width: 770px) {
+		grid-column: span 6;
+    }
+
+	@media screen and (max-width: 600px) {
+		grid-column: span 12;
+    }
+`
+const LineChartGrid = styled(Box)`
+	grid-column: span 12;
+	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+	border-radius: 20px;
+
+	@media screen and (max-width: 1024px) {
+		grid-column: span 12;
+    }
+`
+const ChartHeader = styled(Box)`
+	margin-top: 10px;
+	padding: 0px 30px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+`
+const BarChartGrid = styled(Box)`
+	grid-column: span 12;
+	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+	border-radius: 20px;
+
+	@media screen and (max-width: 1024px) {
+		grid-column: span 12;
+    }
+`
+
+const Dashboard = (props) => {
+
+  const { width, height } = useWindowDimensions()
+  const statBoxData = StatBoxData()
+  const lineChartHeaderData = LineChartHeaderData()
+  const topRecipesCarouselData = TopRecipesCarouselData()
+  const topTypesCarouselData = TopTypesCarouselData()
+
   return (
-    <View>
-      <View style={styles.container}>
-        <Spinner visible={isLoading} />
-        <Text style={styles.welcome}>Welcome, {userInfo.user.firstName} {userInfo.user.lastName}</Text>
-      </View>
-    </View>
-  );
-};
+    <DashboardGrid>
+      {statBoxData.map((item, index) => {
+        return (
+          <StatBoxGrid>
+            <StatBox title={item.title} subtitle={item.subtitle} title1={item.title1} subtitle1={item.subtitle1} progress={item.progress} icon={item.icon} percentIncrease={item.percentIncrease} />
+          </StatBoxGrid>
+        )
+      })}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 50,
-  },
-  welcome: {
-    fontSize: 30,
-    marginBottom: 40,
-  },
-  blueBtn: {
-    position: "relative",
-    // width: 170,
-    // height: 45,
-    margin: 5,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 10,
-    // borderWidth: 2,
-    // borderColor: "#2bb378",
-    backgroundColor: "#0071cd",
-    justifyContent: "center"
-  }
-});
+      <LineChartGrid>
+        <ChartHeader>
+          {
+            lineChartHeaderData.map((item) => {
+              return (
+                <Box>
+                  <Typography variant="h6" fontFamily='inherit' fontWeight='600' color='#121B28'>
+                    {item.title}
+                  </Typography>
+                  <Typography variant="h7" fontFamily='inherit' fontWeight='600' color='#047c44'>
+                    {item.subtitle}
+                  </Typography>
+                </Box>
+              )
+            }
+            )
+          }
+          <Box>
+            <PaidRounded sx={{ color: '#047c44', fontSize: '36px' }} />
+          </Box>
+        </ChartHeader>
+        <Box height="225px" ml="-20px" mt="-35px">
+          <LineChart winWidth={width} />
+        </Box>
+      </LineChartGrid>
 
-export default Dashboard;
+
+      <ImageCarousel title='Top Items with Highest Margin' data={topRecipesCarouselData.topMargin} renderCarousel={props.renderCarousel} winWidth={width} />
+      <ImageCarousel title='Top Items with Highest Sell' data={topRecipesCarouselData.topSales} renderCarousel={props.renderCarousel} winWidth={width} />
+      <ImageCarousel title='Top Categories with Highest Margin' data={topTypesCarouselData.topMargin} renderCarousel={props.renderCarousel} winWidth={width} />
+      <ImageCarousel title='Top Categories with Highest Sell' data={topTypesCarouselData.topSales} renderCarousel={props.renderCarousel} winWidth={width} />
+      {/* <ImageCarousel title='Top Ingredients Bought this week' data={RetailersData} renderCarousel={props.renderCarousel} winWidth={width} /> */}
+
+      <BarChartGrid>
+        <ChartHeader>
+          <Box>
+            <Typography variant="h6" fontFamily='inherit' fontWeight='600' color='#121B28'>
+              {lineChartHeaderData[2].title}
+            </Typography>
+            <Typography variant="h5" fontFamily='inherit' fontWeight='500' color='#047c44'>
+              {lineChartHeaderData[2].subtitle}
+            </Typography>
+          </Box>
+          <Box>
+            <PaidRounded sx={{ color: '#047c44', fontSize: '36px' }} />
+          </Box>
+        </ChartHeader>
+        <Box height="225px" ml="-20px" mt="-35px">
+          <BarChart winWidth={width} />
+        </Box>
+      </BarChartGrid>
+
+    </DashboardGrid>
+  )
+}
+
+export default Dashboard
