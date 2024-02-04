@@ -2,7 +2,7 @@ import React from 'react'
 import StatBox from '../../components/StatBox'
 import { StatBoxData } from '../../utils/StatBoxData'
 import { LineChartHeaderData } from '../../utils/ChartData'
-import { TopRecipesCarouselData, TopTypesCarouselData } from '../../utils/CarouselData'
+import { TopRecipesCarouselData, TopTypesCarouselData, TopPurchasedIngredientsCarouselData, TopVendorsCarouselData } from '../../utils/CarouselData'
 import LineChart from '../../components/LineChart'
 import BarChart from '../../components/BarChart'
 import ImageCarousel from '../../components/ImageCarousel'
@@ -10,7 +10,6 @@ import useWindowDimensions from '../../utils/windowDimensions'
 import { Box, Typography } from '@mui/material'
 import { PaidRounded, PointOfSaleRounded } from '@mui/icons-material'
 import styled from 'styled-components'
-
 
 const DashboardGrid = styled(Box)`
 	display: grid;
@@ -86,13 +85,27 @@ const Dashboard = (props) => {
   const lineChartHeaderData = LineChartHeaderData()
   const topRecipesCarouselData = TopRecipesCarouselData()
   const topTypesCarouselData = TopTypesCarouselData()
+  const topPurchasedIngredientsCarouselData = TopPurchasedIngredientsCarouselData()
+  const topVendorsCarouselData = TopVendorsCarouselData()
 
   return (
     <DashboardGrid>
       {statBoxData.map((item, index) => {
         return (
           <StatBoxGrid>
-            <StatBox title={item.title} subtitle={item.subtitle} title1={item.title1} subtitle1={item.subtitle1} progress={item.progress} icon={item.icon} percentIncrease={item.percentIncrease} />
+            <StatBox
+              title={item.title}
+              subtitle={item.subtitle}
+              percentIcon={item.percentIcon}
+              percentChange={item.percentChange}
+              color={item.color}
+              title1={item.title1}
+              subtitle1={item.subtitle1}
+              percentIcon1={item.percentIcon1}
+              percentChange1={item.percentChange1}
+              color1={item.color1}
+              icon={item.icon}
+            />
           </StatBoxGrid>
         )
       })}
@@ -128,7 +141,8 @@ const Dashboard = (props) => {
       <ImageCarousel title='Top Items with Highest Sell' data={topRecipesCarouselData.topSales} renderCarousel={props.renderCarousel} winWidth={width} />
       <ImageCarousel title='Top Categories with Highest Margin' data={topTypesCarouselData.topMargin} renderCarousel={props.renderCarousel} winWidth={width} />
       <ImageCarousel title='Top Categories with Highest Sell' data={topTypesCarouselData.topSales} renderCarousel={props.renderCarousel} winWidth={width} />
-      {/* <ImageCarousel title='Top Ingredients Bought this week' data={RetailersData} renderCarousel={props.renderCarousel} winWidth={width} /> */}
+      <ImageCarousel title='Top Ingredients Bought this week' data={topPurchasedIngredientsCarouselData.topIngredients} renderCarousel={props.renderCarousel} winWidth={width} />
+      <ImageCarousel title='Top Vendors' data={topVendorsCarouselData.topVendors} renderCarousel={props.renderCarousel} winWidth={width} />
 
       <BarChartGrid>
         <ChartHeader>

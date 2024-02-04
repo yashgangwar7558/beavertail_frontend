@@ -11,6 +11,8 @@ import client from '../../utils/ApiConfig'
 import { useDropzone } from 'react-dropzone';
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
+import { DatePicker } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
 
 const InvoiceTable = () => {
     const { userInfo, isLoading, logout } = useContext(AuthContext);
@@ -20,12 +22,19 @@ const InvoiceTable = () => {
     const [invoiceFiles, setInvoiceFiles] = useState(null)
     const [selectedInvoice, setSelectedInvoice] = useState(null);
     const [openModal, setOpenModal] = useState(false)
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const today = dayjs();
 
     const getInvoices = async () => {
         try {
             setLoading(true)
-            const user = { userId: userInfo.user.userId };
-            const result = await client.post('/get-invoices', user, {
+            const data = {
+                userId: userInfo.user.userId,
+                startDate: startDate,
+                endDate: endDate,
+            };
+            const result = await client.post('/get-invoices', data, {
                 headers: { 'Content-Type': 'application/json' },
             })
             console.log(result.data.invoices);
@@ -38,7 +47,17 @@ const InvoiceTable = () => {
 
     useEffect(() => {
         getInvoices();
-    }, []);
+    }, [startDate, endDate]);
+
+    const handleStartDateChange = (date) => {
+        setStartDate(date.format('YYYY-MM-DD'));
+        console.log(date.format('YYYY-MM-DD'));
+    };
+
+    const handleEndDateChange = (date) => {
+        setEndDate(date.format('YYYY-MM-DD'));
+        console.log(date.format('YYYY-MM-DD'));
+    };
 
     const onDrop = (acceptedFiles) => {
         setInvoiceFiles(acceptedFiles);
@@ -108,6 +127,25 @@ const InvoiceTable = () => {
                 <View style={styles.tableNav}>
                     <View style={styles.tableButtonContainer}>
                         <View style={styles.leftTableButtons}>
+                            <DatePicker
+                                label="From"
+                                defaultValue={today}
+                                disableFuture
+                                value={startDate}
+                                onChange={handleStartDateChange}
+                                formatDensity="spacious"
+                                slotProps={{ textField: { size: 'small' } }}
+                            />
+                            <Text>  </Text>
+                            <DatePicker
+                                label="To"
+                                defaultValue={today}
+                                disableFuture
+                                value={endDate}
+                                onChange={handleEndDateChange}
+                                formatDensity="spacious"
+                                slotProps={{ textField: { size: 'small' } }}
+                            />
                             <Icon.Button
                                 style={styles.tableNavBtnBlue}
                                 name="angle-down"
@@ -119,7 +157,7 @@ const InvoiceTable = () => {
                             >
                                 <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>Add Invoice</Text>
                             </Icon.Button>
-                            <Icon.Button
+                            {/* <Icon.Button
                                 style={styles.tableNavBtnSky}
                                 name="angle-down"
                                 backgroundColor="transparent"
@@ -148,7 +186,7 @@ const InvoiceTable = () => {
                                 color={"white"}
                             >
                                 <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>All Vendors</Text>
-                            </Icon.Button>
+                            </Icon.Button> */}
                         </View>
                         <View style={styles.rightTableButtons}>
                             <Icon.Button

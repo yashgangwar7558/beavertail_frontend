@@ -34,6 +34,7 @@ const LogoLabel = styled(Typography)`
 `
 const SidebarWrapper = styled.div`
     background: #121B28;
+	font-family: 'Nunito', sans-serif;
     width: ${(props) => props.isCollapsed ? '55px' : '300px'};
 	height: 100%;
 	transition: all 0.3s ease-in-out;

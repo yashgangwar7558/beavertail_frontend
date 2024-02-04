@@ -51,10 +51,6 @@ const ImageCarousel = (props) => {
 
 		handleResize()
 
-		console.log(props.renderCarousel)
-		console.log(carouselDim.width)
-		console.log(sliderItems)
-
 		window.addEventListener('resize', handleResize)
 		return () => {
 			window.removeEventListener('resize', handleResize)

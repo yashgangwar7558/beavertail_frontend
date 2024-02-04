@@ -1,14 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { ScrollView, View, Text, TextInput, Button, StyleSheet, FlatList, TouchableOpacity, Picker } from 'react-native';
-import Spinner from 'react-native-loading-spinner-overlay';
-import { AuthContext } from '../../context/AuthContext.js'
-import { useNavigation, useRoute } from '@react-navigation/native';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Header from '../../components/global/Header/index.js'
 import { useDropzone } from 'react-dropzone';
 import client from '../../utils/ApiConfig'
+import { AuthContext } from '../../context/AuthContext.js'
 import LoadingScreen from '../../components/LoadingScreen';
 
 const MenuBuilder = () => {

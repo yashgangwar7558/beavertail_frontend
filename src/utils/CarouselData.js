@@ -9,8 +9,9 @@ export const TopRecipesCarouselData = () => {
     const getWeeksRecipesSales = async () => {
         try {
             const currentDate = new Date();
-            const startOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay());
-            const endOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + (6 - currentDate.getDay()))
+            const startOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + (currentDate.getDay() === 0 ? -6 : 1));
+            const endOfWeek = new Date(startOfWeek);
+            endOfWeek.setDate(startOfWeek.getDate() + 6);
             const data = {
                 userId: userInfo.user.userId,
                 startDate: startOfWeek,
@@ -64,8 +65,9 @@ export const TopTypesCarouselData = () => {
     const getWeeksTypeWiseSales = async () => {
         try {
             const currentDate = new Date();
-            const startOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay());
-            const endOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + (6 - currentDate.getDay()))
+            const startOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + (currentDate.getDay() === 0 ? -6 : 1));
+            const endOfWeek = new Date(startOfWeek);
+            endOfWeek.setDate(startOfWeek.getDate() + 6);
             const data = {
                 userId: userInfo.user.userId,
                 startDate: startOfWeek,
@@ -111,3 +113,91 @@ export const TopTypesCarouselData = () => {
 
     return data
 }
+
+export const TopVendorsCarouselData = () => {
+    const { userInfo } = useContext(AuthContext);
+    const [vendorsTotal, setVendorsTotal] = useState([])
+
+    const getWeeksVendorsTotal = async () => {
+        try {
+            const currentDate = new Date();
+            const startOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + (currentDate.getDay() === 0 ? -6 : 1));
+            const endOfWeek = new Date(startOfWeek);
+            endOfWeek.setDate(startOfWeek.getDate() + 6);;
+            const data = {
+                userId: userInfo.user.userId,
+                startDate: startOfWeek,
+                endDate: endOfWeek,
+            };
+            const result = await client.post('/get-vendors-total', data, {
+                headers: { 'Content-Type': 'application/json' },
+            });
+            setVendorsTotal(result.data.vendorsTotal)
+        } catch (err) {
+            console.log(`Getting live data error ${err}`);
+        }
+    }
+
+    useEffect(() => {
+        getWeeksVendorsTotal()
+    }, []);
+
+    const topVendorsData = vendorsTotal
+        .sort((a, b) => a.totalAmount - b.totalAmount)
+        .slice(0, 5);
+
+    const topVendors = topVendorsData.map(vendor => ({
+        title: vendor.vendor,
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdVv-gjmgoeUvXWKhZ-hDT_6mDPmMCkBCR6g&usqp=CAU'
+    }));
+
+    const data = {
+        topVendors
+    }
+
+    return data
+}
+
+export const TopPurchasedIngredientsCarouselData = () => {
+    const { userInfo } = useContext(AuthContext);
+    const [ingredientsPurchase, setIngredientsPurchase] = useState([])
+
+    const getWeeksIngredientsPurchaseData = async () => {
+        try {
+            const currentDate = new Date();
+            const startOfWeek = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + (currentDate.getDay() === 0 ? -6 : 1));
+            const endOfWeek = new Date(startOfWeek);
+            endOfWeek.setDate(startOfWeek.getDate() + 6);
+            const data = {
+                userId: userInfo.user.userId,
+                startDate: startOfWeek,
+                endDate: endOfWeek,
+            };
+            const result = await client.post('/get-ingredients-total-purchase', data, {
+                headers: { 'Content-Type': 'application/json' },
+            });
+            setIngredientsPurchase(result.data.ingredientsTotal)
+        } catch (err) {
+            console.log(`Getting live data error ${err}`);
+        }
+    }
+
+    useEffect(() => {
+        getWeeksIngredientsPurchaseData()
+    }, []);
+
+    const topIngredientsData = ingredientsPurchase
+        .sort((a, b) => a.totalAmount - b.totalAmount)
+        .slice(0, 5);
+
+    const topIngredients = topIngredientsData.map(ingredient => ({
+        title: ingredient.ingredient,
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTli5rwEZwfuQP4ZsYSRH431jLr9jULzPI8HA&usqp=CAU'
+    }));
+
+    const data = {
+        topIngredients
+    }
+
+    return data
+}   

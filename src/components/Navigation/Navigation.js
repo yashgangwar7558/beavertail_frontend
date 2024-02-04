@@ -1,4 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
+import { useFonts, Nunito_400Regular, Nunito_500Medium } from '@expo-google-fonts/nunito';
+import { AppLoading } from 'expo';
 import {
   BrowserRouter as Router,
   Routes,
@@ -15,14 +17,28 @@ import AnalyticsSales from '../../screens/AnalyticsSales';
 import AnalyticsPurchases from '../../screens/AnalyticsPurchases';
 import MenuBuilder from '../../screens/MenuBuilder';
 import MenuItems from '../../screens/MenuItems';
+import AddInvoice from '../../screens/AddInvoice';
 import InvoiceTable from '../../screens/InvoiceTable';
 import PurchaseHistory from '../../screens/PurchaseHistory';
 import FoodCostCalculator from '../../screens/FoodCostCalculator';
 import MarginCalculator from '../../screens/MarginCalculator';
 import { AuthContext } from '../../context/AuthContext.js';
-import styled from 'styled-components'
+import styled, { ThemeProvider } from 'styled-components';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+
+const Content = styled.main`
+    margin: 0;
+	  margin-left: ${(props) => props.isSidebarCollapsed ? '50px' : '300px'};
+    font-family: 'Nunito', sans-serif;
+    box-sizing: border-box;
+	  background-color: #ffffff;
+	  transition: all 0.3s ease-in-out;
+	
+    @media screen and (max-width: 800px) {
+      margin-left: 0;
+    }
+`
 
 const Navigation = () => {
   const { userInfo, splashLoading } = useContext(AuthContext);
@@ -42,60 +58,47 @@ const Navigation = () => {
   }, [headerTitle]);
 
   const renderWebNavigation = () => (
-    <Router>
-      {splashLoading ? (
-        <>
-          <Routes>
-            <Route path="/loading" element={<SplashScreen />} />
-          </Routes>
-        </>
-      ) : userInfo.token ? (
-        <>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Sidebar setHeaderTitle={setHeaderTitle} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
-            <Content isSidebarCollapsed={isSidebarCollapsed}>
-              <Header title={headerTitle} username={userInfo.user.firstName} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
-              <Routes>
-                <Route path="/" element={<Dashboard renderCarousel={isSidebarCollapsed}/>} />
-                <Route path="/analytics-sales" element={<AnalyticsSales />} />
-                <Route path="/analytics-purchases" element={<AnalyticsPurchases />} />
-                <Route path="/menu" element={<MenuItems />} />
-                <Route path="/menubuilder" element={<MenuBuilder />} />
-                <Route path="/invoices" element={<InvoiceTable />} />
-                <Route path="/purchasehistory" element={<PurchaseHistory />} />
-                <Route path="/foodcost" element={<FoodCostCalculator />} />
-                <Route path="/margin" element={<MarginCalculator />} />
-              </Routes>
-            </Content>
-          </LocalizationProvider>
-        </>
-      ) : (
-        <>
-          <Routes>
-            <Route path="/" element={<SignIn />} />
-            <Route path="/signup" element={<SignUp />} />
-          </Routes>
-        </>
-      )}
-    </Router>
+      <Router>
+        {splashLoading ? (
+          <>
+            <Routes>
+              <Route path="/loading" element={<SplashScreen />} />
+            </Routes>
+          </>
+        ) : userInfo.token ? (
+          <>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <Sidebar setHeaderTitle={setHeaderTitle} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
+              <Content isSidebarCollapsed={isSidebarCollapsed}>
+                <Header title={headerTitle} username={userInfo.user.firstName} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
+                <Routes>
+                  <Route path="/" element={<Dashboard renderCarousel={isSidebarCollapsed} />} />
+                  <Route path="/analytics-sales" element={<AnalyticsSales />} />
+                  <Route path="/analytics-purchases" element={<AnalyticsPurchases />} />
+                  <Route path="/menubuilder" element={<MenuBuilder />} />
+                  <Route path="/menu" element={<MenuItems />} />
+                  <Route path="/add-invoice" element={<AddInvoice />} />
+                  <Route path="/invoices" element={<InvoiceTable />} />
+                  <Route path="/purchasehistory" element={<PurchaseHistory />} />
+                  <Route path="/foodcost" element={<FoodCostCalculator />} />
+                  <Route path="/margin" element={<MarginCalculator />} />
+                </Routes>
+              </Content>
+            </LocalizationProvider>
+          </>
+        ) : (
+          <>
+            <Routes>
+              <Route path="/" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
+            </Routes>
+          </>
+        )}
+      </Router>
   );
 
   return renderWebNavigation()
 };
 
-const Content = styled.main`
-
-    height: 100%;
-    font-family: 'Nunito', sans-serif;
-    margin: 0;
-	margin-left: ${(props) => props.isSidebarCollapsed ? '50px' : '300px'};
-    box-sizing: border-box;
-	background-color: #ffffff;
-	transition: all 0.3s ease-in-out;
-	
-	@media screen and (max-width: 800px) {
-		margin-left: 0;
-	}
-`
-
 export default Navigation;
+

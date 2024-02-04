@@ -8,6 +8,8 @@ import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from '../../context/AuthContext.js'
 import Header from '../../components/global/Header/index.js';
 import client from '../../utils/ApiConfig'
+import { DatePicker } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
 
 const PurchaseHistory = () => {
     const { userInfo, isLoading, logout } = useContext(AuthContext);
@@ -15,12 +17,19 @@ const PurchaseHistory = () => {
     const [ingredients, setIngredient] = useState([]);
     const [expandedIngredients, setExpandedIngredients] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const today = dayjs();
 
     const getPurchaseHistory = async () => {
         try {
             setLoading(true)
-            const user = { userId: userInfo.user.userId };
-            const result = await client.post('/get-ingredient-purchase-history', user, {
+            const data = {
+                userId: userInfo.user.userId,
+                startDate: startDate,
+                endDate: endDate,
+            };
+            const result = await client.post('/get-ingredient-purchase-history', data, {
                 headers: { 'Content-Type': 'application/json' },
             })
             console.log(result.data.history);
@@ -45,7 +54,17 @@ const PurchaseHistory = () => {
     useEffect(() => {
         getPurchaseHistory();
         getIngredients();
-    }, []);
+    }, [startDate, endDate]);
+
+    const handleStartDateChange = (date) => {
+        setStartDate(date.format('YYYY-MM-DD'));
+        console.log(date.format('YYYY-MM-DD'));
+    };
+
+    const handleEndDateChange = (date) => {
+        setEndDate(date.format('YYYY-MM-DD'));
+        console.log(date.format('YYYY-MM-DD'));
+    };
 
     const handleIngredientToggle = (ingredientName) => {
         setExpandedIngredients((prevExpanded) =>
@@ -71,7 +90,7 @@ const PurchaseHistory = () => {
                                 <DataTable.Cell style={styles.cell}></DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}>{invoice.invoiceNumber}</DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}>{invoice.vendor}</DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}>{invoice.uploadDate}</DataTable.Cell>
+                                <DataTable.Cell style={styles.cell}>{invoice.invoiceDate}</DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}>{invoice.quantity}</DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}>{invoice.unit}</DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}>${invoice.unitPrice}</DataTable.Cell>
@@ -96,6 +115,25 @@ const PurchaseHistory = () => {
                 <View style={styles.tableNav}>
                     <View style={styles.tableButtonContainer}>
                         <View style={styles.leftTableButtons}>
+                            <DatePicker
+                                label="From"
+                                defaultValue={today}
+                                disableFuture
+                                value={startDate}
+                                onChange={handleStartDateChange}
+                                formatDensity="spacious"
+                                slotProps={{ textField: { size: 'small' } }}
+                            />
+                            <Text>  </Text>
+                            <DatePicker
+                                label="To"
+                                defaultValue={today}
+                                disableFuture
+                                value={endDate}
+                                onChange={handleEndDateChange}
+                                formatDensity="spacious"
+                                slotProps={{ textField: { size: 'small' } }}
+                            />
                             <Icon.Button
                                 style={styles.tableNavBtnBlue}
                                 name="angle-down"

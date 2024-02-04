@@ -136,7 +136,7 @@ export const BarChartData = () => {
 
     monthlyData[`month`] = month
     salesData.forEach(({ type, totalProfitWmc }) => {
-      monthlyData[`${type}`] = totalProfitWmc;
+      monthlyData[`${type}`] = totalProfitWmc.toFixed(2);
       // monthlyData[`${type}Color`] = getColor(type);
     });
 
@@ -169,7 +169,6 @@ export const RecipeTypes = async () => {
   }, []);
 
   const data = types.map((item) => item.type)
-  console.log(data);
   return data
 }
 

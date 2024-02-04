@@ -24,7 +24,6 @@ const MenuItems = () => {
             const result = await client.post('/get-recipes', user, {
                 headers: { 'Content-Type': 'application/json' },
             })
-            console.log(result.data.recipes);
             setRecipes(result.data.recipes)
             setLoading(false)
         } catch (error) {

@@ -1,4 +1,4 @@
-import { HomeRounded, SettingsRounded, ViewListRounded, AddCard, ReceiptRounded, HistoryRounded, PointOfSaleOutlined, AnalyticsRounded } from "@mui/icons-material"
+import { HomeRounded, SettingsRounded, ViewListRounded, AddCard, PostAddRounded, ReceiptRounded, HistoryRounded, PointOfSaleOutlined, AnalyticsRounded } from "@mui/icons-material"
 
 export const SidebarData = [
     {
@@ -25,6 +25,11 @@ export const SidebarData = [
         title: 'Recipe Book',
         path: '/menu',
         icon: <ViewListRounded sx={{ fontSize: '22px' }} />,
+    },
+    {
+        title: 'Add Invoice',
+        path: '/add-invoice',
+        icon: <PostAddRounded sx={{ fontSize: '22px' }} />,
     },
     {
         title: 'Invoices',
