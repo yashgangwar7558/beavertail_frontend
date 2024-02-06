@@ -342,7 +342,7 @@ const MenuBuilder = () => {
                         <p>Drag 'n' drop your media here, or click to select one</p>
                     </div>
                     {recipeData.photo && (
-                        <Text style={{ color: '#2bb378' }}>Files Added Successfully!</Text>
+                        <Text style={{ color: '#2bb378' }}>Files Added Successfully! <span style={{ color: 'blue', cursor: 'pointer' }} onClick={() => setRecipeData({ ...recipeData, photo: null })}>Reset</span></Text>
                     )}
                 </View>
 
@@ -483,7 +483,7 @@ const MenuBuilder = () => {
                             </Icon.Button>
                         </View>
                     ))}
-                    <Text style={{ fontSize: '15px', fontWeight: 'bold' }}>Estimated Cost: <span style={{ color: '#2bb378' }}>${currentCost}</span></Text>
+                    <Text style={{ fontSize: '15px', fontWeight: 'bold' }}>Estimated Cost: <span style={{ color: '#2bb378' }}>${currentCost ? currentCost.toString() : '0'}</span></Text>
                 </View>
 
                 <View style={styles.inputContainer}>

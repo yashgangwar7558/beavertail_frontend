@@ -38,7 +38,7 @@ const StatBox = (props) => {
                         <Typography variant='h6' fontWeight='bold' color='#047c44' fontFamily='inherit'>
                             {props.title1}
                         </Typography>
-                        {props.percentChange != 0 && (
+                        {props.percentChange1 != 0 && (
                             <Typography variant='h8' fontWeight='bold' color={props.color1} fontFamily='inherit' style={{ marginLeft: '10px', fontSize: '12px' }}>
                                 {props.percentIcon1}
                                 {props.percentChange1}%

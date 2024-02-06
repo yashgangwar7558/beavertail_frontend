@@ -37,7 +37,7 @@ export const StatBoxData = () => {
         try {
             const currentDate = new Date();
             const startOfPrevDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1);
-            const endOfPrevDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1);
+            const endOfPrevDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
             const data = {
                 userId: userInfo.user.userId,
                 startDate: startOfPrevDay,
@@ -113,7 +113,7 @@ export const StatBoxData = () => {
         try {
             const currentDate = new Date();
             const startOfPrevDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1);
-            const endOfPrevDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()  - 1);
+            const endOfPrevDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
             const data = {
                 userId: userInfo.user.userId,
                 startDate: startOfPrevDay,
@@ -151,7 +151,9 @@ export const StatBoxData = () => {
         try {
             const currentDate = new Date();
             const startOfPrevDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1);
-            const endOfPrevDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1);
+            const endOfPrevDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+            console.log(startOfPrevDay);
+            console.log(endOfPrevDay);
             const data = {
                 userId: userInfo.user.userId,
                 startDate: startOfPrevDay,
@@ -233,6 +235,8 @@ export const StatBoxData = () => {
             color: ordersFulfilled >= yesterdayOrdersFulfilled ? '#1da32b' : '#b0192a',
             title1: itemsSold,
             subtitle1: 'Items Sold',
+            x: yesterdayItemsSold,
+            y: itemsSold,
             percentIcon1: itemsSold >= yesterdayItemsSold ? <NorthRounded sx={{ color: '#1da32b', fontSize: '12px', stroke: "#1da32b", strokeWidth: 2 }} /> : <SouthRounded sx={{ color: '#b0192a', fontSize: '12px', stroke: "#b0192a", strokeWidth: 2 }} />,
             percentChange1: calculatePercentageChange(yesterdayItemsSold, itemsSold),
             color1: itemsSold >= yesterdayItemsSold ? '#1da32b' : '#b0192a',
@@ -240,5 +244,6 @@ export const StatBoxData = () => {
         },
     ];
 
+    console.log(data);
     return data;
 };

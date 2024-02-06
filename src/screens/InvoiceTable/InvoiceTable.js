@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Image, ActivityIndicator, TextInput } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Image, ActivityIndicator, TextInput, Picker } from 'react-native';
 import { Button, DataTable } from 'react-native-paper';
+import { useNavigate } from 'react-router'
 import LoadingScreen from '../../components/LoadingScreen';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -15,6 +16,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 
 const InvoiceTable = () => {
+    const navigate = useNavigate({});
     const { userInfo, isLoading, logout } = useContext(AuthContext);
     const [invoices, setInvoices] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -25,6 +27,8 @@ const InvoiceTable = () => {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const today = dayjs();
+
+    const statusTypes = ['Pending', 'Paid']
 
     const getInvoices = async () => {
         try {
@@ -37,7 +41,6 @@ const InvoiceTable = () => {
             const result = await client.post('/get-invoices', data, {
                 headers: { 'Content-Type': 'application/json' },
             })
-            console.log(result.data.invoices);
             setInvoices(result.data.invoices)
             setLoading(false)
         } catch (error) {
@@ -51,12 +54,10 @@ const InvoiceTable = () => {
 
     const handleStartDateChange = (date) => {
         setStartDate(date.format('YYYY-MM-DD'));
-        console.log(date.format('YYYY-MM-DD'));
     };
 
     const handleEndDateChange = (date) => {
         setEndDate(date.format('YYYY-MM-DD'));
-        console.log(date.format('YYYY-MM-DD'));
     };
 
     const onDrop = (acceptedFiles) => {
@@ -87,8 +88,6 @@ const InvoiceTable = () => {
             alert('No invoices added!')
         }
 
-        console.log(result.data);
-
         if (result.data.success == true) {
             setLoadingScreen(false)
             setOpenModal(false)
@@ -106,8 +105,6 @@ const InvoiceTable = () => {
         window.open(fileUrl, '_blank')
     }
 
-
-
     const handleInvoiceClick = (invoice) => {
         setSelectedInvoice(invoice);
     };
@@ -119,6 +116,7 @@ const InvoiceTable = () => {
     const closeModal = () => {
         setOpenModal(false)
         setInvoiceFiles(null)
+        setLoadingScreen(false)
     };
 
     return (
@@ -153,7 +151,7 @@ const InvoiceTable = () => {
                                 underlayColor="transparent"
                                 iconStyle={{ fontSize: 22, paddingHorizontal: 5 }}
                                 color={"white"}
-                                onPress={() => setOpenModal(true)}
+                                onPress={() => { navigate('/add-invoice') }}
                             >
                                 <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>Add Invoice</Text>
                             </Icon.Button>
@@ -240,17 +238,28 @@ const InvoiceTable = () => {
                                         <DataTable.Cell style={styles.cell}>{item.invoiceNumber}</DataTable.Cell>
                                         <DataTable.Cell style={styles.cell}>{item.invoiceDate}</DataTable.Cell>
                                         <DataTable.Cell style={styles.cell}>{item.payment}</DataTable.Cell>
-                                        <DataTable.Cell style={styles.cell}>{item.status}</DataTable.Cell>
+                                        <DataTable.Cell style={styles.cell}>
+                                            {/* <Picker
+                                                selectedValue={item.status}
+                                                // onValueChange={(itemValue) => setInvoiceData({ ...invoiceData, payment: itemValue })}
+                                            >
+                                                <Picker.Item label="Select payment status..." value="" />
+                                                {statusTypes.map((status, index) => (
+                                                    <Picker.Item key={index} label={status} value={status} />
+                                                ))}
+                                            </Picker> */}
+                                            {item.status}
+                                        </DataTable.Cell>
                                         <DataTable.Cell style={styles.cell}>
                                             ${item.total}
-                                            <Icon.Button style={{ border: '2px solid #1f82d2', borderRadius: 30, paddingHorizontal: 7, paddingVertical: 4, marginLeft: 50 }}
+                                            {/* <Icon.Button style={{ border: '2px solid #1f82d2', borderRadius: 30, paddingHorizontal: 7, paddingVertical: 4, marginLeft: 50 }}
                                                 name="paypal"
                                                 backgroundColor="transparent"
                                                 underlayColor="transparent"
                                                 color={"#1f82d2"}
                                                 iconStyle={{ padding: 0, marginRight: 5, fontSize: 15 }}>
                                                 <Text style={{ color: '#1f82d2', fontSize: 15, fontWeight: '700' }}>Pay</Text>
-                                            </Icon.Button>
+                                            </Icon.Button> */}
                                         </DataTable.Cell>
                                     </DataTable.Row>
                                 </TouchableOpacity>
@@ -402,7 +411,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     tableContainer: {
-        flex: 1,
+        flex: 1.5,
         backgroundColor: 'white',
     },
     dataTable: {

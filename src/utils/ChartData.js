@@ -55,7 +55,7 @@ export const LineChartData = () => {
   const getMonthlyData = async () => {
     try {
       const currentDate = new Date();
-      const startOfPastYear = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), 1);
+      const startOfPastYear = new Date(currentDate.getFullYear() - 1, currentDate.getMonth() + 1, 1);
       const endOfCurrentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
       const data = {
         userId: userInfo.user.userId,
@@ -109,7 +109,7 @@ export const BarChartData = () => {
   const getMonthlyData = async () => {
     try {
       const currentDate = new Date();
-      const startOfPastYear = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), 1);
+      const startOfPastYear = new Date(currentDate.getFullYear() - 1, currentDate.getMonth() + 1, 1);
       const endOfCurrentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
       const data = {
         userId: userInfo.user.userId,
