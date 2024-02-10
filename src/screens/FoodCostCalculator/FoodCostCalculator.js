@@ -1,11 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Image, ActivityIndicator, TextInput } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Image, ActivityIndicator, TextInput, Picker } from 'react-native';
 import { Button, DataTable } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import RNPrint from 'react-native-print';
 import { AuthContext } from '../../context/AuthContext.js'
 import Header from '../../components/global/Header/index.js';
 import client from '../../utils/ApiConfig'
+import { sortSalesReport } from '../../helpers/sort.js'
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { TextField } from '@mui/material';
@@ -18,6 +19,9 @@ const FoodCostCalculator = () => {
     const [loading, setLoading] = useState(false);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+    const [sortedTypeSales, setSortedTypeSales] = useState([]);
+    const [sortedRecipeSales, setSortedRecipeSales] = useState([]);
+    const [sortOption, setSortOption] = useState('quantitySold_descending')
     const today = dayjs();
 
     const getRecipesSalesData = async () => {
@@ -46,6 +50,14 @@ const FoodCostCalculator = () => {
         getRecipesSalesData();
     }, [startDate, endDate]);
 
+    useEffect(() => {
+        const [sortBy, sortOrder] = sortOption.split('_');
+        const sortedTypes = sortSalesReport(typeWiseSales, sortBy, sortOrder);
+        const sortedRecipes = sortSalesReport(recipeWiseSales, sortBy, sortOrder);
+        setSortedTypeSales(sortedTypes)
+        setSortedRecipeSales(sortedRecipes)
+    }, [typeWiseSales, recipeWiseSales, sortOption]);
+
     const handleStartDateChange = (date) => {
         setStartDate(date.format('YYYY-MM-DD'));
         console.log(date.format('YYYY-MM-DD'));
@@ -65,7 +77,7 @@ const FoodCostCalculator = () => {
     };
 
     const renderAccordionContent = (typeName) => {
-        const typeWiseRecipes = recipeWiseSales.filter((item) => item.type === typeName);
+        const typeWiseRecipes = sortedRecipeSales.filter((item) => item.type === typeName);
         console.log(typeWiseRecipes);
         return (
             typeWiseRecipes.map((item, index) => (
@@ -119,6 +131,20 @@ const FoodCostCalculator = () => {
                                 }
                             }}
                         />
+                        <Picker
+                            style={styles.picker}
+                            itemStyle={styles.pickerItem}
+                            underlineColorAndroid="transparent"
+                            selectedValue={sortOption}
+                            onValueChange={(value) => setSortOption(value)}
+                        >
+                            <Picker.Item label="Highest Selling" value="quantitySold_descending" />
+                            <Picker.Item label="Lowest Selling" value="quantitySold_ascending" />
+                            <Picker.Item label="Highest Sales" value="totalSales_descending" />
+                            <Picker.Item label="Lowest Sales" value="totalSales_ascending" />
+                            <Picker.Item label="Highest Profit" value="totalProfitWomc_ascending" />
+                            <Picker.Item label="Lowest Profit" value="totalProfitWomc_ascending" />
+                        </Picker>
                     </View>
 
                     <View style={styles.rightTableButtons}>
@@ -162,7 +188,7 @@ const FoodCostCalculator = () => {
                 {loading ? (
                     <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 10 }} />
                 ) : (
-                    typeWiseSales.map((item, index) => (
+                    sortedTypeSales.map((item, index) => (
                         <React.Fragment key={index}>
                             <DataTable.Row
                                 style={index % 2 === 0 ? styles.evenRow : styles.oddRow}
@@ -184,7 +210,7 @@ const FoodCostCalculator = () => {
                                 </DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}></DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.avgCost).toFixed(2)}</span></DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>{item.itemsSold}</span></DataTable.Cell>
+                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>{item.quantitySold}</span></DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalFoodCost).toFixed(2)}</span></DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalSales).toFixed(2)}</span></DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalProfitWomc).toFixed(2)}</span></DataTable.Cell>
@@ -236,6 +262,28 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: "#72b8f2",
         justifyContent: "center"
+    },
+    pickerContainer: {
+        height: 40,
+        margin: 3,
+        borderRadius: 30,
+        backgroundColor: "#0071cd",
+        justifyContent: "center",
+    },
+    picker: {
+        height: 40,
+        margin: 3,
+        borderRadius: 10,
+        backgroundColor: "#0071cd",
+        justifyContent: "center",
+        color: 'white',
+        paddingHorizontal: 8,
+        fontSize: 15
+    },
+    pickerItem: {
+        color: 'white',
+        backgroundColor: "red",
+        fontSize: 15
     },
     dataTable: {
         // marginTop: 5,

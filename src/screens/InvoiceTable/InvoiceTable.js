@@ -9,6 +9,8 @@ import RNPrint from 'react-native-print';
 import { AuthContext } from '../../context/AuthContext.js'
 import Header from '../../components/global/Header/index.js';
 import client from '../../utils/ApiConfig'
+import { sortInvoices } from '../../helpers/sort.js';
+import { filterInvoices } from '../../helpers/filter.js';
 import { useDropzone } from 'react-dropzone';
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
@@ -17,8 +19,10 @@ import dayjs from 'dayjs';
 
 const InvoiceTable = () => {
     const navigate = useNavigate({});
+    const [editingStatusRows, setEditingStatusRows] = useState([])
     const { userInfo, isLoading, logout } = useContext(AuthContext);
     const [invoices, setInvoices] = useState([]);
+    const [vendors, setVendors] = useState([]);
     const [loading, setLoading] = useState(false);
     const [loadingScreen, setLoadingScreen] = useState(false);
     const [invoiceFiles, setInvoiceFiles] = useState(null)
@@ -26,6 +30,10 @@ const InvoiceTable = () => {
     const [openModal, setOpenModal] = useState(false)
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+    const [sortOption, setSortOption] = useState('invoiceDate_descending');
+    const [filterByVendor, setFilterByVendor] = useState('All');
+    const [filterByStatus, setFilterByStatus] = useState('All');
+    const [filteredInvoices, setFilteredInvoices] = useState([]);
     const today = dayjs();
 
     const statusTypes = ['Pending', 'Paid']
@@ -42,15 +50,51 @@ const InvoiceTable = () => {
                 headers: { 'Content-Type': 'application/json' },
             })
             setInvoices(result.data.invoices)
+            setVendors(Array.from(new Set(result.data.invoices.map((invoice) => invoice.vendor))))
+            console.log(Array.from(new Set(result.data.invoices.map((invoice) => invoice.vendor))));
             setLoading(false)
         } catch (error) {
             console.log(`getting invoices error ${error}`);
         }
     }
 
+
     useEffect(() => {
         getInvoices();
     }, [startDate, endDate]);
+
+    useEffect(() => {
+        const [sortBy, sortOrder] = sortOption.split('_');
+        const sorted = sortInvoices(invoices, sortBy, sortOrder);
+        const vendorFiltered = filterInvoices(sorted, 'vendor', filterByVendor);
+        const statusFiltered = filterInvoices(vendorFiltered, 'status', filterByStatus);
+        setFilteredInvoices(statusFiltered)
+    }, [invoices, sortOption, filterByVendor, filterByStatus]);
+
+    const updateInvoiceStatus = async (invoiceId, newStatus) => {
+        try {
+            setLoading(true)
+            const data = {
+                userId: userInfo.user.userId,
+                invoiceId: invoiceId,
+                newStatus: newStatus,
+            };
+            const result = await client.post('/update-invoice-status', data, {
+                headers: { 'Content-Type': 'application/json' },
+            })
+            await getInvoices()
+            setEditingStatusRows(new Array(invoices.length).fill(false))
+            setLoading(false)
+        } catch (error) {
+            console.log(`updating invoice status error ${error}`);
+        }
+    }
+
+    const handleEditStatusClick = (index) => {
+        const updatedEditingStatusRows = [...editingStatusRows];
+        updatedEditingStatusRows[index] = true;
+        setEditingStatusRows(updatedEditingStatusRows);
+    };
 
     const handleStartDateChange = (date) => {
         setStartDate(date.format('YYYY-MM-DD'));
@@ -155,36 +199,41 @@ const InvoiceTable = () => {
                             >
                                 <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>Add Invoice</Text>
                             </Icon.Button>
-                            {/* <Icon.Button
-                                style={styles.tableNavBtnSky}
-                                name="angle-down"
-                                backgroundColor="transparent"
-                                underlayColor="transparent"
-                                iconStyle={{ fontSize: 22, paddingHorizontal: 5 }}
-                                color={"white"}
+                            <Picker
+                                style={styles.picker}
+                                itemStyle={styles.pickerItem}
+                                underlineColorAndroid="transparent"
+                                selectedValue={sortOption}
+                                onValueChange={(value) => setSortOption(value)}
                             >
-                                <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>Include All Orders</Text>
-                            </Icon.Button>
-                            <Icon.Button
-                                style={styles.tableNavBtnBlue}
-                                name="angle-down"
-                                backgroundColor="transparent"
-                                underlayColor="transparent"
-                                iconStyle={{ fontSize: 22, paddingHorizontal: 5 }}
-                                color={"white"}
+                                <Picker.Item label="Total (High to Low)" value="total_descending" />
+                                <Picker.Item label="Total (Low to High)" value="total_ascending" />
+                                <Picker.Item label="Recent First" value="invoiceDate_descending" />
+                                <Picker.Item label="Oldest First" value="invoiceDate_ascending" />
+                            </Picker>
+                            <Picker
+                                style={styles.picker}
+                                itemStyle={styles.pickerItem}
+                                underlineColorAndroid="transparent"
+                                selectedValue={filterByVendor}
+                                onValueChange={(value) => setFilterByVendor(value)}
                             >
-                                <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>Invoice Date: All Time</Text>
-                            </Icon.Button>
-                            <Icon.Button
-                                style={styles.tableNavBtnSky}
-                                name="angle-down"
-                                backgroundColor="transparent"
-                                underlayColor="transparent"
-                                iconStyle={{ fontSize: 22, paddingHorizontal: 5 }}
-                                color={"white"}
+                                <Picker.Item label="Vendor: All" value="All" />
+                                {vendors.map((vendor, index) => (
+                                    <Picker.Item key={index} label={vendor} value={vendor} />
+                                ))}
+                            </Picker>
+                            <Picker
+                                style={styles.picker}
+                                itemStyle={styles.pickerItem}
+                                underlineColorAndroid="transparent"
+                                selectedValue={filterByStatus}
+                                onValueChange={(value) => setFilterByStatus(value)}
                             >
-                                <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>All Vendors</Text>
-                            </Icon.Button> */}
+                                <Picker.Item label="Status: All" value="All" />
+                                <Picker.Item label="Pending" value="Pending" />
+                                <Picker.Item label="Paid" value="Paid" />
+                            </Picker>
                         </View>
                         <View style={styles.rightTableButtons}>
                             <Icon.Button
@@ -228,8 +277,13 @@ const InvoiceTable = () => {
                         {loading ? (
                             <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 10 }} />
                         ) : (
-                            invoices.map((item, index) => (
-                                <TouchableOpacity key={index} onPress={() => handleInvoiceClick(item)}>
+                            filteredInvoices.map((item, index) => (
+                                <TouchableOpacity key={index} onPress={(event) => {
+                                    if (event.target && event.target.tagName === 'SELECT') {
+                                        return;
+                                    }
+                                    handleInvoiceClick(item);
+                                }}>
                                     <DataTable.Row
                                         style={index % 2 === 0 ? styles.evenRow : styles.oddRow}
                                     >
@@ -239,27 +293,27 @@ const InvoiceTable = () => {
                                         <DataTable.Cell style={styles.cell}>{item.invoiceDate}</DataTable.Cell>
                                         <DataTable.Cell style={styles.cell}>{item.payment}</DataTable.Cell>
                                         <DataTable.Cell style={styles.cell}>
-                                            {/* <Picker
-                                                selectedValue={item.status}
-                                                // onValueChange={(itemValue) => setInvoiceData({ ...invoiceData, payment: itemValue })}
-                                            >
-                                                <Picker.Item label="Select payment status..." value="" />
-                                                {statusTypes.map((status, index) => (
-                                                    <Picker.Item key={index} label={status} value={status} />
-                                                ))}
-                                            </Picker> */}
-                                            {item.status}
+                                            {editingStatusRows[index] ? (
+                                                <Picker
+                                                    style={styles.smallInput}
+                                                    selectedValue={item.status}
+                                                    onValueChange={(newStatus) => updateInvoiceStatus(item._id, newStatus)}
+                                                >
+                                                    {statusTypes.map((status, index) => (
+                                                        <Picker.Item key={index} label={status} value={status} />
+                                                    ))}
+                                                </Picker>
+                                            ) : (
+                                                <>
+                                                    <TouchableOpacity onPress={() => handleEditStatusClick(index)}>
+                                                        <Icon name="edit" size={15} color="gray" style={{ marginRight: 5 }} />
+                                                    </TouchableOpacity>
+                                                    <Text style={{ fontSize: '15px' }}>{item.status}</Text>
+                                                </>
+                                            )}
                                         </DataTable.Cell>
                                         <DataTable.Cell style={styles.cell}>
                                             ${item.total}
-                                            {/* <Icon.Button style={{ border: '2px solid #1f82d2', borderRadius: 30, paddingHorizontal: 7, paddingVertical: 4, marginLeft: 50 }}
-                                                name="paypal"
-                                                backgroundColor="transparent"
-                                                underlayColor="transparent"
-                                                color={"#1f82d2"}
-                                                iconStyle={{ padding: 0, marginRight: 5, fontSize: 15 }}>
-                                                <Text style={{ color: '#1f82d2', fontSize: 15, fontWeight: '700' }}>Pay</Text>
-                                            </Icon.Button> */}
                                         </DataTable.Cell>
                                     </DataTable.Row>
                                 </TouchableOpacity>
@@ -389,6 +443,28 @@ const styles = StyleSheet.create({
         backgroundColor: "#72b8f2",
         justifyContent: "center"
     },
+    pickerContainer: {
+        height: 40,
+        margin: 3,
+        borderRadius: 30,
+        backgroundColor: "#0071cd",
+        justifyContent: "center",
+    },
+    picker: {
+        height: 40,
+        margin: 3,
+        borderRadius: 10,
+        backgroundColor: "#0071cd",
+        justifyContent: "center",
+        color: 'white',
+        paddingHorizontal: 8,
+        fontSize: 15
+    },
+    pickerItem: {
+        color: 'white',
+        backgroundColor: "red",
+        fontSize: 15
+    },
     searchContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -429,6 +505,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#f2f0f0',
     },
     oddRow: {
+        backgroundColor: '#fff',
+    },
+    smallInput: {
+        // flex: 1,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 3,
+        paddingRight: 5,
         backgroundColor: '#fff',
     },
     invoiceContainer: {

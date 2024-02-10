@@ -61,9 +61,22 @@ const AddInvoice = () => {
         }
     }
 
+    const calculateTotalAmount = () => {
+        const totalAmount = invoiceData.ingredients.reduce((sum, ingredient) => {
+            const ingredientTotal = parseFloat(ingredient.total) || 0;
+            return sum + ingredientTotal;
+        }, 0);
+    
+        setInvoiceData((prevInvoiceData) => ({
+            ...prevInvoiceData,
+            total: totalAmount.toFixed(2),
+        }));
+    };
+
     useEffect(() => {
         getIngredients()
         getUnitMaps()
+        calculateTotalAmount()
     }, [invoiceData])
 
     const handleDateChange = (date) => {
@@ -124,29 +137,24 @@ const AddInvoice = () => {
     };
 
     const handleIngredientsChange = (index, field, value) => {
-        const updatedIngredients = [...invoiceData.ingredients];
-        updatedIngredients[index][field] = value;
+        const updatedIngredients = [...invoiceData.ingredients]
+        updatedIngredients[index][field] = value
         if (field === 'quantity' || field === 'unitPrice') {
             const quantity = updatedIngredients[index]['quantity'] || 0;
             const unitPrice = updatedIngredients[index]['unitPrice'] || 0;
             updatedIngredients[index]['total'] = (quantity * unitPrice).toFixed(2);
         }
-        setInvoiceData({ ...invoiceData, ingredients: updatedIngredients });
+        setInvoiceData({ ...invoiceData, ingredients: updatedIngredients })
     };
-
-    const handleDeleteIngredient = (index) => {
+    
+    const handleDeleteIngredient = async (index) => {
         const updatedIngredients = [...invoiceData.ingredients];
         updatedIngredients.splice(index, 1);
-        setInvoiceData({ ...invoiceData, ingredients: updatedIngredients });
-    };
-
-    const calculateTotalAmount = () => {
-        const totalAmount = invoiceData.ingredients.reduce((sum, ingredient) => {
-            const ingredientTotal = parseFloat(ingredient.total) || 0;
-            return sum + ingredientTotal;
-        }, 0);
-
-        setInvoiceData({ ...invoiceData, total: totalAmount.toFixed(2) })
+    
+        setInvoiceData((prevInvoiceData) => ({
+            ...prevInvoiceData,
+            ingredients: updatedIngredients,
+        }));
     };
 
     const handleSubmit = async () => {
@@ -332,7 +340,7 @@ const AddInvoice = () => {
                             />
                             <Icon.Button style={styles.crossBtn}
                                 name="times-circle-o"
-                                onPress={() => handleDeleteIngredient(index)}
+                                onPress={() => {handleDeleteIngredient(index)}}
                                 backgroundColor="transparent"
                                 underlayColor="transparent"
                                 iconStyle={{ margin: 0, padding: 0, fontSize: 25 }}
