@@ -45,7 +45,7 @@ const AddInvoice = () => {
             })
             setIngredients(result.data.ingredients)
         } catch (error) {
-            console.log(`getting recipes error ${error}`);
+            console.log(`getting ingredients error ${error}`);
         }
     }
 
@@ -76,7 +76,7 @@ const AddInvoice = () => {
     useEffect(() => {
         getIngredients()
         getUnitMaps()
-        calculateTotalAmount()
+        // calculateTotalAmount()
     }, [invoiceData])
 
     const handleDateChange = (date) => {

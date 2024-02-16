@@ -135,7 +135,7 @@ const MarginCalculator = () => {
                             <Picker.Item label="Lowest Selling" value="quantitySold_ascending" />
                             <Picker.Item label="Highest Sales" value="totalSales_descending" />
                             <Picker.Item label="Lowest Sales" value="totalSales_ascending" />
-                            <Picker.Item label="Highest Profit" value="totalProfitWmc_ascending" />
+                            <Picker.Item label="Highest Profit" value="totalProfitWmc_descending" />
                             <Picker.Item label="Lowest Profit" value="totalProfitWmc_ascending" />
                         </Picker>
                     </View>
@@ -207,8 +207,8 @@ const MarginCalculator = () => {
                                 <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalModifierCost).toFixed(2)}</span></DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalFoodCost + item.totalModifierCost).toFixed(2)}</span></DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalSales).toFixed(2)}</span></DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalProfitWmc).toFixed(2)}</span></DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>{(item.theoreticalCostWmc).toFixed(2)}%</span></DataTable.Cell>
+                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: item.totalProfitWmc < 0 ? 'red' : 'green' }}>${(Math.abs(item.totalProfitWmc)).toFixed(2)}</span></DataTable.Cell>
+                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: item.theoreticalCostWmc < 0 ? 'red' : 'green' }}>{(Math.abs(item.theoreticalCostWmc)).toFixed(2)}%</span></DataTable.Cell>
                             </DataTable.Row>
 
                             {expandedTypes.includes(item.type) && renderAccordionContent(item.type)}

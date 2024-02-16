@@ -52,7 +52,7 @@ const SignUp = ({ navigation }) => {
           </Text>
           <CustomButton text="Register" onPress={() => register(firstName, lastName, username, email, password, Confpassword, navigate)} />
           <Text>Already have an account?</Text>
-          <CustomButton text="Login" onPress={() => navigate('/signin')} type="SECONDARY" />
+          <CustomButton text="Login" onPress={() => navigate('/')} type="SECONDARY" />
         </View>
       </ImageBackground>
     </ScrollView>

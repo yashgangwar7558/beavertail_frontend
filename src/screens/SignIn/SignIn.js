@@ -1,96 +1,100 @@
-import Logo from '../../assets/logo/greenCactusAi.png';
+import Logo from '../../assets/logo/logo.png';
 import Background from '../../assets/background1.jpg';
+import './SignIn.css'
 import { useNavigate } from 'react-router'
 import React, { useState, useContext } from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  ImageBackground,
-  StyleSheet,
-  useWindowDimensions,
-  ScrollView,
-} from 'react-native';
 import { AuthContext } from '../../context/AuthContext';
 import client from '../../utils/ApiConfig'
 import Spinner from 'react-native-loading-spinner-overlay';
-import CustomInput from '../../components/CustomInput';
-import CustomButton from '../../components/CustomButton';
+import { Box, Button, IconButton, TextField, InputAdornment, StyledEngineProvider } from '@mui/material'
+import { AccountCircleRounded, LockRounded, VisibilityOffRounded, VisibilityRounded } from '@mui/icons-material';
 
 const SignIn = ({ navigation }) => {
-  const navigate = useNavigate({});
-  const [username, setUsername] = useState(null);
-  const [password, setPassword] = useState(null);
-  const { isLoading, login, error } = useContext(AuthContext);
-  const { height } = useWindowDimensions();
+    const navigate = useNavigate({});
+    const [username, setUsername] = useState(null);
+    const [password, setPassword] = useState(null);
+    const { isLoading, login, error } = useContext(AuthContext);
 
-  return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      style={styles.container}
-      contentContainerStyle={styles.scrollContainer}
-    >
-      <ImageBackground
-        source={Background}
-        style={styles.backgroundImage}
-        imageStyle={styles.backgroundImageStyle}
-      >
-        <View style={styles.root}>
-          <Spinner visible={isLoading} />
-          <Image source={Logo} style={[styles.logo, { height: height * 0.3 }]} resizeMode="contain" />
-          {error ? (
-            <Text style={styles.errorText}>
-              {error}
-            </Text>
-          ) : null}
-          <CustomInput placeholder="Username" value={username} setValue={setUsername} autoCapitalize='none' />
-          <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry autoCapitalize='none' />
-          <CustomButton text="Login" onPress={() => login(username, password, navigate)} />
-          <Text style={styles.registerText}>Don't have an account?</Text>
-          <CustomButton text="Register" onPress={() => navigate('/signup')} type="SECONDARY" />
-        </View>
-      </ImageBackground>
-    </ScrollView>
-  );
+    const [showPassword, setShowPassword] = React.useState(false);
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    }
+
+    return (
+        <div className='login-screen'>
+            <div className='login-card'>
+                <div>
+                    <div className='logo-container'>
+                        <img src={Logo} alt="logo" className='logo' />
+                    </div>
+                    <Box>
+                        <Spinner visible={isLoading} />
+                        <StyledEngineProvider injectFirst>
+                            <div className='input-container' id='username'>
+                                <TextField type="text" fullWidth placeholder='Username'
+                                    name='username' value={username}
+                                    onChange={(event) => setUsername(event.target.value)}
+                                    variant='standard'
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position='start'>
+                                                <AccountCircleRounded />
+                                            </InputAdornment>
+                                        ),
+                                        disableUnderline: true,
+                                    }}
+                                />
+                            </div>
+                            <div className="input-container" id='password'>
+                                <TextField type={showPassword ? 'text' : 'password'} fullWidth placeholder='Password'
+                                    name='password' value={password}
+                                    onChange={(event) => setPassword(event.target.value)}
+                                    variant='standard'
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position='start'>
+                                                <LockRounded />
+                                            </InputAdornment>
+                                        ),
+                                        disableUnderline: true,
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton aria-label="toggle password visibility"
+                                                    onClick={handleClickShowPassword}
+                                                    onMouseDown={handleMouseDownPassword}
+                                                    edge="end">
+                                                    {showPassword ? <VisibilityOffRounded /> : <VisibilityRounded />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        )
+                                    }}
+                                />
+                            </div>
+
+                            <div className='forgot-link'>
+                                <p>Forgot password?</p>
+                            </div>
+
+                            {error ? (
+                                <p className='error-msg'>{error}</p>
+                            ) : null}
+
+                            <div className="loginbutton-container">
+                                <Button type="submit" className='login-button' variant='contained' onClick={() => login(username, password, navigate)}>Login</Button>
+                            </div>
+
+                            <h4 className="line"><span>Or</span></h4>
+
+                            <div className="registerbutton-container">
+                                <Button type="submit" className='register-button' variant='contained' onClick={() => navigate('/signup')}>Register Restraunt</Button>
+                            </div>
+                        </StyledEngineProvider>
+                    </Box>
+                </div>
+            </div>
+        </div>
+    );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  scrollContainer: {
-    flexGrow: 1,
-  },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center',
-  },
-  backgroundImageStyle: {
-    flex: 1,
-  },
-  root: {
-    alignItems: 'center',
-    padding: 20,
-  },
-  logo: {
-    width: '70%',
-    maxWidth: 300,
-    maxHeight: 200,
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 18,
-    textAlign: 'center',
-    marginVertical: 10,
-  },
-  registerText: {
-    color: 'white',
-    marginBottom: 10,
-  },
-});
-
 export default SignIn;
-

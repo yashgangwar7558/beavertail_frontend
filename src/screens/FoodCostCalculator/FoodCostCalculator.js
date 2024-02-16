@@ -142,7 +142,7 @@ const FoodCostCalculator = () => {
                             <Picker.Item label="Lowest Selling" value="quantitySold_ascending" />
                             <Picker.Item label="Highest Sales" value="totalSales_descending" />
                             <Picker.Item label="Lowest Sales" value="totalSales_ascending" />
-                            <Picker.Item label="Highest Profit" value="totalProfitWomc_ascending" />
+                            <Picker.Item label="Highest Profit" value="totalProfitWomc_descending" />
                             <Picker.Item label="Lowest Profit" value="totalProfitWomc_ascending" />
                         </Picker>
                     </View>
@@ -213,8 +213,8 @@ const FoodCostCalculator = () => {
                                 <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>{item.quantitySold}</span></DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalFoodCost).toFixed(2)}</span></DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalSales).toFixed(2)}</span></DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalProfitWomc).toFixed(2)}</span></DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>{(item.theoreticalCostWomc).toFixed(2)}%</span></DataTable.Cell>
+                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: item.totalProfitWomc < 0 ? 'red' : 'green' }}>${(Math.abs(item.totalProfitWomc)).toFixed(2)}</span></DataTable.Cell>
+                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: item.theoreticalCostWomc < 0 ? 'red' : 'green' }}>{(Math.abs(item.theoreticalCostWomc)).toFixed(2)}%</span></DataTable.Cell>
                             </DataTable.Row>
 
                             {expandedTypes.includes(item.type) && renderAccordionContent(item.type)}

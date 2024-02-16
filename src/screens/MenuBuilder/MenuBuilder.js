@@ -61,7 +61,7 @@ const MenuBuilder = () => {
             })
             setIngredient(result.data.ingredients)
         } catch (error) {
-            console.log(`getting recipes error ${error}`);
+            console.log(`getting ingredients error ${error}`);
         }
     }
     const getUnitMaps = async () => {
