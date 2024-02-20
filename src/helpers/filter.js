@@ -7,7 +7,7 @@ exports.filterInvoices = (invoices, filterBy, value) => {
         if (filterBy === 'vendor') {
             return invoice.vendor === value;
         } else if (filterBy === 'status') {
-            return invoice.status === value;
+            return invoice.status.type === value;
         }
 
         return true;

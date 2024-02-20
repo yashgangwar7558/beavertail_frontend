@@ -24,6 +24,7 @@ const InvoiceTable = () => {
     const [invoices, setInvoices] = useState([]);
     const [vendors, setVendors] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [statusLoading, setStatusLoading] = useState(false);
     const [loadingScreen, setLoadingScreen] = useState(false);
     const [invoiceFiles, setInvoiceFiles] = useState(null)
     const [selectedInvoice, setSelectedInvoice] = useState(null);
@@ -34,9 +35,11 @@ const InvoiceTable = () => {
     const [filterByVendor, setFilterByVendor] = useState('All');
     const [filterByStatus, setFilterByStatus] = useState('All');
     const [filteredInvoices, setFilteredInvoices] = useState([]);
+    const [showRejectionInput, setShowRejectionInput] = useState(false);
+    const [rejectionReason, setRejectionReason] = useState('');
     const today = dayjs();
 
-    const statusTypes = ['Pending', 'Paid']
+    const statusTypes = ['Pending Review', 'Pending Approval', 'Proccessed-PendingPayment', 'Processed-Paid', 'Review-Rejected', 'Approval-Rejected']
 
     const getInvoices = async () => {
         try {
@@ -51,7 +54,6 @@ const InvoiceTable = () => {
             })
             setInvoices(result.data.invoices)
             setVendors(Array.from(new Set(result.data.invoices.map((invoice) => invoice.vendor))))
-            console.log(Array.from(new Set(result.data.invoices.map((invoice) => invoice.vendor))));
             setLoading(false)
         } catch (error) {
             console.log(`getting invoices error ${error}`);
@@ -70,31 +72,6 @@ const InvoiceTable = () => {
         const statusFiltered = filterInvoices(vendorFiltered, 'status', filterByStatus);
         setFilteredInvoices(statusFiltered)
     }, [invoices, sortOption, filterByVendor, filterByStatus]);
-
-    const updateInvoiceStatus = async (invoiceId, newStatus) => {
-        try {
-            setLoading(true)
-            const data = {
-                userId: userInfo.user.userId,
-                invoiceId: invoiceId,
-                newStatus: newStatus,
-            };
-            const result = await client.post('/update-invoice-status', data, {
-                headers: { 'Content-Type': 'application/json' },
-            })
-            await getInvoices()
-            setEditingStatusRows(new Array(invoices.length).fill(false))
-            setLoading(false)
-        } catch (error) {
-            console.log(`updating invoice status error ${error}`);
-        }
-    }
-
-    const handleEditStatusClick = (index) => {
-        const updatedEditingStatusRows = [...editingStatusRows];
-        updatedEditingStatusRows[index] = true;
-        setEditingStatusRows(updatedEditingStatusRows);
-    };
 
     const handleStartDateChange = (date) => {
         setStartDate(date.format('YYYY-MM-DD'));
@@ -162,6 +139,70 @@ const InvoiceTable = () => {
         setInvoiceFiles(null)
         setLoadingScreen(false)
     };
+
+    const updateInvoiceStatus = async (invoiceId, newStatus, newRemark) => {
+        try {
+            setStatusLoading(true)
+            const data = {
+                userId: userInfo.user.userId,
+                invoiceId: invoiceId,
+                newStatus: newStatus,
+                newRemark: newRemark
+            };
+            const result = await client.post('/update-invoice-status', data, {
+                headers: { 'Content-Type': 'application/json' },
+            })
+            if (result.data.success) {
+                closeInvoiceDetails()
+                await getInvoices()
+                // setEditingStatusRows(new Array(invoices.length).fill(false))
+            }
+            setStatusLoading(false)
+        } catch (error) {
+            console.log(`updating invoice status error ${error}`)
+        }
+    }
+
+    const processInvoice = async (invoiceId) => {
+        try {
+            setStatusLoading(true)
+            const data = {
+                userId: userInfo.user.userId,
+                invoiceId: invoiceId,
+            };
+            const result = await client.post('/process-invoice', data, {
+                headers: { 'Content-Type': 'application/json' },
+            })
+            if (result.data.success) {
+                closeInvoiceDetails()
+                await getInvoices()
+            }
+            setStatusLoading(false)
+        } catch (error) {
+            console.log(`processing invoice error ${error}`)
+        }
+    }
+
+    const handleEditStatusClick = (index) => {
+        const updatedEditingStatusRows = [...editingStatusRows]
+        updatedEditingStatusRows[index] = true
+        setEditingStatusRows(updatedEditingStatusRows)
+    }
+
+    const deleteInvoice = async (invoiceId) => {
+        try {
+            const id = { invoiceId }
+            const result = await client.post('/delete-invoice', id, {
+                headers: { 'Content-Type': 'application/json' },
+            })
+            if (result.data.success) {
+                getInvoices()
+                closeInvoiceDetails()
+            }
+        } catch (error) {
+            console.log(`deleting recipes error ${error}`)
+        }
+    }
 
     return (
         <View>
@@ -231,11 +272,12 @@ const InvoiceTable = () => {
                                 onValueChange={(value) => setFilterByStatus(value)}
                             >
                                 <Picker.Item label="Status: All" value="All" />
-                                <Picker.Item label="Pending" value="Pending" />
-                                <Picker.Item label="Paid" value="Paid" />
+                                {statusTypes.map((status, index) => (
+                                    <Picker.Item key={index} label={status} value={status} />
+                                ))}
                             </Picker>
                         </View>
-                        <View style={styles.rightTableButtons}>
+                        {/* <View style={styles.rightTableButtons}>
                             <Icon.Button
                                 style={styles.tableNavBtnBlue}
                                 name="angle-down"
@@ -246,7 +288,7 @@ const InvoiceTable = () => {
                             >
                                 <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>Export As</Text>
                             </Icon.Button>
-                        </View>
+                        </View> */}
                     </View>
                     <View style={styles.searchContainer}>
                         <TextInput
@@ -293,7 +335,7 @@ const InvoiceTable = () => {
                                         <DataTable.Cell style={styles.cell}>{item.invoiceDate}</DataTable.Cell>
                                         <DataTable.Cell style={styles.cell}>{item.payment}</DataTable.Cell>
                                         <DataTable.Cell style={styles.cell}>
-                                            {editingStatusRows[index] ? (
+                                            {/* {editingStatusRows[index] ? (
                                                 <Picker
                                                     style={styles.smallInput}
                                                     selectedValue={item.status}
@@ -310,7 +352,8 @@ const InvoiceTable = () => {
                                                     </TouchableOpacity>
                                                     <Text style={{ fontSize: '15px' }}>{item.status}</Text>
                                                 </>
-                                            )}
+                                            )} */}
+                                            {item.status.type}
                                         </DataTable.Cell>
                                         <DataTable.Cell style={styles.cell}>
                                             ${item.total}
@@ -346,11 +389,18 @@ const InvoiceTable = () => {
                         <ScrollView>
                             <View style={styles.invoiceDetailsContainer}>
                                 <View style={styles.invoiceDetails}>
-                                    <Text>Vendor: {selectedInvoice.vendor}</Text>
-                                    <Text>Date: {selectedInvoice.invoiceDate}</Text>
-                                    <Text>Amt. Payable: {selectedInvoice.total}</Text>
+                                    <Text style={{ margin: '4px' }}><span style={{ fontWeight: 'bold' }}>Vendor:</span> {selectedInvoice.vendor}</Text>
+                                    <Text style={{ margin: '4px' }}><span style={{ fontWeight: 'bold' }}>Date:</span> {selectedInvoice.invoiceDate}</Text>
+                                    <Text style={{ margin: '4px' }}><span style={{ fontWeight: 'bold' }}>Amt. Payable:</span> ${selectedInvoice.total}</Text>
+                                    <Text style={{ margin: '4px' }}><span style={{ fontWeight: 'bold' }}>Status:</span> {selectedInvoice.status.type}</Text>
                                 </View>
                                 <DataTable>
+                                    <DataTable.Header style={styles.header}>
+                                        <DataTable.Title><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Name</span></DataTable.Title>
+                                        <DataTable.Title><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Quantity</span></DataTable.Title>
+                                        <DataTable.Title><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Unit</span></DataTable.Title>
+                                        <DataTable.Title><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Unit Price</span></DataTable.Title>
+                                    </DataTable.Header>
                                     {
                                         selectedInvoice.ingredients.map((item, index) => (
                                             <DataTable.Row key={index}>
@@ -362,16 +412,129 @@ const InvoiceTable = () => {
                                         ))
                                     }
                                 </DataTable>
-                                <Icon.Button
-                                    style={styles.blueBtn}
-                                    name="external-link"
-                                    onPress={() => { openInvoiceFile(selectedInvoice.invoiceUrl) }}
-                                    backgroundColor="transparent"
-                                    underlayColor="transparent"
-                                    iconStyle={{ fontSize: 18, padding: 0, margin: 0 }}
-                                    color={"white"}>
-                                    <Text style={[{ fontWeight: '500', color: 'white', fontSize: '15px', marginLeft: '3px' }]}>Open Invoice</Text>
-                                </Icon.Button>
+                                <View style={styles.invoiceDetailsButtonsContainer}>
+                                    <View style={styles.invoiceDetailsButtonsLeft}>
+                                        <Icon.Button
+                                            style={styles.blueTransparentBtn}
+                                            name="external-link"
+                                            onPress={() => { openInvoiceFile(selectedInvoice.invoiceUrl) }}
+                                            backgroundColor="transparent"
+                                            underlayColor="transparent"
+                                            iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
+                                            color={"#0071cd"}>
+                                            <Text style={[{ color: '#0071cd', fontSize: 14, marginLeft: '4px' }]}>Open</Text>
+                                        </Icon.Button>
+                                    </View>
+                                    {selectedInvoice.status.type === 'Pending Review' ? (
+                                        <View style={styles.invoiceDetailsButtonsRight}>
+                                            <Icon.Button
+                                                style={styles.blueBtn}
+                                                name="check-square-o"
+                                                onPress={() => { updateInvoiceStatus(selectedInvoice._id, 'Pending Approval', '') }}
+                                                backgroundColor="transparent"
+                                                underlayColor="transparent"
+                                                iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
+                                                color={"white"}>
+                                                <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px' }]}>Mark Reviewed</Text>
+                                            </Icon.Button>
+                                            <Icon.Button
+                                                style={styles.blueBtn}
+                                                name="edit"
+                                                onPress={() => { navigate('/add-invoice', { state: { editInvoiceData: selectedInvoice } }), closeInvoiceDetails() }}
+                                                backgroundColor="transparent"
+                                                underlayColor="transparent"
+                                                iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
+                                                color={"white"}>
+                                                <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px' }]}>Edit</Text>
+                                            </Icon.Button>
+                                            <Icon.Button
+                                                style={styles.blueTransparentBtn}
+                                                name="close"
+                                                onPress={() => setShowRejectionInput(true)}
+                                                backgroundColor="transparent"
+                                                underlayColor="transparent"
+                                                iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
+                                                color={"#0071cd"}>
+                                                <Text style={[{ color: '#0071cd', fontSize: 14, marginLeft: '4px' }]}>Reject</Text>
+                                            </Icon.Button>
+                                        </View>
+                                    ) : selectedInvoice.status.type === 'Pending Approval' ? (
+                                        <View style={styles.invoiceDetailsButtonsRight}>
+                                            <Icon.Button
+                                                style={styles.blueBtn}
+                                                name="check-square-o"
+                                                onPress={() => { processInvoice(selectedInvoice._id) }}
+                                                backgroundColor="transparent"
+                                                underlayColor="transparent"
+                                                iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
+                                                color={"white"}>
+                                                <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px' }]}>Mark Approved</Text>
+                                            </Icon.Button>
+                                            <Icon.Button
+                                                style={styles.blueTransparentBtn}
+                                                name="close"
+                                                onPress={() => setShowRejectionInput(true)}
+                                                backgroundColor="transparent"
+                                                underlayColor="transparent"
+                                                iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
+                                                color={"#0071cd"}>
+                                                <Text style={[{ color: '#0071cd', fontSize: 14, marginLeft: '4px' }]}>Reject</Text>
+                                            </Icon.Button>
+                                        </View>
+                                    ) : selectedInvoice.status.type === 'Review-Rejected' || selectedInvoice.status.type === 'Approval-Rejected' ? (
+                                        <View style={styles.invoiceDetailsButtonsRight}>
+                                            <Text>Invoice rejected with reason:</Text>
+                                            <Text>{selectedInvoice.status.remark}</Text>
+                                        </View>
+                                    ) : selectedInvoice.status.type === 'Processed-PendingPayment' ? (
+                                        <View style={styles.invoiceDetailsButtonsRight}>
+                                            <Icon.Button
+                                                style={styles.blueBtn}
+                                                name="paypal"
+                                                onPress={() => { updateInvoiceStatus(selectedInvoice._id, 'Processed-Paid', '') }}
+                                                backgroundColor="transparent"
+                                                underlayColor="transparent"
+                                                iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
+                                                color={"white"}>
+                                                <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px' }]}>Pay Vendor</Text>
+                                            </Icon.Button>
+                                        </View>
+                                    ) : (
+                                        <View style={styles.invoiceDetailsButtonsRight}>
+                                            <Text>Invoice is processed and closed, changes can't be reverted back</Text>
+                                        </View>
+                                    )}
+                                </View>
+                                {showRejectionInput && (
+                                    <View style={styles.rejectionContainer}>
+                                        <TextInput
+                                            style={[styles.rejectionInputField]}
+                                            placeholder="Provide rejection reason"
+                                            value={rejectionReason}
+                                            onChangeText={(text) => setRejectionReason(text)}
+                                        />
+                                        <Icon.Button
+                                            style={styles.blueTransparentBtn}
+                                            name="close"
+                                            onPress={() => { setShowRejectionInput(false), setRejectionReason('') }}
+                                            backgroundColor="transparent"
+                                            underlayColor="transparent"
+                                            iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
+                                            color={"#0071cd"}>
+                                            <Text style={[{ color: '#0071cd', fontSize: 14, marginLeft: '4px' }]}>Cancel</Text>
+                                        </Icon.Button>
+                                        <Icon.Button
+                                            style={styles.blueBtn}
+                                            name="check"
+                                            onPress={() => { updateInvoiceStatus(selectedInvoice._id, 'Approval-Rejected', rejectionReason), setRejectionReason('') }}
+                                            backgroundColor="transparent"
+                                            underlayColor="transparent"
+                                            iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
+                                            color={"white"}>
+                                            <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px' }]}>Submit</Text>
+                                        </Icon.Button>
+                                    </View>
+                                )}
                             </View>
                         </ScrollView>
                     </View>
@@ -532,17 +695,61 @@ const styles = StyleSheet.create({
         backgroundColor: '#4697ce',
         color: '#fff',
     },
+    invoiceDetailsButtonsContainer: {
+        marginTop: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 10,
+    },
+    invoiceDetailsButtonsLeft: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    invoiceDetailsButtonsRight: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
     blueBtn: {
         position: "relative",
-        width: 150,
-        height: 35,
-        margin: 8,
-        paddingHorizontal: 5,
-        paddingVertical: 3,
+        // width: 200,
+        height: 32,
+        marginRight: 5,
+        paddingHorizontal: 10,
+        paddingVertical: 4,
         borderRadius: 30,
+        borderWidth: 2,
+        borderColor: "#0071cd",
         backgroundColor: "#0071cd",
-        justifyContent: "center",
-        alignSelf: 'center'
+        justifyContent: "center"
+    },
+    blueTransparentBtn: {
+        position: "relative",
+        // width: 200,
+        height: 32,
+        marginRight: 5,
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        borderRadius: 30,
+        borderWidth: 2,
+        borderColor: "#0071cd",
+        // backgroundColor: "#0071cd",
+        justifyContent: "center"
+    },
+    rejectionContainer: {
+        margin: 5,
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    rejectionInputField: {
+        flex: 1,
+        height: 40,
+        borderColor: '#0071cd',
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingHorizontal: 10,
+        marginRight: 10,
     },
     modal: {
         width: '100%',

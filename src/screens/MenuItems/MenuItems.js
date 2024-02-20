@@ -39,6 +39,10 @@ const MenuItems = () => {
         setSelectedRecipe(recipe);
     };
 
+    const closeRecipeDetails = () => {
+        setSelectedRecipe(null);
+    };
+
     const deleteRecipe = async (recipeId) => {
         try {
             const id = { recipeId }
@@ -51,17 +55,13 @@ const MenuItems = () => {
                 closeRecipeDetails();
             }
         } catch (error) {
-            console.log(`getting recipes error ${error}`);
+            console.log(`deleting recipes error ${error}`);
         }
     }
 
     // const closeModal = () => {
     //     setSelectedRecipe(null);
     // };
-
-    const closeRecipeDetails = () => {
-        setSelectedRecipe(null);
-    };
 
     return (
         <View>
@@ -227,7 +227,7 @@ const MenuItems = () => {
                                     >
                                         <Text style={{ color: '#0071cd', fontSize: 14 }}>Recipe Cost History</Text>
                                     </Icon.Button>
-                                    <Icon.Button
+                                    {/* <Icon.Button
                                         style={styles.blueTransparentBtn}
                                         name="history"
                                         backgroundColor="transparent"
@@ -236,7 +236,7 @@ const MenuItems = () => {
                                         color={"#0071cd"}
                                     >
                                         <Text style={{ color: '#0071cd', fontSize: 14 }}>History</Text>
-                                    </Icon.Button>
+                                    </Icon.Button> */}
                                 </View>
                             </View>
                         </View>
@@ -495,8 +495,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 5,
         borderRadius: 30,
-        // borderWidth: 2,
-        // borderColor: "#2bb378",
+        borderWidth: 2,
+        borderColor: "#0071cd",
         backgroundColor: "#0071cd",
         justifyContent: "center"
     },

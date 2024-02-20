@@ -8,6 +8,8 @@ import client from '../../utils/ApiConfig'
 import { AuthContext } from '../../context/AuthContext.js'
 import LoadingScreen from '../../components/LoadingScreen';
 import { DatePicker } from '@mui/x-date-pickers';
+import Divider from '@mui/material/Divider';
+import Chip from '@mui/material/Chip';
 import dayjs from 'dayjs';
 
 const AddInvoice = () => {
@@ -21,6 +23,7 @@ const AddInvoice = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [selectedIngredient, setSelectedIngredient] = useState({});
+    const [editMode, setEditMode] = useState(location.state ? true : false);
     const [invoiceData, setInvoiceData] = useState({
         userId: userInfo.user.userId,
         invoiceNumber: '',
@@ -29,9 +32,10 @@ const AddInvoice = () => {
         invoiceFile: null,
         ingredients: [],
         payment: '',
-        status: '',
         total: '',
     });
+
+    const editInvoiceData = location.state?.editInvoiceData || null;
 
     const statusTypes = ['Pending', 'Paid']
     const paymentModes = ['Net Banking', 'Credit/Debit Card', 'Cash']
@@ -65,23 +69,32 @@ const AddInvoice = () => {
         const totalAmount = invoiceData.ingredients.reduce((sum, ingredient) => {
             const ingredientTotal = parseFloat(ingredient.total) || 0;
             return sum + ingredientTotal;
-        }, 0);
-    
+        }, 0)
+
         setInvoiceData((prevInvoiceData) => ({
             ...prevInvoiceData,
             total: totalAmount.toFixed(2),
-        }));
+        }))
     };
 
     useEffect(() => {
         getIngredients()
         getUnitMaps()
         // calculateTotalAmount()
+        if (editMode) {
+            setInvoiceData({
+                userId: editInvoiceData.userId,
+                invoiceNumber: editInvoiceData.invoiceNumber,
+                vendor: editInvoiceData.vendor,
+                invoiceDate: dayjs(editInvoiceData.invoiceDate),
+                invoiceFile: null,
+                ingredients: editInvoiceData.ingredients || [],
+                payment: editInvoiceData.payment,
+                total: editInvoiceData.total,
+            });
+            setEditMode(false)
+        }
     }, [invoiceData])
-
-    const handleDateChange = (date) => {
-        setInvoiceData({ ...invoiceData, invoiceDate: date.format('YYYY-MM-DD') })
-    };
 
     const onDrop = (acceptedFiles) => {
         if (acceptedFiles.length > 1) {
@@ -146,36 +159,46 @@ const AddInvoice = () => {
         }
         setInvoiceData({ ...invoiceData, ingredients: updatedIngredients })
     };
-    
+
     const handleDeleteIngredient = async (index) => {
         const updatedIngredients = [...invoiceData.ingredients];
         updatedIngredients.splice(index, 1);
-    
+
         setInvoiceData((prevInvoiceData) => ({
             ...prevInvoiceData,
             ingredients: updatedIngredients,
         }));
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (statusType) => {
         try {
             setLoading(true)
             const data = new FormData();
             data.append('userId', invoiceData.userId);
             data.append('invoiceNumber', invoiceData.invoiceNumber);
             data.append('vendor', invoiceData.vendor);
-            data.append('invoiceDate', invoiceData.invoiceDate);
+            data.append('invoiceDate', invoiceData.invoiceDate.format('YYYY-MM-DD'));
             data.append('invoiceFile', invoiceData.invoiceFile);
             data.append('ingredients', JSON.stringify(invoiceData.ingredients));
             data.append('payment', invoiceData.payment);
-            data.append('status', invoiceData.status);
+            data.append('statusType', statusType);
             data.append('total', invoiceData.total);
 
-            const result = await client.post('/process-invoice', data, {
-                headers: {
-                    'content-type': 'multipart/form-data'
-                },
-            })
+            let result
+            if (editInvoiceData && editInvoiceData._id) {
+                data.append('invoiceId', editInvoiceData._id);
+                result = await client.post('/update-invoice', data, {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    },
+                })
+            } else {
+                result = await client.post('/create-invoice', data, {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    },
+                })
+            }
 
             if (result.data.success) {
                 setInvoiceData({
@@ -186,7 +209,6 @@ const AddInvoice = () => {
                     invoiceFile: null,
                     ingredients: [{ name: '', quantity: '', unit: '', unitPrice: '', total: '' }],
                     payment: '',
-                    status: '',
                     total: '',
                 });
                 navigate('/invoices');
@@ -206,6 +228,60 @@ const AddInvoice = () => {
             <ScrollView
                 style={styles.formContainer}
             >
+
+                {!location.state &&
+                    <View>
+                        <Text style={styles.headingLabel}>Autofill Invoice Details</Text>
+                        <View style={styles.inputContainer}>
+                            <div {...getRootProps()} style={styles.dropzone}>
+                                <input {...getInputProps()} />
+                                <p>Drag 'n' drop your invoice here, or click to select one</p>
+                            </div>
+                            {invoiceData.invoiceFile && (
+                                <View style={styles.postUploadContainer}>
+                                    <Text style={{ color: '#2bb378' }}>
+                                        File Added Successfully!{' '}
+                                        <Text
+                                            style={{ color: 'blue', cursor: 'pointer' }}
+                                            onPress={() => setInvoiceData({ ...invoiceData, invoiceFile: null })}
+                                        >
+                                            Reset
+                                        </Text>
+                                    </Text>
+                                    <View style={styles.postUploadButtonsContainer}>
+                                        <Icon.Button
+                                            style={styles.postUploadButtonBlue}
+                                            name="search-plus"
+                                            backgroundColor="transparent"
+                                            underlayColor="transparent"
+                                            iconStyle={{ fontSize: 16, marginRight: 5 }}
+                                            color={"white"}
+                                        >
+                                            <Text style={{ color: 'white', fontSize: 15 }}>Extract</Text>
+                                        </Icon.Button>
+                                        <Icon.Button
+                                            style={styles.postUploadButtonTrans}
+                                            onPress={() => setInvoiceData({ ...invoiceData, invoiceFile: null })}
+                                            name="remove"
+                                            backgroundColor="transparent"
+                                            underlayColor="transparent"
+                                            iconStyle={{ fontSize: 16, marginRight: 5 }}
+                                            color={"#0071cd"}
+                                        >
+                                            <Text style={{ color: '#0071cd', fontSize: 15 }}>Cancel</Text>
+                                        </Icon.Button>
+                                    </View>
+                                </View>
+                            )}
+
+                        </View>
+                        <Divider style={styles.divider}>
+                            <Chip label="Or" size="small" />
+                        </Divider>
+                        <Text style={styles.headingLabel}>Manually Fill Invoice Details</Text>
+                    </View>
+                }
+
                 <View style={styles.inputContainer}>
                     <Text style={styles.label}>Invoice Number</Text>
                     <TextInput
@@ -230,21 +306,11 @@ const AddInvoice = () => {
                         defaultValue={today}
                         disableFuture
                         value={invoiceData.invoiceDate}
-                        onChange={handleDateChange}
+                        onChange={(date) => setInvoiceData({ ...invoiceData, invoiceDate: date })}
                         formatDensity="spacious"
+                        format="DD-MM-YYYY"
                         slotProps={{ textField: { size: 'small' } }}
                     />
-                </View>
-
-                <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Add Invoice File</Text>
-                    <div {...getRootProps()} style={styles.dropzone}>
-                        <input {...getInputProps()} />
-                        <p>Drag 'n' drop your file here, or click to select one</p>
-                    </div>
-                    {invoiceData.invoiceFile && (
-                        <Text style={{ color: '#2bb378' }}>Files Added Successfully! <span style={{ color: 'blue', cursor: 'pointer' }} onClick={() => setInvoiceData({ ...invoiceData, invoiceFile: null })}>Reset</span></Text>
-                    )}
                 </View>
 
                 <View style={styles.inputContainer}>
@@ -306,7 +372,7 @@ const AddInvoice = () => {
                                 placeholder="Enter Quantity"
                                 placeholderTextColor="gray"
                                 value={ingredient.quantity ? ingredient.quantity.toString() : ''}
-                                onChangeText={(text) => {handleIngredientsChange(index, 'quantity', parseFloat(text)), calculateTotalAmount()}}
+                                onChangeText={(text) => { handleIngredientsChange(index, 'quantity', parseFloat(text)), calculateTotalAmount() }}
                             />
                             <Picker
                                 style={styles.smallInput}
@@ -329,18 +395,18 @@ const AddInvoice = () => {
                                 placeholder="Unit Price"
                                 placeholderTextColor="gray"
                                 value={ingredient.unitPrice ? ingredient.unitPrice.toString() : ''}
-                                onChangeText={(text) => {handleIngredientsChange(index, 'unitPrice', parseFloat(text)), calculateTotalAmount()}}
+                                onChangeText={(text) => { handleIngredientsChange(index, 'unitPrice', parseFloat(text)), calculateTotalAmount() }}
                             />
                             <TextInput
                                 style={styles.smallInput}
                                 placeholder="Total"
                                 placeholderTextColor="gray"
                                 value={ingredient.total}
-                                onChangeText={(text) => {handleIngredientsChange(index, 'total', text), calculateTotalAmount()}}
+                                onChangeText={(text) => { handleIngredientsChange(index, 'total', text), calculateTotalAmount() }}
                             />
                             <Icon.Button style={styles.crossBtn}
                                 name="times-circle-o"
-                                onPress={() => {handleDeleteIngredient(index)}}
+                                onPress={() => { handleDeleteIngredient(index) }}
                                 backgroundColor="transparent"
                                 underlayColor="transparent"
                                 iconStyle={{ margin: 0, padding: 0, fontSize: 25 }}
@@ -374,7 +440,7 @@ const AddInvoice = () => {
                     </Picker>
                 </View>
 
-                <View style={styles.inputContainer}>
+                {/* <View style={styles.inputContainer}>
                     <Text style={styles.label}>Payment Status</Text>
                     <Picker
                         style={styles.input}
@@ -386,19 +452,62 @@ const AddInvoice = () => {
                             <Picker.Item key={index} label={status} value={status} />
                         ))}
                     </Picker>
-                </View>
+                </View> */}
 
-                <Icon.Button
-                    style={styles.createBtn}
-                    onPress={handleSubmit}
-                    name="file-text"
-                    backgroundColor="transparent"
-                    underlayColor="transparent"
-                    iconStyle={{ fontSize: 19 }}
-                    color={"white"}
-                >
-                    <Text style={{ color: 'white', fontSize: 20 }}>Add Invoice</Text>
-                </Icon.Button>
+                {
+                    !location.state ? (
+                        <View style={styles.createButtonsContainer}>
+                            <Icon.Button
+                                style={styles.blueBtn}
+                                onPress={() => handleSubmit('Pending Review')}
+                                name="plus"
+                                backgroundColor="transparent"
+                                underlayColor="transparent"
+                                iconStyle={{ fontSize: 19, marginRight: 5 }}
+                                color={"white"}
+                            >
+                                <Text style={{ color: 'white', fontSize: 16 }}>Add Invoice</Text>
+                            </Icon.Button>
+                            <Icon.Button
+                                style={styles.blueBtnTrans}
+                                onPress={() => handleSubmit('Pending Approval')}
+                                name="check-square-o"
+                                backgroundColor="transparent"
+                                underlayColor="transparent"
+                                iconStyle={{ fontSize: 19, marginRight: 5 }}
+                                color={"#0071cd"}
+                            >
+                                <Text style={{ color: '#0071cd', fontSize: 16 }}>Add & Mark Reviewed</Text>
+                            </Icon.Button>
+                        </View>
+                    ) : (
+                        <View style={styles.createButtonsContainer}>
+                            <Icon.Button
+                                style={styles.blueBtn}
+                                onPress={() => handleSubmit('Pending Review')}
+                                name="save"
+                                backgroundColor="transparent"
+                                underlayColor="transparent"
+                                iconStyle={{ fontSize: 19 }}
+                                color={"white"}
+                            >
+                                <Text style={{ color: 'white', fontSize: 16 }}>Save Changes</Text>
+                            </Icon.Button>
+                            <Icon.Button
+                                style={styles.blueBtnTrans}
+                                onPress={() => handleSubmit('Pending Approval')}
+                                name="check-square-o"
+                                backgroundColor="transparent"
+                                underlayColor="transparent"
+                                iconStyle={{ fontSize: 19 }}
+                                color={"#0071cd"}
+                            >
+                                <Text style={{ color: '#0071cd', fontSize: 16 }}>Save & Mark Reviewed</Text>
+                            </Icon.Button>
+                        </View>
+                    )
+                }
+
 
             </ScrollView>
             {loading && <LoadingScreen />}
@@ -408,7 +517,7 @@ const AddInvoice = () => {
 
 const styles = {
     formContainer: {
-        marginTop: 30,
+        marginTop: 20,
         paddingBottom: 40,
         paddingHorizontal: 30,
         backgroundColor: 'white'
@@ -418,11 +527,60 @@ const styles = {
         fontWeight: 'bold',
         marginBottom: 20,
     },
+    postUploadContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        // marginVertical: 10,
+    },
+    postUploadButtonsContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    postUploadButtonBlue: {
+        position: "relative",
+        // width: 200,
+        // height: 45,
+        marginTop: 8,
+        marginLeft: 5,
+        paddingHorizontal: 13,
+        paddingVertical: 6,
+        borderRadius: 30,
+        borderWidth: 2,
+        borderColor: "#0071cd",
+        backgroundColor: "#0071cd",
+        justifyContent: "center",
+        alignSelf: "center"
+    },
+    postUploadButtonTrans: {
+        position: "relative",
+        // width: 200,
+        // height: 45,
+        marginTop: 8,
+        marginLeft: 5,
+        paddingHorizontal: 13,
+        paddingVertical: 6,
+        borderRadius: 30,
+        borderWidth: 2,
+        borderColor: "#0071cd",
+        backgroundColor: "white",
+        justifyContent: "center",
+        alignSelf: "center"
+    },
+    divider: {
+        marginTop: 15,
+        marginBottom: 15,
+    },
     inputContainer: {
-        marginBottom: 20,
+        marginTop: 15,
+    },
+    headingLabel: {
+        marginBottom: 8,
+        fontWeight: 'bold',
+        fontFamily: 'sans-serif',
+        fontSize: 22,
     },
     label: {
-        fontSize: 16,
         marginBottom: 8,
         fontWeight: 'bold',
         fontFamily: 'sans-serif',
@@ -538,17 +696,40 @@ const styles = {
         borderColor: "#ff3131",
         justifyContent: "center"
     },
-    createBtn: {
+    createButtonsContainer: {
+        marginTop: 10,
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    blueBtn: {
         position: "relative",
-        width: 185,
-        height: 45,
+        // width: 200,
+        // height: 45,
+        marginTop: 10,
         marginRight: 5,
-        paddingHorizontal: 10,
-        paddingVertical: 5,
+        paddingHorizontal: 12,
+        paddingVertical: 6,
         borderRadius: 30,
-        // borderWidth: 2,
-        // borderColor: "#2bb378",
+        borderWidth: 2,
+        borderColor: "#0071cd",
         backgroundColor: "#0071cd",
+        justifyContent: "center",
+        alignSelf: "center"
+    },
+    blueBtnTrans: {
+        position: "relative",
+        // width: 200,
+        // height: 45,
+        marginTop: 10,
+        marginRight: 5,
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: 30,
+        borderWidth: 2,
+        borderColor: "#0071cd",
+        backgroundColor: "white",
         justifyContent: "center",
         alignSelf: "center"
     },

@@ -227,7 +227,6 @@ const MenuBuilder = () => {
                 })
             }
 
-            console.log(result.data)
             if (result.data.success) {
                 setRecipeData({
                     userId: userInfo.user.userId,
