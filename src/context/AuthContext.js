@@ -13,17 +13,22 @@ export const AuthProvider = ({ children }) => {
     const [splashLoading, setSplashLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const register = async (firstName, lastName, username, email, password, Confpassword, navigate) => {
+    const register = async (username, password, confirmPassword, firstName, lastName, email, mobileNo, address, tenantId, status, navigate) => {
+        setIsLoading(true)
         try {
             const { data } = await client.post(
                 '/create-user',
                 {
+                    username,
+                    password,
+                    confirmPassword,
                     firstName,
                     lastName,
-                    username,
                     email,
-                    password,
-                    confirmPassword: Confpassword
+                    mobileNo,
+                    address,
+                    tenantId,
+                    status
                 },
                 {
                     headers: {
@@ -32,21 +37,17 @@ export const AuthProvider = ({ children }) => {
                     }
                 }
             );
-            console.log(data);
 
             if (data.success) {
                 let userInfo = data;
-                console.log(userInfo);
-                await setUserInfo(userInfo);
-                await AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
                 setIsLoading(false);
-                navigate("/signin");
+                setError('')
+                navigate("/");
             } else {
-                alert(data.message);
+                setError(data.message)
                 setIsLoading(false);
             }
         } catch (e) {
-            console.log(e);
             console.log(`register error ${e}`);
             setIsLoading(false);
         }
@@ -70,28 +71,24 @@ export const AuthProvider = ({ children }) => {
                 }
             );
 
-
             if (data.success) {
                 let userInfo = data;
                 console.log(userInfo);
                 await setUserInfo(userInfo);
                 await AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
                 setIsLoading(false);
+                setError('')
             } else {
                 setError(data.message)
                 setIsLoading(false);
             }
-
-            console.log(data);
         } catch (error) {
             setIsLoading(false);
-            console.log(error);
         }
     };
 
     const logout = (navigate) => {
         setIsLoading(true);
-        console.log(userInfo.token);
         client.post(
             '/sign-out',
             {},
@@ -102,7 +99,6 @@ export const AuthProvider = ({ children }) => {
                 }
             }
         ).then(async (res) => {
-            console.log(res.data);
             AsyncStorage.removeItem('userInfo');
             setUserInfo({});
             setIsLoading(false);
@@ -142,6 +138,7 @@ export const AuthProvider = ({ children }) => {
                 userInfo,
                 splashLoading,
                 error,
+                setError,
                 register,
                 login,
                 logout,

@@ -87,7 +87,7 @@ const PurchaseHistory = () => {
                                 style={{ backgroundColor: 'white' }}
                             >
                                 <DataTable.Cell style={[styles.cell, { flex: 0.2 }]}></DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}></DataTable.Cell>
+                                <DataTable.Cell style={styles.cell}>{ingredientName}</DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}>{invoice.invoiceNumber}</DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}>{invoice.vendor}</DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}>{invoice.invoiceDate}</DataTable.Cell>
@@ -134,7 +134,7 @@ const PurchaseHistory = () => {
                                 formatDensity="spacious"
                                 slotProps={{ textField: { size: 'small' } }}
                             />
-                            <Icon.Button
+                            {/* <Icon.Button
                                 style={styles.tableNavBtnBlue}
                                 name="angle-down"
                                 backgroundColor="transparent"
@@ -153,7 +153,7 @@ const PurchaseHistory = () => {
                                 color={"white"}
                             >
                                 <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>Include All Orders</Text>
-                            </Icon.Button>
+                            </Icon.Button> */}
                             <Icon.Button
                                 style={styles.tableNavBtnBlue}
                                 name="angle-down"

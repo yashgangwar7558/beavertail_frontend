@@ -35,8 +35,8 @@ const InvoiceTable = () => {
     const [filterByVendor, setFilterByVendor] = useState('All');
     const [filterByStatus, setFilterByStatus] = useState('All');
     const [filteredInvoices, setFilteredInvoices] = useState([]);
-    const [showRejectionInput, setShowRejectionInput] = useState(false);
-    const [rejectionReason, setRejectionReason] = useState('');
+    const [showRejectionInputs, setShowRejectionInputs] = useState([]);
+    const [invoiceRejectionReason, setInvoiceRejectionReason] = useState([]);
     const today = dayjs();
 
     const statusTypes = ['Pending Review', 'Pending Approval', 'Proccessed-PendingPayment', 'Processed-Paid', 'Review-Rejected', 'Approval-Rejected']
@@ -140,6 +140,19 @@ const InvoiceTable = () => {
         setLoadingScreen(false)
     };
 
+    const setRejectionInputVisibility = (invoiceId, isVisible) => {
+        setShowRejectionInputs((prev) => ({
+            ...prev,
+            [invoiceId]: isVisible,
+        }));
+    };
+    const setRejectionReason = (invoiceId, reason) => {
+        setInvoiceRejectionReason((prev) => ({
+            ...prev,
+            [invoiceId]: reason,
+        }));
+    };
+
     const updateInvoiceStatus = async (invoiceId, newStatus, newRemark) => {
         try {
             setStatusLoading(true)
@@ -155,8 +168,8 @@ const InvoiceTable = () => {
             if (result.data.success) {
                 closeInvoiceDetails()
                 await getInvoices()
-                // setEditingStatusRows(new Array(invoices.length).fill(false))
             }
+            setRejectionInputVisibility(invoiceId, false)
             setStatusLoading(false)
         } catch (error) {
             console.log(`updating invoice status error ${error}`)
@@ -181,12 +194,6 @@ const InvoiceTable = () => {
         } catch (error) {
             console.log(`processing invoice error ${error}`)
         }
-    }
-
-    const handleEditStatusClick = (index) => {
-        const updatedEditingStatusRows = [...editingStatusRows]
-        updatedEditingStatusRows[index] = true
-        setEditingStatusRows(updatedEditingStatusRows)
     }
 
     const deleteInvoice = async (invoiceId) => {
@@ -334,27 +341,7 @@ const InvoiceTable = () => {
                                         <DataTable.Cell style={styles.cell}>{item.invoiceNumber}</DataTable.Cell>
                                         <DataTable.Cell style={styles.cell}>{item.invoiceDate}</DataTable.Cell>
                                         <DataTable.Cell style={styles.cell}>{item.payment}</DataTable.Cell>
-                                        <DataTable.Cell style={styles.cell}>
-                                            {/* {editingStatusRows[index] ? (
-                                                <Picker
-                                                    style={styles.smallInput}
-                                                    selectedValue={item.status}
-                                                    onValueChange={(newStatus) => updateInvoiceStatus(item._id, newStatus)}
-                                                >
-                                                    {statusTypes.map((status, index) => (
-                                                        <Picker.Item key={index} label={status} value={status} />
-                                                    ))}
-                                                </Picker>
-                                            ) : (
-                                                <>
-                                                    <TouchableOpacity onPress={() => handleEditStatusClick(index)}>
-                                                        <Icon name="edit" size={15} color="gray" style={{ marginRight: 5 }} />
-                                                    </TouchableOpacity>
-                                                    <Text style={{ fontSize: '15px' }}>{item.status}</Text>
-                                                </>
-                                            )} */}
-                                            {item.status.type}
-                                        </DataTable.Cell>
+                                        <DataTable.Cell style={styles.cell}>{item.status.type}</DataTable.Cell>
                                         <DataTable.Cell style={styles.cell}>
                                             ${item.total}
                                         </DataTable.Cell>
@@ -379,7 +366,7 @@ const InvoiceTable = () => {
                             </Icon.Button>
                             <Icon.Button
                                 name="times"
-                                onPress={closeInvoiceDetails}
+                                onPress={() => {closeInvoiceDetails(), setRejectionInputVisibility(selectedInvoice._id, false)}}
                                 backgroundColor="transparent"
                                 underlayColor="transparent"
                                 iconStyle={{ fontSize: 20, padding: 0, margin: 0 }}
@@ -450,7 +437,7 @@ const InvoiceTable = () => {
                                             <Icon.Button
                                                 style={styles.blueTransparentBtn}
                                                 name="close"
-                                                onPress={() => setShowRejectionInput(true)}
+                                                onPress={() => setRejectionInputVisibility(selectedInvoice._id, true)}
                                                 backgroundColor="transparent"
                                                 underlayColor="transparent"
                                                 iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
@@ -471,9 +458,19 @@ const InvoiceTable = () => {
                                                 <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px' }]}>Mark Approved</Text>
                                             </Icon.Button>
                                             <Icon.Button
+                                                style={styles.blueBtn}
+                                                name="refresh"
+                                                onPress={() => { updateInvoiceStatus(selectedInvoice._id, 'Pending Review', '') }}
+                                                backgroundColor="transparent"
+                                                underlayColor="transparent"
+                                                iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
+                                                color={"white"}>
+                                                <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px' }]}>Send for Review</Text>
+                                            </Icon.Button>
+                                            <Icon.Button
                                                 style={styles.blueTransparentBtn}
                                                 name="close"
-                                                onPress={() => setShowRejectionInput(true)}
+                                                onPress={() => setRejectionInputVisibility(selectedInvoice._id, true)}
                                                 backgroundColor="transparent"
                                                 underlayColor="transparent"
                                                 iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
@@ -505,18 +502,18 @@ const InvoiceTable = () => {
                                         </View>
                                     )}
                                 </View>
-                                {showRejectionInput && (
+                                {showRejectionInputs[selectedInvoice._id] && (
                                     <View style={styles.rejectionContainer}>
                                         <TextInput
                                             style={[styles.rejectionInputField]}
                                             placeholder="Provide rejection reason"
-                                            value={rejectionReason}
-                                            onChangeText={(text) => setRejectionReason(text)}
+                                            value={invoiceRejectionReason[selectedInvoice._id]}
+                                            onChangeText={(text) => setRejectionReason(selectedInvoice._id, text)}
                                         />
                                         <Icon.Button
                                             style={styles.blueTransparentBtn}
                                             name="close"
-                                            onPress={() => { setShowRejectionInput(false), setRejectionReason('') }}
+                                            onPress={() => { setRejectionInputVisibility(selectedInvoice._id, false), setRejectionReason(selectedInvoice._id, '') }}
                                             backgroundColor="transparent"
                                             underlayColor="transparent"
                                             iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
@@ -526,7 +523,7 @@ const InvoiceTable = () => {
                                         <Icon.Button
                                             style={styles.blueBtn}
                                             name="check"
-                                            onPress={() => { updateInvoiceStatus(selectedInvoice._id, 'Approval-Rejected', rejectionReason), setRejectionReason('') }}
+                                            onPress={() => { updateInvoiceStatus(selectedInvoice._id, 'Approval-Rejected', invoiceRejectionReason[selectedInvoice._id]), setRejectionReason(selectedInvoice._id, '') }}
                                             backgroundColor="transparent"
                                             underlayColor="transparent"
                                             iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}

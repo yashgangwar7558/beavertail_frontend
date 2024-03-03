@@ -1,4 +1,4 @@
-.login-screen {
+.signup-screen {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -10,27 +10,43 @@
   margin: auto;
 }
 
-.login-card {
+.signup-card {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: 0px 20px;
-  width: 420px;
+  width: 80%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
-.logo-container-l {
-  padding-bottom: 40px;
+.logo-container {
+  display: flex;
+  padding-bottom: 10px;
+  align-items: center;
+  justify-content: center;
 }
 
-.logo-l {
-  width: 100%;
+.logo {
+  width: 70%;
 }
 
-.input-container-l {
+.form-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  width: 800px;
+}
+
+.left-container,
+.right-container {
+  width: 46%;
+}
+
+.input-container {
   width: 100%;
-  padding-top: 30px;
+  padding-top: 20px;
   font-family: inherit;
   color: #121b28;
 }
@@ -40,11 +56,18 @@
 }
 
 /* .MuiInputBase-input {
-    padding-left: 5px;
-} */
+      padding-left: 5px;
+  } */
 
 #username .MuiInputBase-root,
-#password .MuiInputBase-root {
+#password .MuiInputBase-root,
+#firstname .MuiInputBase-root,
+#lastname .MuiInputBase-root,
+#email .MuiInputBase-root,
+#mobileNo .MuiInputBase-root,
+#address .MuiInputBase-root,
+#tenant .MuiInputBase-root, 
+#radio .MuiInputBase-root {
   border-radius: 25px;
   background-color: #e8e2e2;
   height: 50px;
@@ -67,12 +90,16 @@ input:-webkit-autofill:active {
   font-size: 14px;
 }
 
-.loginbutton-container-l {
-  padding-top: 40px;
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
 }
 
-.login-button-l {
-  width: 100%;
+.register-button {
+  width: 50%;
   height: 50px;
   border-radius: 25px;
   background-color: #1f0f0f;
@@ -90,12 +117,8 @@ input:-webkit-autofill:active {
   }
 }
 
-.registerbutton-container-l {
-  padding-top: 40px;
-}
-
-.register-button-l {
-  width: 100%;
+.login-button {
+  width: 50%;
   height: 50px;
   border-radius: 25px;
   background-color: #69e1bd;
@@ -113,31 +136,15 @@ input:-webkit-autofill:active {
   }
 }
 
-.forgot-link {
-  display: flex;
-  justify-content: right;
-  padding-top: 3px;
+.line {
+  width: 45%;
+  text-align: center;
+  border-bottom: 1px solid #000;
+  line-height: 0.1em;
+  padding: 0;
 }
 
-.forgot-link p {
-  font-family: inherit;
-  font-size: 16px;
-  font-weight: 400;
-  color: #121b28;
-  cursor: pointer;
-  padding: 0px;
-  margin: 0px;  
+.line span {
+  background: #fff;
+  padding: 0 10px;
 }
-
-.loginline {
-    width: 100%; 
-    text-align: center; 
-    border-bottom: 1px solid #000; 
-    line-height: 0.1em;
-    padding-top: 30px;  
- } 
- 
- .loginline span { 
-     background:#fff; 
-     padding:0 10px; 
- }

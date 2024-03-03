@@ -53,7 +53,7 @@ export const SidebarData = [
     },
     {
         title: 'Settings',
-        path: '/settings',
+        path: '/settings/user-profile',
         icon: <SettingsRounded sx={{ fontSize: '22px' }} />,
     }
 ]

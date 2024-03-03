@@ -152,8 +152,6 @@ export const StatBoxData = () => {
             const currentDate = new Date();
             const startOfPrevDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1);
             const endOfPrevDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
-            console.log(startOfPrevDay);
-            console.log(endOfPrevDay);
             const data = {
                 userId: userInfo.user.userId,
                 startDate: startOfPrevDay,
@@ -244,6 +242,5 @@ export const StatBoxData = () => {
         },
     ];
 
-    console.log(data);
     return data;
 };

@@ -96,7 +96,7 @@ const Sidebar = (props) => {
 
 	const { width, height } = useWindowDimensions()
 
-	const { logout } = useContext(AuthContext);
+	const { userInfo ,logout } = useContext(AuthContext);
 
 	useEffect(() => {
 		width <= 1024 ? props.setIsSidebarCollapsed(true) : props.setIsSidebarCollapsed(false)
@@ -129,10 +129,16 @@ const Sidebar = (props) => {
 				</NavIcon>
 				<MenuWrapper>
 					<Box width='100%'>
-						{SidebarData.map((item, index) => {
-							return <MenuItem item={item} key={index} setHeaderTitle={props.setHeaderTitle}
-								selected={selected} setSelected={setSelected} isCollapsed={props.isSidebarCollapsed} />
-						})}
+						{SidebarData.filter(item => userInfo.user.userAllowedRoutes.includes(item.path)).map((item, index) => (
+							<MenuItem
+								item={item}
+								key={index}
+								setHeaderTitle={props.setHeaderTitle}
+								selected={selected}
+								setSelected={setSelected}
+								isCollapsed={props.isSidebarCollapsed}
+							/>
+						))}
 					</Box>
 					<StyledEngineProvider>
 						{props.isSidebarCollapsed ? (
