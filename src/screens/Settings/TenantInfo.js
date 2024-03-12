@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
+import { AuthContext } from '../../context/AuthContext';
+import client from '../../utils/ApiConfig';
 import SettingsTabs from './SettingsTabs';
 import {
   Container,
@@ -22,32 +25,71 @@ const EditableChip = styled(Chip)({
 });
 
 export const TenantInfo = () => {
+  const { userInfo } = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(false);
-  const [tenantInfo, setTenantInfo] = useState({
-    tenantName: 'Sample Tenant',
-    tenantDescription: 'This is a sample description.',
-    invoiceEmails: ['invoice@example.com'],
-    billEmails: ['bill@example.com'],
+  const [loading, setLoading] = useState(false);
+  const [originalTenantInfo, setOriginalTenantInfo] = useState({
+    tenantName: '',
+    tenantDescription: '',
+    invoiceEmails: [],
+    billEmails: [],
   });
+  const [tenantInfo, setTenantInfo] = useState({
+    tenantName: '',
+    tenantDescription: '',
+    invoiceEmails: [],
+    billEmails: [],
+  });
+
+  const getTenantDetails = async () => {
+    try {
+      setLoading(true);
+      const tenantId = { tenantId: userInfo.user.tenant };
+      const result = await client.post('/get-tenant', tenantId, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      setTenantInfo(result.data.tenant);
+      setOriginalTenantInfo(result.data.tenant);
+      setLoading(false);
+    } catch (error) {
+      console.log(`getting tenant details error ${error}`);
+    }
+  };
+
+  useEffect(() => {
+    getTenantDetails();
+  }, []);
 
   const handleEdit = () => {
     setIsEditing(true);
   };
 
-  const handleSaveChanges = () => {
-    setIsEditing(false);
-    // You would typically send an API request to update the data here
+  const handleSaveChanges = async () => {
+    try {
+      setLoading(true);
+      await client.post('/update-tenant', tenantInfo, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      // setOriginalTenantInfo({ ...tenantInfo });
+      getTenantDetails();
+      setIsEditing(false);
+      setLoading(false);
+    } catch (error) {
+      console.log(`updating tenant details error ${error}`);
+      setLoading(false);
+    }
   };
 
   const handleCancelEdit = () => {
-    // Reset the tenantInfo to original state
-    setTenantInfo({
-      tenantName: 'Sample Tenant',
-      tenantDescription: 'This is a sample description.',
-      invoiceEmails: ['invoice@example.com'],
-      billEmails: ['bill@example.com'],
-    });
+    setTenantInfo({ ...originalTenantInfo });
     setIsEditing(false);
+  };
+
+  const handleEditField = (fieldName, value) => {
+    setTenantInfo((prevInfo) => ({
+      ...prevInfo,
+      [fieldName]: value,
+    }));
   };
 
   const handleAddEmail = (type) => {
@@ -85,18 +127,18 @@ export const TenantInfo = () => {
       <div>
         <Paper elevation={3} style={{ padding: '10px', margin: '16px' }}>
           <Typography variant="h5" gutterBottom>
-            Tenant Information
+            Tenant Info
           </Typography>
           <Divider style={{ marginBottom: '16px' }} />
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Typography variant="body1" gutterBottom>
-                <strong>Tenant Name:</strong>{' '}
+                <strong>Brand Name:</strong>{' '}
                 {isEditing ? (
                   <EditableTextField
                     fullWidth
                     value={tenantInfo.tenantName}
-                    onChange={(e) => handleEditEmail('tenantName', 0, e.target.value)}
+                    onChange={(e) => handleEditField('tenantName', e.target.value)}
                   />
                 ) : (
                   tenantInfo.tenantName
@@ -105,7 +147,7 @@ export const TenantInfo = () => {
             </Grid>
             <Grid item xs={12}>
               <Typography variant="body1" gutterBottom>
-                <strong>Tenant Description:</strong>{' '}
+                <strong>Brand Description:</strong>{' '}
                 {isEditing ? (
                   <EditableTextField
                     fullWidth
@@ -113,7 +155,7 @@ export const TenantInfo = () => {
                     rows={4}
                     value={tenantInfo.tenantDescription}
                     onChange={(e) =>
-                      handleEditEmail('tenantDescription', 0, e.target.value)
+                      handleEditField('tenantDescription', e.target.value)
                     }
                   />
                 ) : (
@@ -218,4 +260,3 @@ export const TenantInfo = () => {
     </div>
   );
 };
-

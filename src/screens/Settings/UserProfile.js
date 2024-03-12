@@ -1,4 +1,5 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import client from '../../utils/ApiConfig';
 import SettingsTabs from './SettingsTabs';
 import {
     Container,
@@ -14,7 +15,7 @@ import { styled } from '@mui/system';
 import { AuthContext } from '../../context/AuthContext';
 
 const StyledButton = styled(Button)({
-    
+
 });
 
 const EditableTextField = styled(TextField)({
@@ -24,170 +25,231 @@ const EditableTextField = styled(TextField)({
 export const UserProfile = () => {
     const { userInfo } = useContext(AuthContext);
     const [isEditing, setIsEditing] = useState(false);
-    const [editedUser, setEditedUser] = useState(userInfo.user);
+    const [loading, setLoading] = useState(false);
+    const [userDetails, setUserDetails] = useState(null);
+    const [originalUserDetails, setOriginalUserDetails] = useState(null);
+    const [oldPassword, setOldPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confNewPassword, setConfNewPassword] = useState('');
+    const [error, setError] = useState(null);
+
+    const getUserDetails = async () => {
+        try {
+            setLoading(true);
+            const userId = { userId: userInfo.user.userId };
+            const result = await client.post('/get-user', userId, {
+                headers: { 'Content-Type': 'application/json' },
+            });
+            setUserDetails(result.data.user);
+            setOriginalUserDetails(result.data.user);
+            setLoading(false);
+        } catch (error) {
+            console.log(`getting user details error ${error}`);
+        }
+    };
+
+    useEffect(() => {
+        getUserDetails();
+    }, []);
 
     const handleEdit = () => {
         setIsEditing(true);
     };
 
-    const handleSaveChanges = () => {
-        setIsEditing(false);
+    const handleSaveChanges = async () => {
+        try {
+            setLoading(true);
+            await client.post('/update-user', userDetails, {
+                headers: { 'Content-Type': 'application/json' },
+            });
+            getUserDetails();
+            setIsEditing(false);
+            setLoading(false);
+        } catch (error) {
+            console.log(`updating user details error ${error}`);
+            setLoading(false);
+        }
     };
 
     const handleCancelEdit = () => {
-        setEditedUser(userInfo.user);
+        setUserDetails({ ...originalUserDetails });
         setIsEditing(false);
     };
 
-    const handleChangePassword = () => {
-        // Implement password change logic
-    };
-
-    const handleInputChange = (field, value) => {
-        setEditedUser((prevUser) => ({
-            ...prevUser,
-            [field]: value,
+    const handleEditField = (fieldName, value) => {
+        setUserDetails((prevInfo) => ({
+            ...prevInfo,
+            [fieldName]: value,
         }));
     };
+
+    const handleChangePassword = async () => {
+        try {
+            setLoading(true);
+            const data = { userId: userInfo.user.userId, oldPassword, newPassword, confNewPassword };
+            const result = await client.post('/change-password', data, {
+                headers: { 'Content-Type': 'application/json' },
+            });
+            if (result.data.success) {
+                setOldPassword('')
+                setNewPassword('')
+                setConfNewPassword('')
+                setError(null)
+                setLoading(false)
+            } else {
+                setError(result.data.message)
+                setLoading(false);
+            }
+        } catch (error) {
+            console.log(`updating password error ${error}`);
+            setLoading(false);
+        }
+    };
+
 
     return (
         <div>
             <SettingsTabs />
             <div>
-                <Paper elevation={3} style={{ padding: '10px', margin: '16px' }}>
-                    <Typography variant="h5" gutterBottom>
-                        User Profile
-                    </Typography>
-                    <Divider style={{ marginBottom: '16px' }} />
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
-                            <Typography variant="body1" gutterBottom>
-                                <strong>First Name:</strong>{' '}
-                                {isEditing ? (
-                                    <EditableTextField
-                                        fullWidth
-                                        value={editedUser.firstName}
-                                        onChange={(e) =>
-                                            handleInputChange('firstName', e.target.value)
-                                        }
-                                    />
-                                ) : (
-                                    editedUser.firstName
-                                )}
+                {
+                    userDetails != null && (
+                        <Paper elevation={3} style={{ padding: '10px', margin: '16px' }}>
+                            <Typography variant="h5" gutterBottom>
+                                User Profile
                             </Typography>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Typography variant="body1" gutterBottom>
-                                <strong>Last Name:</strong>{' '}
-                                {isEditing ? (
-                                    <EditableTextField
-                                        fullWidth
-                                        value={editedUser.firstName}
-                                        onChange={(e) =>
-                                            handleInputChange('lastName', e.target.value)
-                                        }
-                                    />
-                                ) : (
-                                    editedUser.lastName
-                                )}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Typography variant="body1" gutterBottom>
-                                <strong>Username:</strong>{' '}
-                                {isEditing ? (
-                                    <EditableTextField
-                                        fullWidth
-                                        value={editedUser.email}
-                                        onChange={(e) =>
-                                            handleInputChange('username', e.target.value)
-                                        }
-                                    />
-                                ) : (
-                                    editedUser.username
-                                )}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Typography variant="body1" gutterBottom>
-                                <strong>Email:</strong>{' '}
-                                {isEditing ? (
-                                    <EditableTextField
-                                        fullWidth
-                                        value={editedUser.email}
-                                        onChange={(e) =>
-                                            handleInputChange('email', e.target.value)
-                                        }
-                                    />
-                                ) : (
-                                    editedUser.email
-                                )}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Typography variant="body1" gutterBottom>
-                                <strong>Mobile No.:</strong>{' '}
-                                {isEditing ? (
-                                    <EditableTextField
-                                        fullWidth
-                                        value={editedUser.mobileNo}
-                                        onChange={(e) =>
-                                            handleInputChange('mobileNo', e.target.value)
-                                        }
-                                    />
-                                ) : (
-                                    editedUser.mobileNo
-                                )}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Typography variant="body1" gutterBottom>
-                                <strong>Address:</strong>{' '}
-                                {isEditing ? (
-                                    <EditableTextField
-                                        fullWidth
-                                        value={editedUser.mobileNo}
-                                        onChange={(e) =>
-                                            handleInputChange('address', e.target.value)
-                                        }
-                                    />
-                                ) : (
-                                    editedUser.address
-                                )}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Typography variant="body1" gutterBottom>
-                                <strong>Roles Assigned:</strong>{' '}
-                                {editedUser.roles.map((item, index) => (
-                                    <React.Fragment key={index}>
-                                        <Chip label={item.roleName}/>
-                                        {/* {index < editedUser.roles.length - 1 && ', '} */}
-                                    </React.Fragment>
-                                ))}
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                    {isEditing ? (
-                        <div style={{ marginTop: '16px' }}>
-                            <StyledButton
-                                variant="contained"
-                                color="primary"
-                                onClick={handleSaveChanges}
-                                style={{ marginRight: '16px' }}
-                            >
-                                Save Changes
-                            </StyledButton>
-                            <StyledButton variant="outlined" onClick={handleCancelEdit}>
-                                Cancel
-                            </StyledButton>
-                        </div>
-                    ) : (
-                        <StyledButton variant="outlined" onClick={handleEdit} style={{ marginTop: '16px' }}>
-                            Edit
-                        </StyledButton>
-                    )}
-                </Paper>
+                            <Divider style={{ marginBottom: '16px' }} />
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6}>
+                                    <Typography variant="body1" gutterBottom>
+                                        <strong>First Name:</strong>{' '}
+                                        {isEditing ? (
+                                            <EditableTextField
+                                                fullWidth
+                                                value={userDetails.firstName}
+                                                onChange={(e) =>
+                                                    handleEditField('firstName', e.target.value)
+                                                }
+                                            />
+                                        ) : (
+                                            userDetails.firstName
+                                        )}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <Typography variant="body1" gutterBottom>
+                                        <strong>Last Name:</strong>{' '}
+                                        {isEditing ? (
+                                            <EditableTextField
+                                                fullWidth
+                                                value={userDetails.lastName}
+                                                onChange={(e) =>
+                                                    handleEditField('lastName', e.target.value)
+                                                }
+                                            />
+                                        ) : (
+                                            userDetails.lastName
+                                        )}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <Typography variant="body1" gutterBottom>
+                                        <strong>Username:</strong>{' '}
+                                        {isEditing ? (
+                                            <EditableTextField
+                                                fullWidth
+                                                value={userDetails.username}
+                                                onChange={(e) =>
+                                                    handleEditField('username', e.target.value)
+                                                }
+                                            />
+                                        ) : (
+                                            userDetails.username
+                                        )}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <Typography variant="body1" gutterBottom>
+                                        <strong>Email:</strong>{' '}
+                                        {isEditing ? (
+                                            <EditableTextField
+                                                fullWidth
+                                                value={userDetails.email}
+                                                onChange={(e) =>
+                                                    handleEditField('email', e.target.value)
+                                                }
+                                            />
+                                        ) : (
+                                            userDetails.email
+                                        )}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <Typography variant="body1" gutterBottom>
+                                        <strong>Mobile No.:</strong>{' '}
+                                        {isEditing ? (
+                                            <EditableTextField
+                                                fullWidth
+                                                value={userDetails.mobileNo}
+                                                onChange={(e) =>
+                                                    handleEditField('mobileNo', e.target.value)
+                                                }
+                                            />
+                                        ) : (
+                                            userDetails.mobileNo
+                                        )}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <Typography variant="body1" gutterBottom>
+                                        <strong>Address:</strong>{' '}
+                                        {isEditing ? (
+                                            <EditableTextField
+                                                fullWidth
+                                                value={userDetails.address}
+                                                onChange={(e) =>
+                                                    handleEditField('address', e.target.value)
+                                                }
+                                            />
+                                        ) : (
+                                            userDetails.address
+                                        )}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <Typography variant="body1" gutterBottom>
+                                        <strong>Roles Assigned:</strong>{' '}
+                                        {userDetails.roles.map((item, index) => (
+                                            <React.Fragment key={index}>
+                                                <Chip label={item.roleName} />
+                                            </React.Fragment>
+                                        ))}
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                            {isEditing ? (
+                                <div style={{ marginTop: '16px' }}>
+                                    <StyledButton
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={handleSaveChanges}
+                                        style={{ marginRight: '16px' }}
+                                    >
+                                        Save Changes
+                                    </StyledButton>
+                                    <StyledButton variant="outlined" onClick={handleCancelEdit}>
+                                        Cancel
+                                    </StyledButton>
+                                </div>
+                            ) : (
+                                <StyledButton variant="outlined" onClick={handleEdit} style={{ marginTop: '16px' }}>
+                                    Edit
+                                </StyledButton>
+                            )}
+                        </Paper>
+                    )
+                }
+
+
                 <Paper elevation={3} style={{ padding: '10px', margin: '16px' }}>
                     <Typography variant="h5" gutterBottom>
                         Change Password
@@ -197,8 +259,10 @@ export const UserProfile = () => {
                         <Grid item xs={12} sm={6}>
                             <EditableTextField
                                 fullWidth
-                                label="Previous Password"
+                                label="Old Password"
                                 type="password"
+                                value={oldPassword}
+                                onChange={(e) => setOldPassword(e.target.value)}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -206,6 +270,8 @@ export const UserProfile = () => {
                                 fullWidth
                                 label="New Password"
                                 type="password"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -213,9 +279,16 @@ export const UserProfile = () => {
                                 fullWidth
                                 label="Confirm New Password"
                                 type="password"
+                                value={confNewPassword}
+                                onChange={(e) => setConfNewPassword(e.target.value)}
                             />
                         </Grid>
                     </Grid>
+                    {error && (
+                        <Typography variant="body2" color="error" style={{ marginTop: '16px' }}>
+                            {error}
+                        </Typography>
+                    )}
                     <StyledButton variant="contained" color="primary" onClick={handleChangePassword} style={{ marginTop: '16px' }}>
                         Change Password
                     </StyledButton>

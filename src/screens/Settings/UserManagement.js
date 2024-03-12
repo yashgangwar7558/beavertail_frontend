@@ -19,7 +19,9 @@ import {
     MenuItem,
     Select,
     styled,
-    Chip
+    Chip,
+    ListItemText,
+    Checkbox
 } from '@mui/material';
 
 const StyledButton = styled(Button)({
@@ -39,6 +41,17 @@ const CompactTableCellHeader = styled(TableCell)({
     padding: '8px',
     fontWeight: 'bold',
 });
+
+const ITEM_HEIGHT = 40;
+const ITEM_PADDING_TOP = 3;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 200,
+        },
+    },
+};
 
 export const UserManagement = () => {
     const navigate = useNavigate({});
@@ -109,12 +122,11 @@ export const UserManagement = () => {
             setLoading(true);
             let data = { userId, rolesAssigned: [], newStatus };
             if (newStatus === 'approved' && (!selectedRoles[userId] || selectedRoles[userId].length === 0)) {
-                alert('No roles selected! Choose at least one');
+                alert('No roles selected! Choose atleast one.');
                 setLoading(false);
                 return;
             }
             if (newStatus === 'approved') data = { userId, rolesAssigned: selectedRoles[userId], newStatus };
-            console.log(data);
             const result = await client.post('/update-user-status', data, {
                 headers: { 'Content-Type': 'application/json' },
             });
@@ -127,6 +139,7 @@ export const UserManagement = () => {
             setLoading(false);
         } catch (error) {
             console.log(`updating user status error ${error}`);
+            setLoading(false)
         }
     };
 
@@ -204,10 +217,20 @@ export const UserManagement = () => {
                                                     label="Select Roles"
                                                     value={selectedRoles[user._id] || []}
                                                     onChange={(e) => handleRoleChange(user._id, e.target.value)}
+                                                    renderValue={(selected) => selected.map((item) => item.roleName).join(', ')}
                                                     style={{ minWidth: '150px', maxWidth: '150px' }}
+                                                    MenuProps={MenuProps}
                                                 >
+                                                    <MenuItem disabled value="">
+                                                        <em>Choose atleast one...</em>
+                                                    </MenuItem>
                                                     {roles.map((role) => (
                                                         <MenuItem key={role._id} value={role}>
+                                                            <Checkbox
+                                                                checked={Boolean(selectedRoles[user._id] && selectedRoles[user._id].find(
+                                                                    (selectedRole) => selectedRole._id === role._id
+                                                                ))}
+                                                            />
                                                             {role.roleName}
                                                         </MenuItem>
                                                     ))}

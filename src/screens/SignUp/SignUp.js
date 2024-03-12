@@ -256,7 +256,7 @@ const SignUp = ({ navigation }) => {
             ) : null}
 
             <div className="button-container">
-              <Button type="submit" className='register-button' variant='contained' onClick={() => register(username, password, confirmPassword, firstName, lastName, email, mobileNo, address, tenantId, status, navigate)}>Register User</Button>
+              <Button type="submit" className='register-button' variant='contained' onClick={() => register(username, password, confirmPassword, firstName, lastName, email, mobileNo, address, [], tenantId, status, navigate)}>Register User</Button>
               <h4 className="line"><span>Or</span></h4>
               <Button type="submit" className='login-button' variant='contained' onClick={() => { navigate('/'), setError('') }}>Login</Button>
             </div>

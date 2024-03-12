@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
     const [splashLoading, setSplashLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const register = async (username, password, confirmPassword, firstName, lastName, email, mobileNo, address, tenantId, status, navigate) => {
+    const register = async (username, password, confirmPassword, firstName, lastName, email, mobileNo, address, rolesAssigned, tenantId, status, navigate) => {
         setIsLoading(true)
         try {
             const { data } = await client.post(
@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }) => {
                     email,
                     mobileNo,
                     address,
+                    rolesAssigned,
                     tenantId,
                     status
                 },
