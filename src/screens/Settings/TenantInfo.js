@@ -1,0 +1,262 @@
+import React, { useContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
+import { AuthContext } from '../../context/AuthContext';
+import client from '../../utils/ApiConfig';
+import SettingsTabs from './SettingsTabs';
+import {
+  Container,
+  Typography,
+  Button,
+  TextField,
+  Paper,
+  Divider,
+  Grid,
+  Chip,
+} from '@mui/material';
+import { styled } from '@mui/system';
+
+const EditableTextField = styled(TextField)({
+  marginBottom: '16px',
+});
+
+const EditableChip = styled(Chip)({
+  marginRight: '8px',
+  marginBottom: '8px',
+});
+
+export const TenantInfo = () => {
+  const { userInfo } = useContext(AuthContext);
+  const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [originalTenantInfo, setOriginalTenantInfo] = useState({
+    tenantName: '',
+    tenantDescription: '',
+    invoiceEmails: [],
+    billEmails: [],
+  });
+  const [tenantInfo, setTenantInfo] = useState({
+    tenantName: '',
+    tenantDescription: '',
+    invoiceEmails: [],
+    billEmails: [],
+  });
+
+  const getTenantDetails = async () => {
+    try {
+      setLoading(true);
+      const tenantId = { tenantId: userInfo.user.tenant };
+      const result = await client.post('/get-tenant', tenantId, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      setTenantInfo(result.data.tenant);
+      setOriginalTenantInfo(result.data.tenant);
+      setLoading(false);
+    } catch (error) {
+      console.log(`getting tenant details error ${error}`);
+    }
+  };
+
+  useEffect(() => {
+    getTenantDetails();
+  }, []);
+
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  const handleSaveChanges = async () => {
+    try {
+      setLoading(true);
+      await client.post('/update-tenant', tenantInfo, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      // setOriginalTenantInfo({ ...tenantInfo });
+      getTenantDetails();
+      setIsEditing(false);
+      setLoading(false);
+    } catch (error) {
+      console.log(`updating tenant details error ${error}`);
+      setLoading(false);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setTenantInfo({ ...originalTenantInfo });
+    setIsEditing(false);
+  };
+
+  const handleEditField = (fieldName, value) => {
+    setTenantInfo((prevInfo) => ({
+      ...prevInfo,
+      [fieldName]: value,
+    }));
+  };
+
+  const handleAddEmail = (type) => {
+    setTenantInfo((prevInfo) => ({
+      ...prevInfo,
+      [type]: [...prevInfo[type], ''],
+    }));
+  };
+
+  const handleEditEmail = (type, index, value) => {
+    setTenantInfo((prevInfo) => {
+      const updatedEmails = [...prevInfo[type]];
+      updatedEmails[index] = value;
+      return {
+        ...prevInfo,
+        [type]: updatedEmails,
+      };
+    });
+  };
+
+  const handleDeleteEmail = (type, index) => {
+    setTenantInfo((prevInfo) => {
+      const updatedEmails = [...prevInfo[type]];
+      updatedEmails.splice(index, 1);
+      return {
+        ...prevInfo,
+        [type]: updatedEmails,
+      };
+    });
+  };
+
+  return (
+    <div>
+      <SettingsTabs />
+      <div>
+        <Paper elevation={3} style={{ padding: '10px', margin: '16px' }}>
+          <Typography variant="h5" gutterBottom>
+            Restaurant Info
+          </Typography>
+          <Divider style={{ marginBottom: '16px' }} />
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Typography variant="body1" gutterBottom>
+                <strong>Brand Name:</strong>{' '}
+                {isEditing ? (
+                  <EditableTextField
+                    fullWidth
+                    value={tenantInfo.tenantName}
+                    onChange={(e) => handleEditField('tenantName', e.target.value)}
+                  />
+                ) : (
+                  tenantInfo.tenantName
+                )}
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="body1" gutterBottom>
+                <strong>Brand Description:</strong>{' '}
+                {isEditing ? (
+                  <EditableTextField
+                    fullWidth
+                    multiline
+                    rows={4}
+                    value={tenantInfo.tenantDescription}
+                    onChange={(e) =>
+                      handleEditField('tenantDescription', e.target.value)
+                    }
+                  />
+                ) : (
+                  tenantInfo.tenantDescription
+                )}
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="body1" gutterBottom>
+                <strong>Invoice Emails:</strong>{' '}
+                {isEditing ? (
+                  <>
+                    {tenantInfo.invoiceEmails.map((email, index) => (
+                      <EditableChip
+                        key={index}
+                        label={
+                          <EditableTextField
+                            fullWidth
+                            value={email}
+                            onChange={(e) =>
+                              handleEditEmail('invoiceEmails', index, e.target.value)
+                            }
+                          />
+                        }
+                        onDelete={() => handleDeleteEmail('invoiceEmails', index)}
+                      />
+                    ))}
+                    <Button
+                      variant="outlined"
+                      onClick={() => handleAddEmail('invoiceEmails')}
+                    >
+                      Add Email
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    {tenantInfo.invoiceEmails.map((email, index) => (
+                      <Chip key={index} label={email} style={{ marginRight: '8px' }} />
+                    ))}
+                  </>
+                )}
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="body1" gutterBottom>
+                <strong>Bill Emails:</strong>{' '}
+                {isEditing ? (
+                  <>
+                    {tenantInfo.billEmails.map((email, index) => (
+                      <EditableChip
+                        key={index}
+                        label={
+                          <EditableTextField
+                            fullWidth
+                            value={email}
+                            onChange={(e) =>
+                              handleEditEmail('billEmails', index, e.target.value)
+                            }
+                          />
+                        }
+                        onDelete={() => handleDeleteEmail('billEmails', index)}
+                      />
+                    ))}
+                    <Button
+                      variant="outlined"
+                      onClick={() => handleAddEmail('billEmails')}
+                    >
+                      Add Email
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    {tenantInfo.billEmails.map((email, index) => (
+                      <Chip key={index} label={email} style={{ marginRight: '8px' }} />
+                    ))}
+                  </>
+                )}
+              </Typography>
+            </Grid>
+          </Grid>
+          {isEditing ? (
+            <div style={{ marginTop: '16px' }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSaveChanges}
+                style={{ marginRight: '16px' }}
+              >
+                Save Changes
+              </Button>
+              <Button variant="outlined" onClick={handleCancelEdit}>
+                Cancel
+              </Button>
+            </div>
+          ) : (
+            <Button variant="outlined" onClick={handleEdit} style={{ marginTop: '16px' }}>
+              Edit
+            </Button>
+          )}
+        </Paper>
+      </div>
+    </div>
+  );
+};

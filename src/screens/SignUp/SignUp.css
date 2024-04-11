@@ -1,0 +1,150 @@
+.signup-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.signup-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0px 20px;
+  width: 80%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.logo-container {
+  display: flex;
+  padding-bottom: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  width: 70%;
+}
+
+.form-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  width: 800px;
+}
+
+.left-container,
+.right-container {
+  width: 46%;
+}
+
+.input-container {
+  width: 100%;
+  padding-top: 20px;
+  font-family: inherit;
+  color: #121b28;
+}
+
+.MuiSvgIcon-root {
+  fill: #121b28;
+}
+
+/* .MuiInputBase-input {
+      padding-left: 5px;
+  } */
+
+#username .MuiInputBase-root,
+#password .MuiInputBase-root,
+#firstname .MuiInputBase-root,
+#lastname .MuiInputBase-root,
+#email .MuiInputBase-root,
+#mobileNo .MuiInputBase-root,
+#address .MuiInputBase-root,
+#tenant .MuiInputBase-root, 
+#radio .MuiInputBase-root {
+  border-radius: 25px;
+  background-color: #e8e2e2;
+  height: 50px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-family: inherit;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+.error-msg {
+  color: red;
+  padding-top: 5px;
+  padding-left: 10px;
+  font-size: 14px;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.register-button {
+  width: 50%;
+  height: 50px;
+  border-radius: 25px;
+  background-color: #1f0f0f;
+  color: #d3cccc;
+  font-weight: 500;
+  border: none;
+  box-shadow: none;
+  text-transform: none;
+  font-family: inherit;
+  font-size: 22px;
+  cursor: pointer;
+  &:hover {
+    background-color: #121b28;
+    color: #d3cccc;
+  }
+}
+
+.login-button {
+  width: 50%;
+  height: 50px;
+  border-radius: 25px;
+  background-color: #69e1bd;
+  color: #121b28;
+  font-weight: 500;
+  border: none;
+  box-shadow: none;
+  text-transform: none;
+  font-family: inherit;
+  font-size: 22px;
+  cursor: pointer;
+  &:hover {
+    background-color: #69e1bd;
+    color: #121b28;
+  }
+}
+
+.line {
+  width: 45%;
+  text-align: center;
+  border-bottom: 1px solid #000;
+  line-height: 0.1em;
+  padding: 0;
+}
+
+.line span {
+  background: #fff;
+  padding: 0 10px;
+}

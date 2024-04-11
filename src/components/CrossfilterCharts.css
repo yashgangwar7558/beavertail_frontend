@@ -1,0 +1,50 @@
+#rangeChart .y.axis {
+    display: none;
+}
+
+#brandBarChart .row text,
+#retailerBarChart .row text,
+#categoryBarChart .row text,
+#itemBarChart .row text {
+    fill: black;
+}
+
+#cityPieChart .dc-legend-item text,
+#agePieChart .dc-legend-item text {
+    transform: translateY(3px);
+    font-size: 11px;
+}
+
+#dataTable th {
+    background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+    font-size: 20px;
+    text-align: left;
+    padding: 8px;
+}
+
+#dataTable td {
+    font-size: 16px;
+    text-align: left;
+    padding: 8px;
+}
+
+#dataTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#dataTable tr:hover {
+    background-color: #e6e6e6;
+}
+
+#dataTable .dc-table-group.dc-table-row-group {
+    height: 40px;
+}
+
+#dataTable .dc-table-columns.dc-table-row-group {
+    height: 50px;
+    background-color: #ddd;
+    font-size: 16px;
+    font-weight: bold;
+}
