@@ -21,8 +21,14 @@ import {
     Checkbox
 } from '@mui/material';
 
-const StyledButton = styled(Button)({
-
+const StyledButtonFill = styled(Button)({
+    color: '#ffffff',
+    borderColor: '#47bf93',
+    backgroundColor: '#47bf93',
+    '&:hover': {
+        backgroundColor: '#47bf93', // Prevent background color change on hover
+        color: '#ffffff', // Ensure color remains the same on hover
+    },
 });
 
 const EditableTextField = styled(TextField)({
@@ -199,9 +205,9 @@ export const CreateUser = () => {
                             {error}
                         </Typography>
                     )}
-                    <StyledButton variant="contained" color="primary" onClick={handleCreateUser} style={{ marginTop: '16px' }}>
+                    <StyledButtonFill variant="contained" onClick={handleCreateUser} style={{ marginTop: '16px' }}>
                         Create User
-                    </StyledButton>
+                    </StyledButtonFill>
                 </Paper>
             </div>
         </div>

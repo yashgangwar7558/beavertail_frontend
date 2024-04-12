@@ -20,11 +20,11 @@
         text-decoration: none;
 
         &:hover {
-            color: #9CFCD8;
+            color: #5fe3b3;
         }
 
         &.active {
-            background: #ffffff;
+            background: #5fe3b3;
             color: #121B28;
             border-radius: ${(props) => props.isCollapsed ? '5px' : '12px'};
         }

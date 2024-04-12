@@ -685,7 +685,7 @@ const styles = {
         borderRadius: 30,
         // borderWidth: 2,
         // borderColor: "#2bb378",
-        backgroundColor: "#0071cd",
+        backgroundColor: "#47bf93",
         justifyContent: "center",
         alignSelf: "center"
     },

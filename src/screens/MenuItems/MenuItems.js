@@ -179,10 +179,10 @@ const MenuItems = () => {
                                 onPress={() => {navigate('/menubuilder')}}
                                 backgroundColor="transparent"
                                 underlayColor="transparent"
-                                iconStyle={{ fontSize: 22, paddingHorizontal: 5 }}
+                                iconStyle={{ fontSize: 18, paddingHorizontal: 0 }}
                                 color={"white"}
                             >
-                                <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>Add a New Menu Item</Text>
+                                <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>Add New Recipe</Text>
                             </Icon.Button>
                         </View>
                         <View style={styles.rightTableButtons}>
@@ -192,7 +192,7 @@ const MenuItems = () => {
                                 onPress={() => navigation.navigate('MenuBuilder')}
                                 backgroundColor="transparent"
                                 underlayColor="transparent"
-                                iconStyle={{ fontSize: 22, paddingHorizontal: 5 }}
+                                iconStyle={{ fontSize: 18, paddingHorizontal: 0 }}
                                 color={"white"}
                             >
                                 <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>Export As</Text>
@@ -205,9 +205,9 @@ const MenuItems = () => {
                             placeholder='Search'
                             placeholderTextColor="gray"
                         />
-                        <View style={styles.searchIcon}>
+                        {/* <View style={styles.searchIcon}>
                             <Icon name="search" size={20} color="gray" />
-                        </View>
+                        </View> */}
                     </View>
                 </View>
 
@@ -280,7 +280,6 @@ const MenuItems = () => {
                                         <Text style={{ fontsize: '10px', marginBottom: '10px' }}>{selectedRecipe.methodPrep}</Text>
                                     </View>
                                     <View style={styles.imageContainer}>
-                                        {/* <Image source={{ uri: `https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGZvb2R8ZW58MHx8MHx8fDA%3D` }} style={styles.recipeImage} /> */}
                                         <Image source={{ uri: selectedRecipe.imageUrl }} style={styles.recipeImage} />
                                     </View>
                                 </View>
@@ -327,9 +326,9 @@ const MenuItems = () => {
                                         backgroundColor="transparent"
                                         underlayColor="transparent"
                                         iconStyle={{ fontSize: 19 }}
-                                        color={"#0071cd"}
+                                        color={"#47bf93"}
                                     >
-                                        <Text style={{ color: '#0071cd', fontSize: 14 }}>Recipe Cost History</Text>
+                                        <Text style={{ color: '#47bf93', fontSize: 14 }}>Recipe Cost History</Text>
                                     </Icon.Button>
                                     {/* <Icon.Button
                                         style={styles.blueTransparentBtn}
@@ -474,8 +473,8 @@ const styles = StyleSheet.create({
         position: "relative",
         height: 40,
         margin: 3,
-        borderRadius: 30,
-        backgroundColor: "#0071cd",
+        borderRadius: 5,
+        backgroundColor: "#47bf93",
         justifyContent: "center"
     },
     searchContainer: {
@@ -542,7 +541,7 @@ const styles = StyleSheet.create({
         // height: '100%',
         flex: 1,
         backgroundColor: '#fff',
-        border: '3.5px solid #4697ce',
+        border: '3.5px solid #47bf93',
         borderRadius: 5,
         overflow: 'hidden',
     },
@@ -551,7 +550,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: 5,
-        backgroundColor: '#4697ce',
+        backgroundColor: '#47bf93',
         color: '#fff',
     },
     uppercaseText: {
@@ -600,8 +599,8 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         borderRadius: 30,
         borderWidth: 2,
-        borderColor: "#0071cd",
-        backgroundColor: "#0071cd",
+        borderColor: "#47bf93",
+        backgroundColor: "#47bf93",
         justifyContent: "center"
     },
     blueTransparentBtn: {
@@ -613,7 +612,7 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         borderRadius: 30,
         borderWidth: 2,
-        borderColor: "#0071cd",
+        borderColor: "#47bf93",
         // backgroundColor: "#0071cd",
         justifyContent: "center"
     }

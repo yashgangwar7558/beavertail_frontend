@@ -27,15 +27,17 @@ const LogoImage = styled.img`
     width: 50px;
     height: auto;
 `
-const LogoLabel = styled(Typography)`
+const LogoLabelMain = styled(Typography)`
 	font-family: inherit; 
-	font-size: 30px;
+	font-size: 1.5rem;
 	color: #9CFCD8;
 `
+// #9CFCD8;
+
 const SidebarWrapper = styled.div`
     background: #121B28;
 	font-family: 'Nunito', sans-serif;
-    width: ${(props) => props.isCollapsed ? '55px' : '300px'};
+    width: ${(props) => props.isCollapsed ? '55px' : '280px'};
 	height: 100%;
 	transition: all 0.3s ease-in-out;
 	overflow: hidden;
@@ -45,7 +47,7 @@ const SidebarWrapper = styled.div`
 	left: 0;
 
 	@media screen and (max-width: 800px) {
-		width: ${(props) => props.isCollapsed ? '0px' : '300px'};
+		width: ${(props) => props.isCollapsed ? '0px' : '280px'};
 	}
 
 	@media screen and (max-width: 350px) {
@@ -119,9 +121,9 @@ const Sidebar = (props) => {
 							<>
 								<LogoWrapper>
 									<LogoImage src={logo1} alt='logo' />
-									<LogoLabel variant='body1'>
+									<LogoLabelMain variant='body1' style={{ fontSize: '30px' }}>
 										cactus.ai
-									</LogoLabel>
+									</LogoLabelMain>
 								</LogoWrapper>
 								<SidebarMenuButton setIsSidebarCollapsed={props.setIsSidebarCollapsed} setIsSidebarOpen={props.setIsSidebarOpen} />
 							</>

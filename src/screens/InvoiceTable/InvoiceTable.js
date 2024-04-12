@@ -16,6 +16,9 @@ import { useDropzone } from 'react-dropzone';
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import { DatePicker } from '@mui/x-date-pickers';
+import {
+    FormControl, InputLabel, MenuItem, Select,
+} from '@mui/material'
 import dayjs from 'dayjs';
 
 const InvoiceTable = () => {
@@ -247,18 +250,7 @@ const InvoiceTable = () => {
                                 formatDensity="spacious"
                                 slotProps={{ textField: { size: 'small' } }}
                             />
-                            <Icon.Button
-                                style={styles.tableNavBtnBlue}
-                                name="angle-down"
-                                backgroundColor="transparent"
-                                underlayColor="transparent"
-                                iconStyle={{ fontSize: 22, paddingHorizontal: 5 }}
-                                color={"white"}
-                                onPress={() => { navigate('/add-invoice') }}
-                            >
-                                <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>Add Invoice</Text>
-                            </Icon.Button>
-                            <Picker
+                            {/* <Picker
                                 style={styles.picker}
                                 itemStyle={styles.pickerItem}
                                 underlineColorAndroid="transparent"
@@ -269,44 +261,48 @@ const InvoiceTable = () => {
                                 <Picker.Item label="Total (Low to High)" value="total_ascending" />
                                 <Picker.Item label="Recent First" value="invoiceDate_descending" />
                                 <Picker.Item label="Oldest First" value="invoiceDate_ascending" />
-                            </Picker>
-                            <Picker
-                                style={styles.picker}
-                                itemStyle={styles.pickerItem}
-                                underlineColorAndroid="transparent"
-                                selectedValue={filterByVendor}
-                                onValueChange={(value) => setFilterByVendor(value)}
-                            >
-                                <Picker.Item label="Vendor: All" value="All" />
-                                {vendors.map((vendor, index) => (
-                                    <Picker.Item key={index} label={vendor} value={vendor} />
-                                ))}
-                            </Picker>
-                            <Picker
-                                style={styles.picker}
-                                itemStyle={styles.pickerItem}
-                                underlineColorAndroid="transparent"
-                                selectedValue={filterByStatus}
-                                onValueChange={(value) => setFilterByStatus(value)}
-                            >
-                                <Picker.Item label="Status: All" value="All" />
-                                {statusTypes.map((status, index) => (
-                                    <Picker.Item key={index} label={status} value={status} />
-                                ))}
-                            </Picker>
+                            </Picker> */}
                         </View>
-                        {/* <View style={styles.rightTableButtons}>
+                        <View style={styles.rightTableButtons}>
+                            <FormControl style={styles.picker}>
+                                <Select
+                                    labelId="picker-label"
+                                    value={filterByVendor}
+                                    onChange={(e) => setFilterByVendor(e.target.value)}
+                                    style={{ color: '#ffffff', width: '100%', height: '100%', border: 'none', outline: 'none', }}
+                                >
+                                    <MenuItem value="All">Vendor: All</MenuItem>
+                                    {vendors.map((vendor, index) => (
+                                        <MenuItem key={index} value={vendor}>{vendor}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+
+                            <FormControl style={styles.picker}>
+                                <Select
+                                    labelId="picker-label"
+                                    value={filterByStatus}
+                                    onChange={(e) => setFilterByStatus(e.target.value)}
+                                    style={{ color: '#ffffff', width: '100%', height: '100%', border: 'none', outline: 'none', }}
+                                >
+                                    <MenuItem value="All">Status: All</MenuItem>
+                                    {statusTypes.map((status, index) => (
+                                        <MenuItem key={index} value={status}>{status}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                             <Icon.Button
                                 style={styles.tableNavBtnBlue}
-                                name="angle-down"
+                                name="plus"
                                 backgroundColor="transparent"
                                 underlayColor="transparent"
-                                iconStyle={{ fontSize: 22, paddingHorizontal: 5 }}
+                                iconStyle={{ fontSize: 15, paddingHorizontal: 0 }}
                                 color={"white"}
+                                onPress={() => { navigate('/add-invoice') }}
                             >
-                                <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>Export As</Text>
+                                <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>Add Invoice</Text>
                             </Icon.Button>
-                        </View> */}
+                        </View>
                     </View>
                     <View style={styles.searchContainer}>
                         <TextInput
@@ -314,9 +310,9 @@ const InvoiceTable = () => {
                             placeholder='Search'
                             placeholderTextColor="gray"
                         />
-                        <View style={styles.searchIcon}>
+                        {/* <View style={styles.searchIcon}>
                             <Icon name="search" size={20} color="gray" />
-                        </View>
+                        </View> */}
                     </View>
                 </View>
             </View>
@@ -461,8 +457,8 @@ const InvoiceTable = () => {
                                             backgroundColor="transparent"
                                             underlayColor="transparent"
                                             iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
-                                            color={"#0071cd"}>
-                                            <Text style={[{ color: '#0071cd', fontSize: 14, marginLeft: '4px' }]}>Open</Text>
+                                            color={"#47bf93"}>
+                                            <Text style={[{ color: '#47bf93', fontSize: 14, marginLeft: '4px' }]}>Open</Text>
                                         </Icon.Button>
                                     </View>
                                     {selectedInvoice.status.type === 'Pending Review' ? (
@@ -494,8 +490,8 @@ const InvoiceTable = () => {
                                                 backgroundColor="transparent"
                                                 underlayColor="transparent"
                                                 iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
-                                                color={"#0071cd"}>
-                                                <Text style={[{ color: '#0071cd', fontSize: 14, marginLeft: '4px' }]}>Reject</Text>
+                                                color={"#47bf93"}>
+                                                <Text style={[{ color: '#47bf93', fontSize: 14, marginLeft: '4px' }]}>Reject</Text>
                                             </Icon.Button>
                                         </View>
                                     ) : selectedInvoice.status.type === 'Pending Approval' ? (
@@ -527,8 +523,8 @@ const InvoiceTable = () => {
                                                 backgroundColor="transparent"
                                                 underlayColor="transparent"
                                                 iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
-                                                color={"#0071cd"}>
-                                                <Text style={[{ color: '#0071cd', fontSize: 14, marginLeft: '4px' }]}>Reject</Text>
+                                                color={"#47bf93"}>
+                                                <Text style={[{ color: '#47bf93', fontSize: 14, marginLeft: '4px' }]}>Reject</Text>
                                             </Icon.Button>
                                         </View>
                                     ) : selectedInvoice.status.type === 'Review-Rejected' || selectedInvoice.status.type === 'Approval-Rejected' ? (
@@ -570,8 +566,8 @@ const InvoiceTable = () => {
                                             backgroundColor="transparent"
                                             underlayColor="transparent"
                                             iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
-                                            color={"#0071cd"}>
-                                            <Text style={[{ color: '#0071cd', fontSize: 14, marginLeft: '4px' }]}>Cancel</Text>
+                                            color={"#47bf93"}>
+                                            <Text style={[{ color: '#47bf93', fontSize: 14, marginLeft: '4px' }]}>Cancel</Text>
                                         </Icon.Button>
                                         <Icon.Button
                                             style={styles.blueBtn}
@@ -644,15 +640,15 @@ const styles = StyleSheet.create({
         position: "relative",
         height: 40,
         margin: 3,
-        borderRadius: 30,
-        backgroundColor: "#0071cd",
+        borderRadius: 5,
+        backgroundColor: "#47bf93",
         justifyContent: "center"
     },
     tableNavBtnSky: {
         position: "relative",
         height: 40,
         margin: 3,
-        borderRadius: 30,
+        borderRadius: 5,
         backgroundColor: "#72b8f2",
         justifyContent: "center"
     },
@@ -666,10 +662,10 @@ const styles = StyleSheet.create({
     picker: {
         height: 40,
         margin: 3,
-        borderRadius: 10,
-        backgroundColor: "#0071cd",
+        borderRadius: 5,
+        backgroundColor: "#47bf93",
         justifyContent: "center",
-        color: 'white',
+        color: '#ffffff',
         paddingHorizontal: 8,
         fontSize: 15
     },
@@ -733,7 +729,7 @@ const styles = StyleSheet.create({
         // height: '100%',
         flex: 1,
         backgroundColor: '#fff',
-        border: '3.5px solid #4697ce',
+        border: '3.5px solid #47bf93',
         borderRadius: 5,
         overflow: 'hidden',
     },
@@ -742,8 +738,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: 5,
-        backgroundColor: '#4697ce',
+        backgroundColor: '#47bf93',
         color: '#fff',
+    },
+    invoiceDetails: {
+        flexDirection: 'column',
+        padding: 12,
     },
     invoiceDetailsButtonsContainer: {
         marginTop: 10,
@@ -769,8 +769,8 @@ const styles = StyleSheet.create({
         paddingVertical: 4,
         borderRadius: 30,
         borderWidth: 2,
-        borderColor: "#0071cd",
-        backgroundColor: "#0071cd",
+        borderColor: "#47bf93",
+        backgroundColor: "#47bf93",
         justifyContent: "center"
     },
     blueTransparentBtn: {
@@ -782,7 +782,7 @@ const styles = StyleSheet.create({
         paddingVertical: 4,
         borderRadius: 30,
         borderWidth: 2,
-        borderColor: "#0071cd",
+        borderColor: "#47bf93",
         // backgroundColor: "#0071cd",
         justifyContent: "center"
     },
@@ -795,7 +795,7 @@ const styles = StyleSheet.create({
     rejectionInputField: {
         flex: 1,
         height: 40,
-        borderColor: '#0071cd',
+        borderColor: '#47bf93',
         borderWidth: 1,
         borderRadius: 5,
         paddingHorizontal: 10,

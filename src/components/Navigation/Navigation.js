@@ -38,7 +38,7 @@ import { useNavigate } from 'react-router'
 
 const Content = styled.main`
     margin: 0;
-	  margin-left: ${(props) => props.isSidebarCollapsed ? '50px' : '300px'};
+	  margin-left: ${(props) => props.isSidebarCollapsed ? '50px' : '280px'};
     font-family: 'Nunito', sans-serif;
     box-sizing: border-box;
 	  background-color: #ffffff;

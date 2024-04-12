@@ -266,9 +266,9 @@ const AddInvoice = () => {
                                             backgroundColor="transparent"
                                             underlayColor="transparent"
                                             iconStyle={{ fontSize: 16, marginRight: 5 }}
-                                            color={"#0071cd"}
+                                            color={"#47bf93"}
                                         >
-                                            <Text style={{ color: '#0071cd', fontSize: 15 }}>Cancel</Text>
+                                            <Text style={{ color: '#47bf93', fontSize: 15 }}>Cancel</Text>
                                         </Icon.Button>
                                     </View>
                                 </View>
@@ -276,7 +276,7 @@ const AddInvoice = () => {
 
                         </View>
                         <Divider style={styles.divider}>
-                            <Chip label="Or" size="small" />
+                            <Chip label="Or" size="small" style={{ backgroundColor: '#47bf93', color: '#ffffff' }}/>
                         </Divider>
                         <Text style={styles.headingLabel}>Manually Fill Invoice Details</Text>
                     </View>
@@ -475,9 +475,9 @@ const AddInvoice = () => {
                                 backgroundColor="transparent"
                                 underlayColor="transparent"
                                 iconStyle={{ fontSize: 19, marginRight: 5 }}
-                                color={"#0071cd"}
+                                color={"#47bf93"}
                             >
-                                <Text style={{ color: '#0071cd', fontSize: 16 }}>Add & Mark Reviewed</Text>
+                                <Text style={{ color: '#47bf93', fontSize: 16 }}>Add & Mark Reviewed</Text>
                             </Icon.Button>
                         </View>
                     ) : (
@@ -500,9 +500,9 @@ const AddInvoice = () => {
                                 backgroundColor="transparent"
                                 underlayColor="transparent"
                                 iconStyle={{ fontSize: 19 }}
-                                color={"#0071cd"}
+                                color={"#47bf93"}
                             >
-                                <Text style={{ color: '#0071cd', fontSize: 16 }}>Save & Mark Reviewed</Text>
+                                <Text style={{ color: '#47bf93', fontSize: 16 }}>Save & Mark Reviewed</Text>
                             </Icon.Button>
                         </View>
                     )
@@ -547,8 +547,8 @@ const styles = {
         paddingVertical: 6,
         borderRadius: 30,
         borderWidth: 2,
-        borderColor: "#0071cd",
-        backgroundColor: "#0071cd",
+        borderColor: "#47bf93",
+        backgroundColor: "#47bf93",
         justifyContent: "center",
         alignSelf: "center"
     },
@@ -562,7 +562,7 @@ const styles = {
         paddingVertical: 6,
         borderRadius: 30,
         borderWidth: 2,
-        borderColor: "#0071cd",
+        borderColor: "#47bf93",
         backgroundColor: "white",
         justifyContent: "center",
         alignSelf: "center"
@@ -570,6 +570,7 @@ const styles = {
     divider: {
         marginTop: 15,
         marginBottom: 15,
+        color: '#47bf93'
     },
     inputContainer: {
         marginTop: 15,
@@ -713,8 +714,8 @@ const styles = {
         paddingVertical: 6,
         borderRadius: 30,
         borderWidth: 2,
-        borderColor: "#0071cd",
-        backgroundColor: "#0071cd",
+        borderColor: "#47bf93",
+        backgroundColor: "#47bf93",
         justifyContent: "center",
         alignSelf: "center"
     },
@@ -728,7 +729,7 @@ const styles = {
         paddingVertical: 6,
         borderRadius: 30,
         borderWidth: 2,
-        borderColor: "#0071cd",
+        borderColor: "#47bf93",
         backgroundColor: "white",
         justifyContent: "center",
         alignSelf: "center"

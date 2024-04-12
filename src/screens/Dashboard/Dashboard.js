@@ -18,7 +18,7 @@ const DashboardGrid = styled(Box)`
 	grid-auto-rows: auto;
 	height: calc(100vh - 72px);
 	gap: 10px;
-	margin: 0px 15px;
+	margin: 10px 10px;
 
 	@media screen and (max-width: 1024px) {
 		grid-template-columns: repeat(12, 1fr);

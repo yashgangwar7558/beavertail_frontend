@@ -24,8 +24,23 @@ import {
     Checkbox
 } from '@mui/material';
 
-const StyledButton = styled(Button)({
+// const StyledButtonRed = styled(Button)({
+//     margin: '8px',
+// });
+
+const StyledButtonTrans = styled(Button)({
     margin: '8px',
+});
+
+const StyledButtonFill = styled(Button)({
+    margin: '8px',
+    color: '#ffffff',
+    borderColor: '#47bf93',
+    backgroundColor: '#47bf93',
+    '&:hover': {
+        backgroundColor: '#47bf93', // Prevent background color change on hover
+        color: '#ffffff', // Ensure color remains the same on hover
+    },
 });
 
 const CompactTableContainer = styled(TableContainer)({
@@ -173,12 +188,12 @@ export const UserManagement = () => {
                                             <CompactTableCell>{user.email}</CompactTableCell>
                                             <CompactTableCell>
                                                 {user.roles.map((role, index) => (
-                                                    <Chip label={role.roleName} />
+                                                    <Chip label={role.roleName} key={index}/>
                                                 ))}
                                             </CompactTableCell>
                                             <CompactTableCell>
-                                                <StyledButton onClick={() => updateUserStatus(user._id, 'pending_admin_approval')} variant='contained'>Non-Approve</StyledButton>
-                                                <StyledButton onClick={() => updateUserStatus(user._id, 'declined')} variant='outlined' color='error'>Delete</StyledButton>
+                                                <StyledButtonFill onClick={() => updateUserStatus(user._id, 'pending_admin_approval')} variant='contained'>Non-Approve</StyledButtonFill>
+                                                <StyledButtonTrans onClick={() => updateUserStatus(user._id, 'declined')} variant='outlined' color='error'>Delete</StyledButtonTrans>
                                             </CompactTableCell>
                                         </TableRow>
                                     ))}
@@ -238,8 +253,8 @@ export const UserManagement = () => {
                                             </FormControl>
                                         </CompactTableCell>
                                         <CompactTableCell>
-                                            <StyledButton onClick={() => updateUserStatus(user._id, 'approved')} variant='contained'>Approve</StyledButton>
-                                            <StyledButton onClick={() => updateUserStatus(user._id, 'declined')} variant='outlined' color='error'>Decline</StyledButton>
+                                            <StyledButtonFill onClick={() => updateUserStatus(user._id, 'approved')} variant='contained'>Approve</StyledButtonFill>
+                                            <StyledButtonTrans onClick={() => updateUserStatus(user._id, 'declined')} variant='outlined' color='error'>Decline</StyledButtonTrans>
                                         </CompactTableCell>
                                     </TableRow>
                                 ))}

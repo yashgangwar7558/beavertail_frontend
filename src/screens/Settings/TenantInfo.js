@@ -15,6 +15,26 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/system';
 
+const StyledButtonTrans = styled(Button)({
+  color: '#47bf93',
+  borderColor: '#47bf93',
+  '&:hover': {
+    backgroundColor: '#f2faf7',
+    borderColor: '#47bf93',
+    color: '#47bf93', 
+},
+});
+
+const StyledButtonFill = styled(Button)({
+  color: '#ffffff',
+  borderColor: '#47bf93',
+  backgroundColor: '#47bf93',
+  '&:hover': {
+    backgroundColor: '#47bf93', // Prevent background color change on hover
+    color: '#ffffff', // Ensure color remains the same on hover
+  },
+});
+
 const EditableTextField = styled(TextField)({
   marginBottom: '16px',
 });
@@ -183,12 +203,12 @@ export const TenantInfo = () => {
                         onDelete={() => handleDeleteEmail('invoiceEmails', index)}
                       />
                     ))}
-                    <Button
+                    <StyledButtonTrans
                       variant="outlined"
                       onClick={() => handleAddEmail('invoiceEmails')}
                     >
                       Add Email
-                    </Button>
+                    </StyledButtonTrans>
                   </>
                 ) : (
                   <>
@@ -219,12 +239,12 @@ export const TenantInfo = () => {
                         onDelete={() => handleDeleteEmail('billEmails', index)}
                       />
                     ))}
-                    <Button
+                    <StyledButtonTrans
                       variant="outlined"
                       onClick={() => handleAddEmail('billEmails')}
                     >
                       Add Email
-                    </Button>
+                    </StyledButtonTrans>
                   </>
                 ) : (
                   <>
@@ -238,22 +258,22 @@ export const TenantInfo = () => {
           </Grid>
           {isEditing ? (
             <div style={{ marginTop: '16px' }}>
-              <Button
+              <StyledButtonFill
                 variant="contained"
                 color="primary"
                 onClick={handleSaveChanges}
                 style={{ marginRight: '16px' }}
               >
                 Save Changes
-              </Button>
-              <Button variant="outlined" onClick={handleCancelEdit}>
+              </StyledButtonFill>
+              <StyledButtonTrans variant="outlined" onClick={handleCancelEdit}>
                 Cancel
-              </Button>
+              </StyledButtonTrans>
             </div>
           ) : (
-            <Button variant="outlined" onClick={handleEdit} style={{ marginTop: '16px' }}>
+            <StyledButtonTrans variant="outlined" onClick={handleEdit} style={{ marginTop: '16px' }}>
               Edit
-            </Button>
+            </StyledButtonTrans>
           )}
         </Paper>
       </div>

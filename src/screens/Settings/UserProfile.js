@@ -14,8 +14,24 @@ import {
 import { styled } from '@mui/system';
 import { AuthContext } from '../../context/AuthContext';
 
-const StyledButton = styled(Button)({
+const StyledButtonTrans = styled(Button)({
+    color: '#47bf93',
+    borderColor: '#47bf93',
+    '&:hover': {
+        backgroundColor: '#f2faf7',
+        borderColor: '#47bf93',
+        color: '#47bf93', 
+    },
+});
 
+const StyledButtonFill = styled(Button)({
+    color: '#ffffff',
+    borderColor: '#47bf93',
+    backgroundColor: '#47bf93',
+    '&:hover': {
+        backgroundColor: '#47bf93', 
+        color: '#ffffff', 
+    },
 });
 
 const EditableTextField = styled(TextField)({
@@ -228,22 +244,22 @@ export const UserProfile = () => {
                             </Grid>
                             {isEditing ? (
                                 <div style={{ marginTop: '16px' }}>
-                                    <StyledButton
+                                    <StyledButtonFill
                                         variant="contained"
                                         color="primary"
                                         onClick={handleSaveChanges}
                                         style={{ marginRight: '16px' }}
                                     >
                                         Save Changes
-                                    </StyledButton>
-                                    <StyledButton variant="outlined" onClick={handleCancelEdit}>
+                                    </StyledButtonFill>
+                                    <StyledButtonTrans variant="outlined" onClick={handleCancelEdit}>
                                         Cancel
-                                    </StyledButton>
+                                    </StyledButtonTrans>
                                 </div>
                             ) : (
-                                <StyledButton variant="outlined" onClick={handleEdit} style={{ marginTop: '16px' }}>
+                                <StyledButtonTrans variant="outlined" onClick={handleEdit} style={{ marginTop: '16px' }}>
                                     Edit
-                                </StyledButton>
+                                </StyledButtonTrans>
                             )}
                         </Paper>
                     )
@@ -289,9 +305,9 @@ export const UserProfile = () => {
                             {error}
                         </Typography>
                     )}
-                    <StyledButton variant="contained" color="primary" onClick={handleChangePassword} style={{ marginTop: '16px' }}>
+                    <StyledButtonFill variant="contained" onClick={handleChangePassword} style={{ marginTop: '16px' }}>
                         Change Password
-                    </StyledButton>
+                    </StyledButtonFill>
                 </Paper>
             </div>
         </div>

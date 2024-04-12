@@ -19,7 +19,7 @@ const StyledTab = styled(Tab)(({ theme, selected }) => ({
   fontWeight: selected ? 'bold' : 'normal',
   fontSize: '16px',
   padding: '12px 24px',
-  color: selected ? '#333' : '#888',
+  color: selected ? '#47bf93' : '#888',
   backgroundColor: selected ? '#f5f5f5' : 'transparent',
   borderRadius: '5px',
   '&:hover': {
@@ -47,8 +47,8 @@ const SettingsTabs = () => {
       <StyledTabs
         value={tabData.findIndex(tab => window.location.pathname.includes(tab.path))}
         onChange={handleTabChange}
-        indicatorColor="primary"
-        textColor="primary"
+        indicatorColor="success"
+        textColor="success"
         // variant="fullWidth"
         // centered
       >

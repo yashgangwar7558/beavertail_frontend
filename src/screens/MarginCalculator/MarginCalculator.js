@@ -9,7 +9,11 @@ import Header from '../../components/global/Header/index.js';
 import client from '../../utils/ApiConfig'
 import { sortSalesReport } from '../../helpers/sort.js'
 import { DatePicker } from '@mui/x-date-pickers';
+import { ExpandMore, ExpandLess } from '@mui/icons-material'
 import dayjs from 'dayjs';
+import {
+    FormControl, InputLabel, MenuItem, Select,
+} from '@mui/material'
 
 const MarginCalculator = () => {
     const { userInfo, isLoading, logout } = useContext(AuthContext);
@@ -74,8 +78,8 @@ const MarginCalculator = () => {
         //   "theoreticalCostWomc": 25.0,
         //   "theoreticalCostWmc": 39.33
         // }
-      ]
-      );
+    ]
+    );
     const [recipeWiseSales, setRecipeWiseSales] = useState([
         // {
         //   "recipeId": "recipe_id_1",
@@ -157,7 +161,7 @@ const MarginCalculator = () => {
         //   "theoreticalCostWomc": 25.0,
         //   "theoreticalCostWmc": 39.33
         // }
-      ]);
+    ]);
     const [expandedTypes, setExpandedTypes] = useState([]);
     const [loading, setLoading] = useState(false);
     const [startDate, setStartDate] = useState(null);
@@ -228,16 +232,16 @@ const MarginCalculator = () => {
                     key={index}
                     style={{ backgroundColor: 'white' }}
                 >
-                    <DataTable.Cell style={[styles.cell, { flex: 0.2 }]}></DataTable.Cell>
-                    <DataTable.Cell style={styles.cell}>{item.type}</DataTable.Cell>
+                    {/* <DataTable.Cell style={[styles.cell, { flex: 0.2 }]}></DataTable.Cell> */}
+                    <DataTable.Cell style={[styles.cell, { flex: 1.2 }]}><span style={{ fontSize: '14px', color: 'black', marginLeft: '27px' }}>{item.type}</span></DataTable.Cell>
                     <DataTable.Cell style={styles.cell}>{item.name}</DataTable.Cell>
-                    <DataTable.Cell style={styles.cell}>${(item.avgCost).toFixed(2)}</DataTable.Cell>
+                    <DataTable.Cell style={styles.cell}>{(item.avgCost).toFixed(2)}</DataTable.Cell>
                     <DataTable.Cell style={styles.cell}>{item.quantitySold}</DataTable.Cell>
-                    <DataTable.Cell style={styles.cell}>${(item.totalModifierCost).toFixed(2)}</DataTable.Cell>
-                    <DataTable.Cell style={styles.cell}>${((item.totalFoodCost + item.totalModifierCost)).toFixed(2)}</DataTable.Cell>
-                    <DataTable.Cell style={styles.cell}>${(item.totalSales).toFixed(2)}</DataTable.Cell>
-                    <DataTable.Cell style={styles.cell}>${(item.totalProfitWmc).toFixed(2)}</DataTable.Cell>
-                    <DataTable.Cell style={styles.cell}>{(item.theoreticalCostWmc).toFixed(2)}%</DataTable.Cell>
+                    <DataTable.Cell style={styles.cell}>{(item.totalModifierCost).toFixed(2)}</DataTable.Cell>
+                    <DataTable.Cell style={styles.cell}>{((item.totalFoodCost + item.totalModifierCost)).toFixed(2)}</DataTable.Cell>
+                    <DataTable.Cell style={styles.cell}>{(item.totalSales).toFixed(2)}</DataTable.Cell>
+                    <DataTable.Cell style={styles.cell}><span style={{ color: item.totalProfitWmc < 0 ? 'red' : 'green' }}>{(Math.abs(item.totalProfitWmc)).toFixed(2)}</span></DataTable.Cell>
+                    <DataTable.Cell style={styles.cell}><span style={{ color: item.totalProfitWmc < 0 ? 'red' : 'green' }}>{(Math.abs(item.theoreticalCostWmc)).toFixed(2)}</span></DataTable.Cell>
                 </DataTable.Row>
             ))
         )
@@ -267,28 +271,29 @@ const MarginCalculator = () => {
                             formatDensity="spacious"
                             slotProps={{ textField: { size: 'small' } }}
                         />
-                        <Picker
-                            style={styles.picker}
-                            itemStyle={styles.pickerItem}
-                            underlineColorAndroid="transparent"
-                            selectedValue={sortOption}
-                            onValueChange={(value) => setSortOption(value)}
-                        >
-                            <Picker.Item label="Highest Selling" value="quantitySold_descending" />
-                            <Picker.Item label="Lowest Selling" value="quantitySold_ascending" />
-                            <Picker.Item label="Highest Sales" value="totalSales_descending" />
-                            <Picker.Item label="Lowest Sales" value="totalSales_ascending" />
-                            <Picker.Item label="Highest Profit" value="totalProfitWmc_descending" />
-                            <Picker.Item label="Lowest Profit" value="totalProfitWmc_ascending" />
-                        </Picker>
                     </View>
                     <View style={styles.rightTableButtons}>
+                        <FormControl style={styles.picker}>
+                            <Select
+                                labelId="picker-label"
+                                value={sortOption}
+                                onChange={(e) => setSortOption(e.target.value)}
+                                style={{ color: '#ffffff', width: '100%', height: '100%', border: 'none', outline: 'none', }}
+                            >
+                                <MenuItem value="quantitySold_descending">Highest Selling</MenuItem>
+                                <MenuItem value="quantitySold_ascending">Lowest Selling</MenuItem>
+                                <MenuItem value="totalSales_descending">Highest Sales</MenuItem>
+                                <MenuItem value="totalSales_ascending">Lowest Sales</MenuItem>
+                                <MenuItem value="totalProfitWomc_descending">Highest Profit</MenuItem>
+                                <MenuItem value="totalProfitWomc_ascending">Lowest Profit</MenuItem>
+                            </Select>
+                        </FormControl>
                         <Icon.Button
                             style={styles.tableNavBtnMidBlue}
                             name="print"
                             backgroundColor="transparent"
                             underlayColor="transparent"
-                            iconStyle={{ fontSize: 22, paddingHorizontal: 5 }}
+                            iconStyle={{ fontSize: 20, paddingHorizontal: 0 }}
                             color={"white"}
                         >
                             <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>Print Report</Text>
@@ -298,7 +303,7 @@ const MarginCalculator = () => {
                             name="angle-down"
                             backgroundColor="transparent"
                             underlayColor="transparent"
-                            iconStyle={{ fontSize: 22, paddingHorizontal: 5 }}
+                            iconStyle={{ fontSize: 20, paddingHorizontal: 0 }}
                             color={"white"}
                         >
                             <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>Export As</Text>
@@ -309,16 +314,16 @@ const MarginCalculator = () => {
 
             <DataTable style={styles.dataTable}>
                 <DataTable.Header style={styles.header}>
-                    <DataTable.Cell style={[styles.cell, { flex: 0.2 }]}></DataTable.Cell>
-                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Menu Item Type</span></DataTable.Title>
+                    {/* <DataTable.Cell style={[styles.cell, { flex: 0.2 }]}></DataTable.Cell> */}
+                    <DataTable.Title style={[styles.headerCell, { flex: 1.2 }]}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black', marginLeft: '5px' }}>Menu Item Type</span></DataTable.Title>
                     <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Menu Item</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Avg. Cost</span></DataTable.Title>
+                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Avg. Cost ($)</span></DataTable.Title>
                     <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Items Sold</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Modifier Cost</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Total Cost</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Total Sales</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Total Profit</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Margin</span></DataTable.Title>
+                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Modifier Cost ($)</span></DataTable.Title>
+                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Total Cost ($)</span></DataTable.Title>
+                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Total Sales ($)</span></DataTable.Title>
+                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Total Profit ($)</span></DataTable.Title>
+                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Margin (%)</span></DataTable.Title>
                 </DataTable.Header>
 
                 {loading ? (
@@ -330,28 +335,25 @@ const MarginCalculator = () => {
                                 style={index % 2 === 0 ? styles.evenRow : styles.oddRow}
                                 onPress={() => handleTypesToggle(item.type)}
                             >
-                                <DataTable.Cell style={[styles.cell, { flex: 0.2 }]}>
-                                    <Icon.Button style={{}}
-                                        name={expandedTypes.includes(item.type) ? 'minus-square' : 'plus-square'}
-                                        onPress={() => handleTypesToggle(item.type)}
-                                        backgroundColor="transparent"
-                                        underlayColor="transparent"
-                                        color={"#1f82d2"}
-                                        iconStyle={{ padding: 0, marginRight: 0, fontSize: 15 }}>
-                                    </Icon.Button>
-                                </DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}>
-                                    <span style={{ fontWeight: '700' }}>{item.type}</span>
-                                    <span style={{ fontWeight: '700' }}> ({item.count})</span>
+                                <DataTable.Cell style={[styles.cell, { flex: 1.2 }]}>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        {expandedTypes.includes(item.type) ? (
+                                            <ExpandLess sx={{ fontSize: '22px', marginRight: '3px', color: '#47bf93' }} />
+                                        ) : (
+                                            <ExpandMore sx={{ fontSize: '22px', marginRight: '3px', color: '#47bf93' }} />
+                                        )}
+                                        <span style={{ fontSize: '14px', fontWeight: '600', verticalAlign: 'middle', marginRight: '3px' }}>{item.type}</span>
+                                        <span style={{ fontSize: '14px', fontWeight: '600', verticalAlign: 'middle' }}>({item.count})</span>
+                                    </div>
                                 </DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}></DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.avgCost).toFixed(2)}</span></DataTable.Cell>
+                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>{(item.avgCost).toFixed(2)}</span></DataTable.Cell>
                                 <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>{item.quantitySold}</span></DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalModifierCost).toFixed(2)}</span></DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalFoodCost + item.totalModifierCost).toFixed(2)}</span></DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>${(item.totalSales).toFixed(2)}</span></DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: item.totalProfitWmc < 0 ? 'red' : 'green' }}>${(Math.abs(item.totalProfitWmc)).toFixed(2)}</span></DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: item.theoreticalCostWmc < 0 ? 'red' : 'green' }}>{(Math.abs(item.theoreticalCostWmc)).toFixed(2)}%</span></DataTable.Cell>
+                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>{(item.totalModifierCost).toFixed(2)}</span></DataTable.Cell>
+                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>{(item.totalFoodCost + item.totalModifierCost).toFixed(2)}</span></DataTable.Cell>
+                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>{(item.totalSales).toFixed(2)}</span></DataTable.Cell>
+                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: item.totalProfitWmc < 0 ? 'red' : 'green' }}>{(Math.abs(item.totalProfitWmc)).toFixed(2)}</span></DataTable.Cell>
+                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: item.totalProfitWmc < 0 ? 'red' : 'green' }}>{(Math.abs(item.theoreticalCostWmc)).toFixed(2)}</span></DataTable.Cell>
                             </DataTable.Row>
 
                             {expandedTypes.includes(item.type) && renderAccordionContent(item.type)}
@@ -389,7 +391,7 @@ const styles = StyleSheet.create({
         height: 40,
         margin: 3,
         borderRadius: 5,
-        backgroundColor: "#4496cd",
+        backgroundColor: "#47bf93",
         justifyContent: "center"
     },
     tableNavBtnSky: {
@@ -410,10 +412,10 @@ const styles = StyleSheet.create({
     picker: {
         height: 40,
         margin: 3,
-        borderRadius: 10,
-        backgroundColor: "#0071cd",
+        borderRadius: 5,
+        backgroundColor: "#47bf93",
         justifyContent: "center",
-        color: 'white',
+        color: '#ffffff',
         paddingHorizontal: 8,
         fontSize: 15
     },
