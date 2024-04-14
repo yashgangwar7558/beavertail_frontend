@@ -1,4 +1,4 @@
-import { HomeRounded, SettingsRounded, ViewListRounded, AddCard, PostAddRounded, ReceiptRounded, HistoryRounded, PointOfSaleOutlined, AnalyticsRounded } from "@mui/icons-material"
+import { HomeRounded, SettingsRounded, ViewListRounded, AddCard, PostAddRounded, ReceiptRounded, HistoryRounded, PointOfSaleOutlined, AnalyticsRounded, NoteAdd, MenuBook, LocalPharmacy, MonetizationOn } from "@mui/icons-material"
 
 export const SidebarData = [
     {
@@ -14,7 +14,7 @@ export const SidebarData = [
     {
         title: 'Margin',
         path: '/margin',
-        icon: <PointOfSaleOutlined sx={{ fontSize: '22px' }} />,
+        icon: <MonetizationOn sx={{ fontSize: '22px' }} />,
     },
     {
         title: 'Invoices',
@@ -24,17 +24,17 @@ export const SidebarData = [
     {
         title: 'Add Invoice',
         path: '/add-invoice',
-        icon: <PostAddRounded sx={{ fontSize: '22px' }} />,
+        icon: <NoteAdd sx={{ fontSize: '22px' }} />,
     },
     {
         title: 'Recipe Book',
         path: '/menu',
-        icon: <ViewListRounded sx={{ fontSize: '22px' }} />,
+        icon: <MenuBook sx={{ fontSize: '22px' }} />,
     },
     {
         title: 'Add Recipe',
         path: '/menubuilder',
-        icon: <AddCard sx={{ fontSize: '22px' }} />,
+        icon: <LocalPharmacy sx={{ fontSize: '22px' }} />,
     },
     // {
     //     title: 'Purchase History',

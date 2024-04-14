@@ -1,5 +1,6 @@
 import { React, useEffect, useState, useContext } from 'react'
 import logo1 from '../../../assets/logo/greenCactusAi.png'
+import { useNavigate } from 'react-router'
 import { SidebarData } from '../../../utils/SidebarData'
 import SidebarMenuButton from '../SidebarMenuButton'
 import MenuItem from '../MenuItem'
@@ -7,8 +8,6 @@ import useWindowDimensions from '../../../utils/windowDimensions'
 import { AuthContext } from '../../../context/AuthContext';
 import { Box, Button, Typography, StyledEngineProvider, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, IconButton } from '@mui/material'
 import { LogoutRounded } from '@mui/icons-material'
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { DatePicker, DateRangePicker } from '@mui/x-date-pickers';
 import styled from 'styled-components'
 
 const NavIcon = styled.div`
@@ -36,7 +35,7 @@ const LogoLabelMain = styled(Typography)`
 
 const SidebarWrapper = styled.div`
     background: #121B28;
-	font-family: 'Nunito', sans-serif;
+	font-family: Helvetica;
     width: ${(props) => props.isCollapsed ? '55px' : '280px'};
 	height: 100%;
 	transition: all 0.3s ease-in-out;
@@ -96,10 +95,11 @@ const LogoutIconButton = styled(IconButton)`
 const Sidebar = (props) => {
 
 	const [selected, setSelected] = useState('Dashboard')
+	const navigate = useNavigate({});
 
 	const { width, height } = useWindowDimensions()
 
-	const { userInfo ,logout } = useContext(AuthContext);
+	const { userInfo, logout } = useContext(AuthContext);
 
 	useEffect(() => {
 		width <= 1024 ? props.setIsSidebarCollapsed(true) : props.setIsSidebarCollapsed(false)
@@ -160,17 +160,17 @@ const Sidebar = (props) => {
 						}
 					</StyledEngineProvider>
 					<Dialog open={logoutDialogOpen} onClose={handleLogoutDialogClose}>
-						<DialogTitle fontFamily='inherit'>
+						<DialogTitle fontFamily='helvetica'>
 							Logout
 						</DialogTitle>
 						<DialogContent>
-							<DialogContentText fontFamily='inherit'>
+							<DialogContentText fontFamily='helvetica'>
 								Are you sure you want to logout?
 							</DialogContentText>
 						</DialogContent>
 						<DialogActions>
-							<Button sx={{ fontFamily: 'inherit', color: '#121B28' }} onClick={handleLogoutDialogClose}> No </Button>
-							<Button sx={{ fontFamily: 'inherit', color: '#121B28' }} onClick={logout} autoFocus> Yes </Button>
+							<Button sx={{ fontFamily: 'helvetica', color: '#121B28' }} onClick={handleLogoutDialogClose}> No </Button>
+							<Button sx={{ fontFamily: 'helvetica', color: '#121B28' }} onClick={() => logout(navigate)} autoFocus> Yes </Button>
 						</DialogActions>
 					</Dialog>
 				</MenuWrapper>

@@ -117,8 +117,8 @@ const MenuItems = () => {
         //   "menuType": "Regular",
         //   "inventory": true
         // }
-      ]
-      );
+    ]
+    );
     const [selectedRecipe, setSelectedRecipe] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -175,28 +175,25 @@ const MenuItems = () => {
                         <View style={styles.leftTableButtons}>
                             <Icon.Button
                                 style={styles.tableNavBtn}
-                                name="plus"
-                                onPress={() => {navigate('/menubuilder')}}
+                                name='plus'
+                                onPress={() => { navigate('/menubuilder') }}
                                 backgroundColor="transparent"
                                 underlayColor="transparent"
-                                iconStyle={{ fontSize: 18, paddingHorizontal: 0 }}
+                                iconStyle={{ fontSize: 15, paddingHorizontal: 0 }}
                                 color={"white"}
                             >
-                                <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>Add New Recipe</Text>
+                                <Text style={{ color: 'white', fontSize: 15, marginRight: 5, fontFamily: 'inherit' }}>Add New Recipe</Text>
                             </Icon.Button>
                         </View>
                         <View style={styles.rightTableButtons}>
-                            <Icon.Button
+                            <Button
                                 style={styles.tableNavBtn}
-                                name="angle-down"
-                                onPress={() => navigation.navigate('MenuBuilder')}
-                                backgroundColor="transparent"
-                                underlayColor="transparent"
-                                iconStyle={{ fontSize: 18, paddingHorizontal: 0 }}
-                                color={"white"}
                             >
-                                <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>Export As</Text>
-                            </Icon.Button>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Text style={{ color: 'white', fontSize: 15, marginRight: 5, fontFamily: 'inherit' }}>Export</Text>
+                                    <Icon name="angle-down" size={18} color="white" />
+                                </View>
+                            </Button>
                         </View>
                     </View>
                     <View style={styles.searchContainer}>
@@ -216,13 +213,13 @@ const MenuItems = () => {
                         {/* Table */}
                         <DataTable style={styles.dataTable}>
                             <DataTable.Header style={styles.header}>
-                                <DataTable.Title style={styles.headerCell}><span style={{fontWeight: 'bold', fontSize: '14px', color: 'black'}}>Name</span></DataTable.Title>
-                                <DataTable.Title style={styles.headerCell}><span style={{fontWeight: 'bold', fontSize: '14px', color: 'black'}}>Type</span></DataTable.Title>
-                                <DataTable.Title style={styles.headerCell}><span style={{fontWeight: 'bold', fontSize: '14px', color: 'black'}}>On Inventory</span></DataTable.Title>
-                                <DataTable.Title style={styles.headerCell}><span style={{fontWeight: 'bold', fontSize: '14px', color: 'black'}}>Cost</span></DataTable.Title>
-                                <DataTable.Title style={styles.headerCell}><span style={{fontWeight: 'bold', fontSize: '14px', color: 'black'}}>Menu Price</span></DataTable.Title>
-                                <DataTable.Title style={styles.headerCell}><span style={{fontWeight: 'bold', fontSize: '14px', color: 'black'}}>Gross Profit</span></DataTable.Title>
-                                <DataTable.Title style={styles.headerCell}><span style={{fontWeight: 'bold', fontSize: '14px', color: 'black'}}>Cost %</span></DataTable.Title>
+                                <DataTable.Title style={styles.headerCellLeft}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Name</span></DataTable.Title>
+                                <DataTable.Title style={[styles.headerCellLeft, { flex: 0.8 }]}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Type</span></DataTable.Title>
+                                <DataTable.Title style={styles.headerCellRight}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>On Inventory</span></DataTable.Title>
+                                <DataTable.Title style={styles.headerCellRight}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Cost ($)</span></DataTable.Title>
+                                <DataTable.Title style={styles.headerCellRight}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Menu Price ($)</span></DataTable.Title>
+                                <DataTable.Title style={styles.headerCellRight}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Gross Profit ($)</span></DataTable.Title>
+                                <DataTable.Title style={styles.headerCellLast}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black', textAlign: 'right' }}>Cost (%)</span></DataTable.Title>
                             </DataTable.Header>
 
                             {loading ? (
@@ -233,13 +230,13 @@ const MenuItems = () => {
                                         <DataTable.Row
                                             style={index % 2 === 0 ? styles.evenRow : styles.oddRow}
                                         >
-                                            <DataTable.Cell style={styles.cell}>{item.name}</DataTable.Cell>
-                                            <DataTable.Cell style={styles.cell}>{item.category}</DataTable.Cell>
-                                            <DataTable.Cell style={styles.cell}>{item.inventory ? 'Yes' : 'No'}</DataTable.Cell>
-                                            <DataTable.Cell style={styles.cell}>${(item.cost).toFixed(2)}</DataTable.Cell>
-                                            <DataTable.Cell style={styles.cell}>${(item.menuPrice).toFixed(2)}</DataTable.Cell>
-                                            <DataTable.Cell style={[styles.cell, { backgroundColor: (item.menuPrice - item.cost) < 0 ? '#ed6d7b' : '#8eeda8' }]}>${(item.menuPrice - item.cost).toFixed(2)}</DataTable.Cell>
-                                            <DataTable.Cell style={[styles.cell, { backgroundColor: (item.menuPrice - item.cost) < 0 ? '#ed6d7b' : '#8eeda8' }]}>{((item.cost / item.menuPrice) * 100).toFixed(1)}%</DataTable.Cell>
+                                            <DataTable.Cell style={styles.cellLeft}>{item.name}</DataTable.Cell>
+                                            <DataTable.Cell style={[styles.cellLeft, { flex: 0.8 }]}>{item.category}</DataTable.Cell>
+                                            <DataTable.Cell style={styles.cellRight}>{item.inventory ? 'Yes' : 'No'}</DataTable.Cell>
+                                            <DataTable.Cell style={styles.cellRight}>{(item.cost).toFixed(2)}</DataTable.Cell>
+                                            <DataTable.Cell style={styles.cellRight}>{(item.menuPrice).toFixed(2)}</DataTable.Cell>
+                                            <DataTable.Cell style={styles.cellRight}><span style={{ color: item.menuPrice - item.cost < 0 ? 'red' : '#1c1b1f', fontWeight: '400', fontSize: '14px' }}>{(Math.abs(item.menuPrice - item.cost)).toFixed(2)}</span></DataTable.Cell>
+                                            <DataTable.Cell style={styles.cellLast}><span style={{ color: item.menuPrice - item.cost < 0 ? 'red' : '#1c1b1f', fontWeight: '400', fontSize: '14px' }}>{(Math.abs((item.cost / item.menuPrice) * 100)).toFixed(2)}</span></DataTable.Cell>
                                         </DataTable.Row>
                                     </TouchableOpacity>
                                 ))
@@ -257,7 +254,7 @@ const MenuItems = () => {
                                     underlayColor="transparent"
                                     iconStyle={{ fontSize: 20, marginRight: 5, padding: 0 }}
                                     color={"white"}>
-                                    <Text style={[styles.uppercaseText, { fontWeight: '500', color: 'white', fontSize: '18px' }]}>{selectedRecipe.name}</Text>
+                                    <Text style={[styles.uppercaseText, { fontWeight: '500', color: 'white', fontSize: '18px', fontFamily: 'inherit' }]}>{selectedRecipe.name}</Text>
                                 </Icon.Button>
                                 <Icon.Button
                                     name="times"
@@ -265,7 +262,7 @@ const MenuItems = () => {
                                     onPress={closeRecipeDetails}
                                     backgroundColor="transparent"
                                     underlayColor="transparent"
-                                    iconStyle={{ fontSize: 20, padding: 0, margin: 0 }}
+                                    iconStyle={{ fontSize: 20, padding: 0, margin: 0, fontFamily: 'inherit' }}
                                     color={"white"}>
                                 </Icon.Button>
                             </View>
@@ -295,7 +292,7 @@ const MenuItems = () => {
                                         iconStyle={{ fontSize: 19 }}
                                         color={"white"}
                                     >
-                                        <Text style={{ color: 'white', fontSize: 14 }}>Edit Recipe</Text>
+                                        <Text style={{ color: 'white', fontSize: 14, fontFamily: 'inherit' }}>Edit Recipe</Text>
                                     </Icon.Button>
                                     <Icon.Button
                                         style={styles.blueBtn}
@@ -306,7 +303,7 @@ const MenuItems = () => {
                                         iconStyle={{ fontSize: 19 }}
                                         color={"white"}
                                     >
-                                        <Text style={{ color: 'white', fontSize: 14 }}>Delete Recipe</Text>
+                                        <Text style={{ color: 'white', fontSize: 14, fontFamily: 'inherit' }}>Delete Recipe</Text>
                                     </Icon.Button>
                                     <Icon.Button
                                         style={styles.blueBtn}
@@ -316,7 +313,7 @@ const MenuItems = () => {
                                         iconStyle={{ fontSize: 19 }}
                                         color={"white"}
                                     >
-                                        <Text style={{ color: 'white', fontSize: 14 }}>Print</Text>
+                                        <Text style={{ color: 'white', fontSize: 14, fontFamily: 'inherit' }}>Print</Text>
                                     </Icon.Button>
                                 </View>
                                 <View style={styles.rightButtonsContainer}>
@@ -328,7 +325,7 @@ const MenuItems = () => {
                                         iconStyle={{ fontSize: 19 }}
                                         color={"#47bf93"}
                                     >
-                                        <Text style={{ color: '#47bf93', fontSize: 14 }}>Recipe Cost History</Text>
+                                        <Text style={{ color: '#47bf93', fontSize: 14, fontFamily: 'inherit' }}>Recipe Cost History</Text>
                                     </Icon.Button>
                                     {/* <Icon.Button
                                         style={styles.blueTransparentBtn}
@@ -471,9 +468,9 @@ const styles = StyleSheet.create({
     },
     tableNavBtn: {
         position: "relative",
-        height: 40,
+        height: 35,
         margin: 3,
-        borderRadius: 5,
+        borderRadius: 12,
         backgroundColor: "#47bf93",
         justifyContent: "center"
     },
@@ -488,7 +485,7 @@ const styles = StyleSheet.create({
         height: 40,
         backgroundColor: '#fff',
         border: '1px solid gray',
-        borderRadius: 5,
+        borderRadius: 12,
         paddingHorizontal: 10,
     },
     searchIcon: {
@@ -511,13 +508,27 @@ const styles = StyleSheet.create({
         borderBottomColor: 'black',
         backgroundColor: 'white',
     },
-    headerCell: {
-        paddingLeft: 10,
-        fontWeight: 'bold',
-        fontSize: 12,
+    headerCellLeft: {
+
     },
-    cell: {
-        paddingLeft: 10,
+    headerCellRight: {
+        justifyContent: 'flex-end',
+        paddingRight: '10px',
+    },
+    headerCellLast: {
+        justifyContent: 'flex-end',
+    },
+    cellLeft: {
+
+    },
+    cellRight: {
+        justifyContent: 'flex-end',
+        paddingRight: '10px',
+        borderRightWidth: 1,
+        borderRightColor: '#dedede',
+    },
+    cellLast: {
+        justifyContent: 'flex-end',
     },
     evenRow: {
         backgroundColor: '#f2f0f0',
@@ -597,7 +608,7 @@ const styles = StyleSheet.create({
         marginRight: 5,
         paddingHorizontal: 10,
         paddingVertical: 5,
-        borderRadius: 30,
+        borderRadius: 12,
         borderWidth: 2,
         borderColor: "#47bf93",
         backgroundColor: "#47bf93",
@@ -610,7 +621,7 @@ const styles = StyleSheet.create({
         marginRight: 5,
         paddingHorizontal: 10,
         paddingVertical: 5,
-        borderRadius: 30,
+        borderRadius: 12,
         borderWidth: 2,
         borderColor: "#47bf93",
         // backgroundColor: "#0071cd",

@@ -8,6 +8,7 @@
   left: 0;
   right: 0;
   margin: auto;
+  background-color: rgb(52, 49, 49);
 }
 
 .login-card {
@@ -18,14 +19,28 @@
   width: 420px;
   padding-left: 10px;
   padding-right: 10px;
+  background-color: rgb(52, 49, 49); 
+  font-family: Helvetica;
 }
 
 .logo-container-l {
-  padding-bottom: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  padding-bottom: 20px;
+  background-color: rgb(52, 49, 49);
+  width: 100%; 
 }
 
-.logo-l {
+.logo-image-l {
   width: 100%;
+  height: auto;
+}
+
+.logo-label-l {
+  margin-right: 20px; 
+  color: #9CFCD8;
+  font-size: 60px;
 }
 
 .input-container-l {
@@ -75,7 +90,7 @@ input:-webkit-autofill:active {
   width: 100%;
   height: 50px;
   border-radius: 25px;
-  background-color: #1f0f0f;
+  background-color: #16181a; 
   color: #d3cccc;
   font-weight: 500;
   border: none;
@@ -84,14 +99,10 @@ input:-webkit-autofill:active {
   font-family: inherit;
   font-size: 22px;
   cursor: pointer;
-  &:hover {
-    background-color: #121b28;
-    color: #d3cccc;
-  }
 }
 
-.registerbutton-container-l {
-  padding-top: 40px;
+.login-button-l:hover {
+  background-color: #131212; 
 }
 
 .register-button-l {
@@ -107,23 +118,23 @@ input:-webkit-autofill:active {
   font-family: inherit;
   font-size: 22px;
   cursor: pointer;
-  &:hover {
-    background-color: #69e1bd;
-    color: #121b28;
-  }
+}
+
+.register-button-l:hover {
+  background-color: #47bf93; /* Lighter color on hover for better visibility */
 }
 
 .forgot-link {
   display: flex;
   justify-content: right;
-  padding-top: 3px;
+  padding-top: 5px;
 }
 
 .forgot-link p {
   font-family: inherit;
   font-size: 16px;
   font-weight: 400;
-  color: #121b28;
+  color: #9CFCD8;
   cursor: pointer;
   padding: 0px;
   margin: 0px;  
@@ -132,12 +143,14 @@ input:-webkit-autofill:active {
 .loginline {
     width: 100%; 
     text-align: center; 
-    border-bottom: 1px solid #000; 
+    border-bottom: 1px solid #f8f4f4; 
     line-height: 0.1em;
-    padding-top: 30px;  
+    margin-top: 50px;  
+    margin-bottom: 50px;  
  } 
  
  .loginline span { 
-     background:#fff; 
+     background: rgb(52, 49, 49); 
      padding:0 10px; 
+     color: white
  }

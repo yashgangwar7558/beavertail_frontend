@@ -39,7 +39,7 @@ import { useNavigate } from 'react-router'
 const Content = styled.main`
     margin: 0;
 	  margin-left: ${(props) => props.isSidebarCollapsed ? '50px' : '280px'};
-    font-family: 'Nunito', sans-serif;
+    font-family: Helvetica;
     box-sizing: border-box;
 	  background-color: #ffffff;
 	  transition: all 0.3s ease-in-out;
@@ -130,6 +130,8 @@ const Navigation = () => {
                 <Route path="/permission-denied" element={<PermissionDeniedPage />} />
                 <Route path="*" element={<Navigate to="/page-not-found" />} />
                 <Route path="/page-not-found" element={<NotFoundPage />} />
+                {/* <Route path="/signin" element={<SignIn />} />
+                <Route path="/signup" element={<SignUp />} /> */}
               </Routes>
             </Content>
           </LocalizationProvider>

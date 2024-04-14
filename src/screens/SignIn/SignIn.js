@@ -1,4 +1,5 @@
-import Logo from '../../assets/logo/logo.png';
+// import Logo from '../../assets/logo/logo.png';
+import Logo from '../../assets/logo/greenCactusAi.png';
 import Background from '../../assets/background1.jpg';
 import './SignIn.css'
 import { useNavigate } from 'react-router'
@@ -26,7 +27,8 @@ const SignIn = ({ navigation }) => {
             <div className='login-card'>
                 <div>
                     <div className='logo-container-l'>
-                        <img src={Logo} alt="logo" className='logo-l' />
+                        <img src={Logo} alt="logo" className='logo-image-l' />
+                        <h1 className='logo-label-l'>cactus.ai</h1>
                     </div>
                     <Box>
                         <Spinner visible={isLoading} />

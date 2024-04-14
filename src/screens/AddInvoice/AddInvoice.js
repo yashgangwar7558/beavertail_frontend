@@ -235,7 +235,7 @@ const AddInvoice = () => {
                         <View style={styles.inputContainer}>
                             <div {...getRootProps()} style={styles.dropzone}>
                                 <input {...getInputProps()} />
-                                <p>Drag 'n' drop your invoice here, or click to select one</p>
+                                <p style={{fontFamily: 'inherit'}}>Drag 'n' drop your invoice here, or click to select one</p>
                             </div>
                             {invoiceData.invoiceFile && (
                                 <View style={styles.postUploadContainer}>
@@ -257,7 +257,7 @@ const AddInvoice = () => {
                                             iconStyle={{ fontSize: 16, marginRight: 5 }}
                                             color={"white"}
                                         >
-                                            <Text style={{ color: 'white', fontSize: 15 }}>Extract</Text>
+                                            <Text style={{ color: 'white', fontSize: 15, fontFamily: 'inherit' }}>Extract</Text>
                                         </Icon.Button>
                                         <Icon.Button
                                             style={styles.postUploadButtonTrans}
@@ -268,7 +268,7 @@ const AddInvoice = () => {
                                             iconStyle={{ fontSize: 16, marginRight: 5 }}
                                             color={"#47bf93"}
                                         >
-                                            <Text style={{ color: '#47bf93', fontSize: 15 }}>Cancel</Text>
+                                            <Text style={{ color: '#47bf93', fontSize: 15, fontFamily: 'inherit' }}>Cancel</Text>
                                         </Icon.Button>
                                     </View>
                                 </View>
@@ -320,8 +320,8 @@ const AddInvoice = () => {
                             onPress={() => handleAddNewIngredient()}
                             backgroundColor="transparent"
                             underlayColor="transparent"
-                            color={"#2bb378"}>
-                            <Text style={{ color: '#2bb378', fontSize: 15 }}>Add new</Text>
+                            color={"#47bf93"}>
+                            <Text style={{ color: '#47bf93', fontSize: 15, fontFamily: 'inherit' }}>Add new</Text>
                         </Icon.Button>
                     </Text>
                     <Text style={{ color: 'gray', fontSize: '15px', marginBottom: '10px' }}>*Click on Add new, if ingredient not found or purchasing it for the first time.</Text>
@@ -466,7 +466,7 @@ const AddInvoice = () => {
                                 iconStyle={{ fontSize: 19, marginRight: 5 }}
                                 color={"white"}
                             >
-                                <Text style={{ color: 'white', fontSize: 16 }}>Add Invoice</Text>
+                                <Text style={{ color: 'white', fontSize: 16, fontFamily: 'inherit' }}>Add Invoice</Text>
                             </Icon.Button>
                             <Icon.Button
                                 style={styles.blueBtnTrans}
@@ -477,7 +477,7 @@ const AddInvoice = () => {
                                 iconStyle={{ fontSize: 19, marginRight: 5 }}
                                 color={"#47bf93"}
                             >
-                                <Text style={{ color: '#47bf93', fontSize: 16 }}>Add & Mark Reviewed</Text>
+                                <Text style={{ color: '#47bf93', fontSize: 16, fontFamily: 'inherit' }}>Add & Mark Reviewed</Text>
                             </Icon.Button>
                         </View>
                     ) : (
@@ -491,7 +491,7 @@ const AddInvoice = () => {
                                 iconStyle={{ fontSize: 19 }}
                                 color={"white"}
                             >
-                                <Text style={{ color: 'white', fontSize: 16 }}>Save Changes</Text>
+                                <Text style={{ color: 'white', fontSize: 16, fontFamily: 'inherit' }}>Save Changes</Text>
                             </Icon.Button>
                             <Icon.Button
                                 style={styles.blueBtnTrans}
@@ -502,7 +502,7 @@ const AddInvoice = () => {
                                 iconStyle={{ fontSize: 19 }}
                                 color={"#47bf93"}
                             >
-                                <Text style={{ color: '#47bf93', fontSize: 16 }}>Save & Mark Reviewed</Text>
+                                <Text style={{ color: '#47bf93', fontSize: 16, fontFamily: 'inherit'}}>Save & Mark Reviewed</Text>
                             </Icon.Button>
                         </View>
                     )
@@ -518,8 +518,8 @@ const AddInvoice = () => {
 const styles = {
     formContainer: {
         marginTop: 20,
-        paddingBottom: 40,
-        paddingHorizontal: 30,
+        paddingBottom: 30,
+        paddingHorizontal: 15,
         backgroundColor: 'white'
     },
     heading: {
@@ -578,13 +578,13 @@ const styles = {
     headingLabel: {
         marginBottom: 8,
         fontWeight: 'bold',
-        fontFamily: 'sans-serif',
+        fontFamily: 'inherit',
         fontSize: 22,
     },
     label: {
         marginBottom: 8,
         fontWeight: 'bold',
-        fontFamily: 'sans-serif',
+        fontFamily: 'inherit',
         fontSize: 16,
     },
     input: {
@@ -686,9 +686,10 @@ const styles = {
         // margin: 0
     },
     greenBtn: {
-        borderRadius: 30,
+        borderRadius: 12,
         borderWidth: 2,
-        borderColor: "#2bb378",
+        borderColor: "#47bf93",
+        padding: 6,
         justifyContent: "center"
     },
     redBtn: {
@@ -709,10 +710,10 @@ const styles = {
         // width: 200,
         // height: 45,
         marginTop: 10,
-        marginRight: 5,
+        marginRight: 10,
         paddingHorizontal: 12,
         paddingVertical: 6,
-        borderRadius: 30,
+        borderRadius: 12,
         borderWidth: 2,
         borderColor: "#47bf93",
         backgroundColor: "#47bf93",
@@ -727,7 +728,7 @@ const styles = {
         marginRight: 5,
         paddingHorizontal: 12,
         paddingVertical: 6,
-        borderRadius: 30,
+        borderRadius: 12,
         borderWidth: 2,
         borderColor: "#47bf93",
         backgroundColor: "white",

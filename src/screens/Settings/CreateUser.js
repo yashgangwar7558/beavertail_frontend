@@ -25,6 +25,7 @@ const StyledButtonFill = styled(Button)({
     color: '#ffffff',
     borderColor: '#47bf93',
     backgroundColor: '#47bf93',
+    borderRadius: '12px',
     '&:hover': {
         backgroundColor: '#47bf93', // Prevent background color change on hover
         color: '#ffffff', // Ensure color remains the same on hover
@@ -33,6 +34,7 @@ const StyledButtonFill = styled(Button)({
 
 const EditableTextField = styled(TextField)({
     marginBottom: '16px',
+    fontFamily: 'inherit'
 });
 
 const ITEM_HEIGHT = 40;
@@ -107,7 +109,7 @@ export const CreateUser = () => {
         <div>
             <SettingsTabs />
             <div>
-                <Paper elevation={3} style={{ padding: '10px', margin: '16px' }}>
+                <Paper elevation={3} style={{ padding: '10px', margin: '16px', borderRadius: '12px' }}>
                     <Typography variant="h5" gutterBottom>
                         Create New User
                     </Typography>

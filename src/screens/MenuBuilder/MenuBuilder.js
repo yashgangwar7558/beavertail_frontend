@@ -288,9 +288,9 @@ const MenuBuilder = () => {
                             name="plus-circle"
                             backgroundColor="transparent"
                             underlayColor="transparent"
-                            color={"#2bb378"}
+                            color={"#47bf93"}
                             onPress={() => handleAddItem('yields')}>
-                            <Text style={{ color: '#2bb378', fontSize: 15 }}>Add Yields</Text>
+                            <Text style={{ color: '#47bf93', fontSize: 15, fontFamily: 'inherit' }}>Add Yields</Text>
                         </Icon.Button>
                     </Text>
                     {recipeData.yields.map((yieldItem, index) => (
@@ -318,7 +318,7 @@ const MenuBuilder = () => {
                                 onPress={() => handleDeleteYield(index)}
                                 backgroundColor="transparent"
                                 underlayColor="transparent"
-                                iconStyle={{ margin: 0, padding: 0, fontSize: 25 }}
+                                iconStyle={{ margin: 0, padding: 0, fontSize: 25, fontFamily: 'inherit' }}
                                 color={"gray"}>
                             </Icon.Button>
                         </View>
@@ -332,16 +332,16 @@ const MenuBuilder = () => {
                             backgroundColor="transparent"
                             underlayColor="transparent"
                             iconStyle={{ fontSize: 18 }}
-                            color={"#2bb378"}>
-                            <Text style={{ color: '#2bb378', fontSize: 15 }}>Add Media</Text>
+                            color={"#47bf93"}>
+                            <Text style={{ color: '#47bf93', fontSize: 15, fontFamily: 'inherit' }}>Add Media</Text>
                         </Icon.Button>
                     </Text>
                     <div {...getRootProps()} style={styles.dropzone}>
                         <input {...getInputProps()} />
-                        <p>Drag 'n' drop your media here, or click to select one</p>
+                        <p style={{fontFamily: 'inherit'}}>Drag 'n' drop your media here, or click to select one</p>
                     </div>
                     {recipeData.photo && (
-                        <Text style={{ color: '#2bb378' }}>Files Added Successfully! <span style={{ color: 'blue', cursor: 'pointer' }} onClick={() => setRecipeData({ ...recipeData, photo: null })}>Reset</span></Text>
+                        <Text style={{ color: '#47bf93' }}>Files Added Successfully! <span style={{ color: 'blue', cursor: 'pointer' }} onClick={() => setRecipeData({ ...recipeData, photo: null })}>Reset</span></Text>
                     )}
                 </View>
 
@@ -364,36 +364,36 @@ const MenuBuilder = () => {
                             name="plus-circle"
                             backgroundColor="transparent"
                             underlayColor="transparent"
-                            color={"#2bb378"}>
-                            <Text style={{ color: '#2bb378', fontSize: 15 }}>Add Food</Text>
+                            color={"#47bf93"}>
+                            <Text style={{ color: '#47bf93', fontSize: 15, fontFamily: 'inherit' }}>Add Food</Text>
                         </Icon.Button><span>   </span>
                         <Icon.Button style={styles.greenBtn}
                             name="plus-circle"
                             backgroundColor="transparent"
                             underlayColor="transparent"
-                            color={"#2bb378"}>
-                            <Text style={{ color: '#2bb378', fontSize: 15 }}>Add Non-Alcoholic Beverage</Text>
+                            color={"#47bf93"}>
+                            <Text style={{ color: '#47bf93', fontSize: 15, fontFamily: 'inherit' }}>Add Non-Alcoholic Beverage</Text>
                         </Icon.Button><span>   </span>
                         <Icon.Button style={styles.greenBtn}
                             name="plus-circle"
                             backgroundColor="transparent"
                             underlayColor="transparent"
-                            color={"#2bb378"}>
-                            <Text style={{ color: '#2bb378', fontSize: 15 }}>Add Alcohol</Text>
+                            color={"#47bf93"}>
+                            <Text style={{ color: '#47bf93', fontSize: 15, fontFamily: 'inherit' }}>Add Alcohol</Text>
                         </Icon.Button><span>   </span>
                         <Icon.Button style={styles.greenBtn}
                             name="plus-circle"
                             backgroundColor="transparent"
                             underlayColor="transparent"
-                            color={"#2bb378"}>
-                            <Text style={{ color: '#2bb378', fontSize: 15 }}>Add Recipe</Text>
+                            color={"#47bf93"}>
+                            <Text style={{ color: '#47bf93', fontSize: 15, fontFamily: 'inherit' }}>Add Recipe</Text>
                         </Icon.Button><span>   </span>
                         <Icon.Button style={styles.redBtn}
                             name="times"
                             backgroundColor="transparent"
                             underlayColor="transparent"
                             color={"#ff3131"}>
-                            <Text style={{ color: '#ff3131', fontSize: 15 }}>Delete Ingredients</Text>
+                            <Text style={{ color: '#ff3131', fontSize: 15, fontFamily: 'inherit' }}>Delete Ingredient</Text>
                         </Icon.Button>
                     </Text>
                     {/* Search Input */}
@@ -528,7 +528,7 @@ const MenuBuilder = () => {
                     iconStyle={{ fontSize: 19 }}
                     color={"white"}
                 >
-                    <Text style={{ color: 'white', fontSize: 20 }}>{editRecipeData ? 'Update Recipe' : 'Create Recipe'}</Text>
+                    <Text style={{ color: 'white', fontSize: 20, fontFamily: 'inherit' }}>{editRecipeData ? 'Update Recipe' : 'Create Recipe'}</Text>
                 </Icon.Button>
 
             </ScrollView>
@@ -539,9 +539,9 @@ const MenuBuilder = () => {
 
 const styles = {
     formContainer: {
-        marginTop: 30,
-        paddingBottom: 40,
-        paddingHorizontal: 30,
+        marginTop: 20,
+        paddingBottom: 30,
+        paddingHorizontal: 15,
         backgroundColor: 'white'
     },
     heading: {
@@ -556,7 +556,7 @@ const styles = {
         fontSize: 16,
         marginBottom: 8,
         fontWeight: 'bold',
-        fontFamily: 'sans-serif',
+        fontFamily: 'inherit',
         fontSize: 16,
     },
     input: {
@@ -664,27 +664,29 @@ const styles = {
         // margin: 0
     },
     greenBtn: {
-        borderRadius: 30,
+        borderRadius: 12,
         borderWidth: 2,
-        borderColor: "#2bb378",
+        borderColor: "#47bf93",
+        padding: 6,
         justifyContent: "center"
     },
     redBtn: {
-        borderRadius: 30,
+        borderRadius: 12,
         borderWidth: 2,
         borderColor: "#ff3131",
+        padding: 6,
         justifyContent: "center"
     },
     createBtn: {
         position: "relative",
-        width: 185,
-        height: 45,
+        // width: 185,
+        // height: 45,
         marginRight: 5,
         paddingHorizontal: 10,
         paddingVertical: 5,
-        borderRadius: 30,
-        // borderWidth: 2,
-        // borderColor: "#2bb378",
+        borderRadius: 12,
+        borderWidth: 2,
+        borderColor: "#47bf93",
         backgroundColor: "#47bf93",
         justifyContent: "center",
         alignSelf: "center"

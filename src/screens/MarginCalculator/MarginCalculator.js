@@ -9,7 +9,7 @@ import Header from '../../components/global/Header/index.js';
 import client from '../../utils/ApiConfig'
 import { sortSalesReport } from '../../helpers/sort.js'
 import { DatePicker } from '@mui/x-date-pickers';
-import { ExpandMore, ExpandLess } from '@mui/icons-material'
+import { ExpandMore, ExpandLess, KeyboardArrowDown } from '@mui/icons-material'
 import dayjs from 'dayjs';
 import {
     FormControl, InputLabel, MenuItem, Select,
@@ -223,27 +223,29 @@ const MarginCalculator = () => {
         );
     };
 
-    const renderAccordionContent = (typeName) => {
+    const renderAccordionContent = (typeName, typeRowIndex) => {
         const typeWiseRecipes = sortedRecipeSales.filter((item) => item.type === typeName);
-        console.log(typeWiseRecipes);
         return (
-            typeWiseRecipes.map((item, index) => (
-                <DataTable.Row
-                    key={index}
-                    style={{ backgroundColor: 'white' }}
-                >
-                    {/* <DataTable.Cell style={[styles.cell, { flex: 0.2 }]}></DataTable.Cell> */}
-                    <DataTable.Cell style={[styles.cell, { flex: 1.2 }]}><span style={{ fontSize: '14px', color: 'black', marginLeft: '27px' }}>{item.type}</span></DataTable.Cell>
-                    <DataTable.Cell style={styles.cell}>{item.name}</DataTable.Cell>
-                    <DataTable.Cell style={styles.cell}>{(item.avgCost).toFixed(2)}</DataTable.Cell>
-                    <DataTable.Cell style={styles.cell}>{item.quantitySold}</DataTable.Cell>
-                    <DataTable.Cell style={styles.cell}>{(item.totalModifierCost).toFixed(2)}</DataTable.Cell>
-                    <DataTable.Cell style={styles.cell}>{((item.totalFoodCost + item.totalModifierCost)).toFixed(2)}</DataTable.Cell>
-                    <DataTable.Cell style={styles.cell}>{(item.totalSales).toFixed(2)}</DataTable.Cell>
-                    <DataTable.Cell style={styles.cell}><span style={{ color: item.totalProfitWmc < 0 ? 'red' : 'green' }}>{(Math.abs(item.totalProfitWmc)).toFixed(2)}</span></DataTable.Cell>
-                    <DataTable.Cell style={styles.cell}><span style={{ color: item.totalProfitWmc < 0 ? 'red' : 'green' }}>{(Math.abs(item.theoreticalCostWmc)).toFixed(2)}</span></DataTable.Cell>
-                </DataTable.Row>
-            ))
+            typeWiseRecipes.map((item, index) => {
+                const recipeRowIndex = typeRowIndex + index + 1;
+                return (
+                    <DataTable.Row
+                        key={index}
+                        style={recipeRowIndex % 2 === 0 ? styles.whiteRow : styles.greyRow}
+                    >
+                        {/* <DataTable.Cell style={[styles.cell, { flex: 0.2 }]}></DataTable.Cell> */}
+                        <DataTable.Cell style={[styles.cellLeft, { flex: 1.2 }]}><span style={{ fontSize: '14px', fontWeight: '400', color: '#1c1b1f', marginLeft: '27px' }}>{item.type}</span></DataTable.Cell>
+                        <DataTable.Cell style={[styles.cellLeft, { flex: 0.8 }]}>{item.name}</DataTable.Cell>
+                        <DataTable.Cell style={styles.cellRight}>{(item.avgCost).toFixed(2)}</DataTable.Cell>
+                        <DataTable.Cell style={styles.cellRight}>{item.quantitySold}</DataTable.Cell>
+                        <DataTable.Cell style={styles.cellRight}>{(item.totalModifierCost).toFixed(2)}</DataTable.Cell>
+                        <DataTable.Cell style={styles.cellRight}>{((item.totalFoodCost + item.totalModifierCost)).toFixed(2)}</DataTable.Cell>
+                        <DataTable.Cell style={styles.cellRight}>{(item.totalSales).toFixed(2)}</DataTable.Cell>
+                        <DataTable.Cell style={styles.cellRight}><span style={{ color: item.totalProfitWmc < 0 ? 'red' : '#1c1b1f', fontWeight: '400', fontSize: '14px' }}>{(Math.abs(item.totalProfitWmc)).toFixed(2)}</span></DataTable.Cell>
+                        <DataTable.Cell style={styles.cellLast}><span style={{ color: item.totalProfitWmc < 0 ? 'red' : '#1c1b1f', fontWeight: '400', fontSize: '14px' }}>{(Math.abs(item.theoreticalCostWmc)).toFixed(2)}</span></DataTable.Cell>
+                    </DataTable.Row>
+                )
+            })
         )
     };
 
@@ -260,6 +262,13 @@ const MarginCalculator = () => {
                             onChange={handleStartDateChange}
                             formatDensity="spacious"
                             slotProps={{ textField: { size: 'small' } }}
+                            sx={{
+                                "& .MuiOutlinedInput-root": {
+                                    // "&:hover > fieldset": { borderColor: "#47bf93" },
+                                    borderRadius: "12px",
+                                    width: '220px'
+                                },
+                            }}
                         />
                         <Text>  </Text>
                         <DatePicker
@@ -270,6 +279,13 @@ const MarginCalculator = () => {
                             onChange={handleEndDateChange}
                             formatDensity="spacious"
                             slotProps={{ textField: { size: 'small' } }}
+                            sx={{
+                                "& .MuiOutlinedInput-root": {
+                                    // "&:hover > fieldset": { borderColor: "#47bf93" },
+                                    borderRadius: "12px",
+                                    width: '220px'
+                                },
+                            }}
                         />
                     </View>
                     <View style={styles.rightTableButtons}>
@@ -278,7 +294,9 @@ const MarginCalculator = () => {
                                 labelId="picker-label"
                                 value={sortOption}
                                 onChange={(e) => setSortOption(e.target.value)}
-                                style={{ color: '#ffffff', width: '100%', height: '100%', border: 'none', outline: 'none', }}
+                                style={{ color: '#ffffff', width: '100%', height: '100%', border: 'none', outline: 'none', borderRadius: '12px'}}
+                                IconComponent={KeyboardArrowDown}
+                                sx={{ '& .MuiSvgIcon-root': { color: '#ffffff' } }}
                             >
                                 <MenuItem value="quantitySold_descending">Highest Selling</MenuItem>
                                 <MenuItem value="quantitySold_ascending">Lowest Selling</MenuItem>
@@ -288,26 +306,24 @@ const MarginCalculator = () => {
                                 <MenuItem value="totalProfitWomc_ascending">Lowest Profit</MenuItem>
                             </Select>
                         </FormControl>
-                        <Icon.Button
+                        {/* <Icon.Button
                             style={styles.tableNavBtnMidBlue}
                             name="print"
                             backgroundColor="transparent"
                             underlayColor="transparent"
-                            iconStyle={{ fontSize: 20, paddingHorizontal: 0 }}
+                            iconStyle={{ fontSize: 18, paddingHorizontal: 0 }}
                             color={"white"}
                         >
-                            <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>Print Report</Text>
-                        </Icon.Button>
-                        <Icon.Button
+                            <Text style={{ color: 'white', fontSize: 15, marginRight: 5, fontFamily: 'inherit' }}>Print Report</Text>
+                        </Icon.Button> */}
+                        <Button
                             style={styles.tableNavBtnMidBlue}
-                            name="angle-down"
-                            backgroundColor="transparent"
-                            underlayColor="transparent"
-                            iconStyle={{ fontSize: 20, paddingHorizontal: 0 }}
-                            color={"white"}
                         >
-                            <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>Export As</Text>
-                        </Icon.Button>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Text style={{ color: 'white', fontSize: 15, marginRight: 5, fontFamily: 'inherit' }}>Export</Text>
+                                <Icon name="angle-down" size={18} color="white" />
+                            </View>
+                        </Button>
                     </View>
                 </View>
             </View>
@@ -315,52 +331,63 @@ const MarginCalculator = () => {
             <DataTable style={styles.dataTable}>
                 <DataTable.Header style={styles.header}>
                     {/* <DataTable.Cell style={[styles.cell, { flex: 0.2 }]}></DataTable.Cell> */}
-                    <DataTable.Title style={[styles.headerCell, { flex: 1.2 }]}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black', marginLeft: '5px' }}>Menu Item Type</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Menu Item</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Avg. Cost ($)</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Items Sold</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Modifier Cost ($)</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Total Cost ($)</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Total Sales ($)</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Total Profit ($)</span></DataTable.Title>
-                    <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Margin (%)</span></DataTable.Title>
+                    <DataTable.Title style={[styles.headerCellLeft, { flex: 1.2 }]}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Menu Item Type</span></DataTable.Title>
+                    <DataTable.Title style={[styles.headerCellLeft, { flex: 0.8 }]}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Menu Item</span></DataTable.Title>
+                    <DataTable.Title style={styles.headerCellRight}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Avg. Cost ($)</span></DataTable.Title>
+                    <DataTable.Title style={styles.headerCellRight}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Items Sold</span></DataTable.Title>
+                    <DataTable.Title style={styles.headerCellRight}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Modifier Cost ($)</span></DataTable.Title>
+                    <DataTable.Title style={styles.headerCellRight}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Total Cost ($)</span></DataTable.Title>
+                    <DataTable.Title style={styles.headerCellRight}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Total Sales ($)</span></DataTable.Title>
+                    <DataTable.Title style={styles.headerCellRight}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Total Profit ($)</span></DataTable.Title>
+                    <DataTable.Title style={styles.headerCellLast}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Margin (%)</span></DataTable.Title>
                 </DataTable.Header>
 
-                {loading ? (
-                    <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 10 }} />
-                ) : (
-                    sortedTypeSales.map((item, index) => (
-                        <React.Fragment key={index}>
-                            <DataTable.Row
-                                style={index % 2 === 0 ? styles.evenRow : styles.oddRow}
-                                onPress={() => handleTypesToggle(item.type)}
-                            >
-                                <DataTable.Cell style={[styles.cell, { flex: 1.2 }]}>
-                                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        {expandedTypes.includes(item.type) ? (
-                                            <ExpandLess sx={{ fontSize: '22px', marginRight: '3px', color: '#47bf93' }} />
-                                        ) : (
-                                            <ExpandMore sx={{ fontSize: '22px', marginRight: '3px', color: '#47bf93' }} />
-                                        )}
-                                        <span style={{ fontSize: '14px', fontWeight: '600', verticalAlign: 'middle', marginRight: '3px' }}>{item.type}</span>
-                                        <span style={{ fontSize: '14px', fontWeight: '600', verticalAlign: 'middle' }}>({item.count})</span>
-                                    </div>
-                                </DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}></DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>{(item.avgCost).toFixed(2)}</span></DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>{item.quantitySold}</span></DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>{(item.totalModifierCost).toFixed(2)}</span></DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>{(item.totalFoodCost + item.totalModifierCost).toFixed(2)}</span></DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: 'black' }}>{(item.totalSales).toFixed(2)}</span></DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: item.totalProfitWmc < 0 ? 'red' : 'green' }}>{(Math.abs(item.totalProfitWmc)).toFixed(2)}</span></DataTable.Cell>
-                                <DataTable.Cell style={styles.cell}><span style={{ fontWeight: '700', color: item.totalProfitWmc < 0 ? 'red' : 'green' }}>{(Math.abs(item.theoreticalCostWmc)).toFixed(2)}</span></DataTable.Cell>
-                            </DataTable.Row>
+                <ScrollView style={{ maxHeight: '75vh' }} scrollIndicatorInsets={{ right: -5 }} showsVerticalScrollIndicator={false}>
+                    {loading ? (
+                        <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 10 }} />
+                    ) : (
+                        sortedTypeSales.map((item, index) => {
+                            let totalSubRows = 0;
+                            for (let i = 0; i <= index - 1; i++) {
+                                if (expandedTypes.includes(sortedTypeSales[i].type)) {
+                                    totalSubRows += sortedTypeSales[i].count;
+                                }
+                            }
+                            const typeRowIndex = totalSubRows + index + 1
+                            return (
+                                <React.Fragment key={index}>
+                                    <DataTable.Row
+                                        style={typeRowIndex % 2 === 0 ? styles.whiteRow : styles.greyRow}
+                                        onPress={() => handleTypesToggle(item.type)}
+                                    >
+                                        <DataTable.Cell style={[styles.cellLeft, { flex: 1.2 }]}>
+                                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                {expandedTypes.includes(item.type) ? (
+                                                    <ExpandLess sx={{ fontSize: '22px', marginRight: '3px', color: '#47bf93' }} />
+                                                ) : (
+                                                    <ExpandMore sx={{ fontSize: '22px', marginRight: '3px', color: '#47bf93' }} />
+                                                )}
+                                                <span style={{ fontSize: '14px', fontWeight: '600', color: '#1c1b1f', verticalAlign: 'middle', marginRight: '3px' }}>{item.type}</span>
+                                                <span style={{ fontSize: '14px', fontWeight: '600', color: '#1c1b1f', verticalAlign: 'middle' }}>({item.count})</span>
+                                            </div>
+                                        </DataTable.Cell>
+                                        <DataTable.Cell style={[styles.cellLeft, { flex: 0.8 }]}></DataTable.Cell>
+                                        <DataTable.Cell style={styles.cellRight}><span style={{ fontWeight: '600', fontSize: '14px', color: '#1c1b1f' }}>{(item.avgCost).toFixed(2)}</span></DataTable.Cell>
+                                        <DataTable.Cell style={styles.cellRight}><span style={{ fontWeight: '600', fontSize: '14px', color: '#1c1b1f' }}>{item.quantitySold}</span></DataTable.Cell>
+                                        <DataTable.Cell style={styles.cellRight}><span style={{ fontWeight: '600', fontSize: '14px', color: '#1c1b1f' }}>{(item.totalModifierCost).toFixed(2)}</span></DataTable.Cell>
+                                        <DataTable.Cell style={styles.cellRight}><span style={{ fontWeight: '600', fontSize: '14px', color: '#1c1b1f' }}>{(item.totalFoodCost + item.totalModifierCost).toFixed(2)}</span></DataTable.Cell>
+                                        <DataTable.Cell style={styles.cellRight}><span style={{ fontWeight: '600', fontSize: '14px', color: '#1c1b1f' }}>{(item.totalSales).toFixed(2)}</span></DataTable.Cell>
+                                        <DataTable.Cell style={styles.cellRight}><span style={{ fontWeight: '600', fontSize: '14px', color: item.totalProfitWmc < 0 ? 'red' : '#1c1b1f' }}>{(Math.abs(item.totalProfitWmc)).toFixed(2)}</span></DataTable.Cell>
+                                        <DataTable.Cell style={styles.cellLast}><span style={{ fontWeight: '600', fontSize: '14px', color: item.totalProfitWmc < 0 ? 'red' : '#1c1b1f' }}>{(Math.abs(item.theoreticalCostWmc)).toFixed(2)}</span></DataTable.Cell>
+                                    </DataTable.Row>
 
-                            {expandedTypes.includes(item.type) && renderAccordionContent(item.type)}
-                        </React.Fragment>
-                    ))
-                )
-                }
+                                    {expandedTypes.includes(item.type) && renderAccordionContent(item.type, typeRowIndex)}
+                                </React.Fragment>
+                            )
+                        })
+                    )
+                    }
+                </ScrollView>
             </DataTable>
         </View>
     )
@@ -388,9 +415,9 @@ const styles = StyleSheet.create({
     },
     tableNavBtnMidBlue: {
         position: "relative",
-        height: 40,
+        height: 37,
         margin: 3,
-        borderRadius: 5,
+        borderRadius: 12,
         backgroundColor: "#47bf93",
         justifyContent: "center"
     },
@@ -403,21 +430,22 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     pickerContainer: {
-        height: 40,
+        height: 37,
         margin: 3,
         borderRadius: 30,
         backgroundColor: "#0071cd",
         justifyContent: "center",
     },
     picker: {
-        height: 40,
+        height: 37,
         margin: 3,
-        borderRadius: 5,
+        borderRadius: 12,
         backgroundColor: "#47bf93",
         justifyContent: "center",
         color: '#ffffff',
         paddingHorizontal: 8,
-        fontSize: 15
+        fontSize: 15,
+        fontFamily: 'inherit'
     },
     pickerItem: {
         color: 'white',
@@ -431,6 +459,34 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: 'black',
         backgroundColor: 'white'
+    },
+    headerCellLeft: {
+
+    },
+    headerCellRight: {
+        justifyContent: 'flex-end',
+        paddingRight: '10px',
+    },
+    headerCellLast: {
+        justifyContent: 'flex-end',
+    },
+    cellLeft: {
+
+    },
+    cellRight: {
+        justifyContent: 'flex-end',
+        paddingRight: '10px',
+        borderRightWidth: 1,
+        borderRightColor: '#dedede',
+    },
+    cellLast: {
+        justifyContent: 'flex-end',
+    },
+    whiteRow: {
+        backgroundColor: '#f2f0f0',
+    },
+    greyRow: {
+        backgroundColor: '#ffffff',
     },
 })
 

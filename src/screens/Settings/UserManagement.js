@@ -23,6 +23,7 @@ import {
     ListItemText,
     Checkbox
 } from '@mui/material';
+import { Height } from '@mui/icons-material';
 
 // const StyledButtonRed = styled(Button)({
 //     margin: '8px',
@@ -30,6 +31,7 @@ import {
 
 const StyledButtonTrans = styled(Button)({
     margin: '8px',
+    borderRadius: '12px',
 });
 
 const StyledButtonFill = styled(Button)({
@@ -37,6 +39,7 @@ const StyledButtonFill = styled(Button)({
     color: '#ffffff',
     borderColor: '#47bf93',
     backgroundColor: '#47bf93',
+    borderRadius: '12px',
     '&:hover': {
         backgroundColor: '#47bf93', // Prevent background color change on hover
         color: '#ffffff', // Ensure color remains the same on hover
@@ -63,6 +66,7 @@ const MenuProps = {
     PaperProps: {
         style: {
             maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            height: 40,
             width: 200,
         },
     },
@@ -162,7 +166,7 @@ export const UserManagement = () => {
         <div>
             <SettingsTabs />
             <div>
-                <Paper elevation={3} style={{ margin: '16px', padding: '10px' }}>
+                <Paper elevation={3} style={{ margin: '16px', padding: '10px', borderRadius: '12px'}}>
                     <Typography variant="h5" gutterBottom>
                         Users
                     </Typography>
@@ -188,7 +192,7 @@ export const UserManagement = () => {
                                             <CompactTableCell>{user.email}</CompactTableCell>
                                             <CompactTableCell>
                                                 {user.roles.map((role, index) => (
-                                                    <Chip label={role.roleName} key={index}/>
+                                                    <Chip label={role.roleName} key={index} style={{margin: '3px'}}/>
                                                 ))}
                                             </CompactTableCell>
                                             <CompactTableCell>
@@ -202,7 +206,7 @@ export const UserManagement = () => {
                     </CompactTableContainer>
                 </Paper>
 
-                <Paper elevation={3} style={{ margin: '16px', padding: '10px' }}>
+                <Paper elevation={3} style={{ margin: '16px', padding: '10px', borderRadius: '12px' }}>
                     <Typography variant="h5" gutterBottom>
                         Pending Requests
                     </Typography>
@@ -233,8 +237,8 @@ export const UserManagement = () => {
                                                     value={selectedRoles[user._id] || []}
                                                     onChange={(e) => handleRoleChange(user._id, e.target.value)}
                                                     renderValue={(selected) => selected.map((item) => item.roleName).join(', ')}
-                                                    style={{ minWidth: '150px', maxWidth: '150px' }}
-                                                    MenuProps={MenuProps}
+                                                    style={{ minWidth: '150px', maxWidth: '150px', height: '50px', borderRadius: '12px'}}
+                                                    // MenuProps={MenuProps}
                                                 >
                                                     <MenuItem disabled value="">
                                                         <em>Choose atleast one...</em>

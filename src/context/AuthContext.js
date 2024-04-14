@@ -103,6 +103,7 @@ export const AuthProvider = ({ children }) => {
             setUserInfo({});
             setIsLoading(false);
             setError(null)
+            navigate("/");
         })
             .catch(e => {
                 console.log(`logout error ${e}`);

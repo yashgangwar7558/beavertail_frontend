@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Image, ActivityIndicator, TextInput, Picker } from 'react-native';
 import { Button, DataTable } from 'react-native-paper';
-import { SouthRounded, NorthRounded, ImportExportRounded } from "@mui/icons-material"
+import { SouthRounded, NorthRounded, ImportExportRounded, KeyboardArrowDown } from "@mui/icons-material"
 import { useNavigate } from 'react-router'
 import LoadingScreen from '../../components/LoadingScreen';
 import Modal from 'react-native-modal';
@@ -239,6 +239,13 @@ const InvoiceTable = () => {
                                 onChange={handleStartDateChange}
                                 formatDensity="spacious"
                                 slotProps={{ textField: { size: 'small' } }}
+                                sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                        // "&:hover > fieldset": { borderColor: "#47bf93" },
+                                        borderRadius: "12px",
+                                        width: '220px'
+                                    },
+                                }}
                             />
                             <Text>  </Text>
                             <DatePicker
@@ -249,6 +256,13 @@ const InvoiceTable = () => {
                                 onChange={handleEndDateChange}
                                 formatDensity="spacious"
                                 slotProps={{ textField: { size: 'small' } }}
+                                sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                        // "&:hover > fieldset": { borderColor: "#47bf93" },
+                                        borderRadius: "12px",
+                                        width: '220px'
+                                    },
+                                }}
                             />
                             {/* <Picker
                                 style={styles.picker}
@@ -269,7 +283,9 @@ const InvoiceTable = () => {
                                     labelId="picker-label"
                                     value={filterByVendor}
                                     onChange={(e) => setFilterByVendor(e.target.value)}
-                                    style={{ color: '#ffffff', width: '100%', height: '100%', border: 'none', outline: 'none', }}
+                                    style={{ color: '#ffffff', width: '100%', height: '100%', border: 'none', outline: 'none', borderRadius: '12px'}}
+                                    IconComponent={KeyboardArrowDown}
+                                    sx={{ '& .MuiSvgIcon-root': { color: '#ffffff' } }}
                                 >
                                     <MenuItem value="All">Vendor: All</MenuItem>
                                     {vendors.map((vendor, index) => (
@@ -283,7 +299,9 @@ const InvoiceTable = () => {
                                     labelId="picker-label"
                                     value={filterByStatus}
                                     onChange={(e) => setFilterByStatus(e.target.value)}
-                                    style={{ color: '#ffffff', width: '100%', height: '100%', border: 'none', outline: 'none', }}
+                                    style={{ color: '#ffffff', width: '100%', height: '100%', border: 'none', outline: 'none', borderRadius: '12px'}}
+                                    IconComponent={KeyboardArrowDown}
+                                    sx={{ '& .MuiSvgIcon-root': { color: '#ffffff' } }}
                                 >
                                     <MenuItem value="All">Status: All</MenuItem>
                                     {statusTypes.map((status, index) => (
@@ -300,7 +318,7 @@ const InvoiceTable = () => {
                                 color={"white"}
                                 onPress={() => { navigate('/add-invoice') }}
                             >
-                                <Text style={{ color: 'white', fontSize: 15, marginRight: 5 }}>Add Invoice</Text>
+                                <Text style={{ color: 'white', fontSize: 15, marginRight: 5, fontFamily: 'inherit' }}>Add Invoice</Text>
                             </Icon.Button>
                         </View>
                     </View>
@@ -321,7 +339,7 @@ const InvoiceTable = () => {
                 <View style={styles.tableContainer} horizontal={true}>
                     <DataTable style={styles.dataTable}>
                         <DataTable.Header style={styles.header}>
-                            <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Upload Date</span></DataTable.Title>
+                            <DataTable.Title style={styles.headerCellFirst}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Upload Date</span></DataTable.Title>
                             <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Vendor</span></DataTable.Title>
                             <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Invoice Number</span></DataTable.Title>
                             <DataTable.Title style={styles.headerCell}>
@@ -338,17 +356,17 @@ const InvoiceTable = () => {
                                 >
                                     Invoice Date
                                     {sortOption === 'invoiceDate_ascending' ? (
-                                        <NorthRounded sx={{ color: 'grey', fontSize: '15px', stroke: "grey", strokeWidth: 1 }} />
+                                        <NorthRounded sx={{ color: 'grey', fontSize: '15px', stroke: "grey", strokeWidth: 1, marginLeft: '5px' }} />
                                     ) : sortOption === 'invoiceDate_descending' ? (
-                                        <SouthRounded sx={{ color: 'grey', fontSize: '15px', stroke: "grey", strokeWidth: 1 }} />
+                                        <SouthRounded sx={{ color: 'grey', fontSize: '15px', stroke: "grey", strokeWidth: 1, marginLeft: '5px' }} />
                                     ) : (
-                                        <ImportExportRounded sx={{ color: 'grey', fontSize: '18px', stroke: "grey", strokeWidth: 1 }} />
+                                        null
                                     )}
                                 </span>
                             </DataTable.Title>
                             <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Payment</span></DataTable.Title>
                             <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Status</span></DataTable.Title>
-                            <DataTable.Title style={styles.headerCell}>
+                            <DataTable.Title style={styles.headerCellRight}>
                                 <span
                                     style={{
                                         display: 'flex',
@@ -362,11 +380,11 @@ const InvoiceTable = () => {
                                 >
                                     Total
                                     {sortOption === 'total_ascending' ? (
-                                        <NorthRounded sx={{ color: 'grey', fontSize: '15px', stroke: "grey", strokeWidth: 1 }} />
+                                        <NorthRounded sx={{ color: 'grey', fontSize: '15px', stroke: "grey", strokeWidth: 1, marginLeft: '5px' }} />
                                     ) : sortOption === 'total_descending' ? (
-                                        <SouthRounded sx={{ color: 'grey', fontSize: '15px', stroke: "grey", strokeWidth: 1 }} />
+                                        <SouthRounded sx={{ color: 'grey', fontSize: '15px', stroke: "grey", strokeWidth: 1, marginLeft: '5px' }} />
                                     ) : (
-                                        <ImportExportRounded sx={{ color: 'grey', fontSize: '18px', stroke: "grey", strokeWidth: 1 }} />
+                                        null
                                     )}
                                 </span>
                             </DataTable.Title>
@@ -385,13 +403,13 @@ const InvoiceTable = () => {
                                     <DataTable.Row
                                         style={index % 2 === 0 ? styles.evenRow : styles.oddRow}
                                     >
-                                        <DataTable.Cell style={styles.cell}>{item.uploadDate}</DataTable.Cell>
+                                        <DataTable.Cell style={styles.cellFirst}>{item.uploadDate}</DataTable.Cell>
                                         <DataTable.Cell style={styles.cell}>{item.vendor}</DataTable.Cell>
                                         <DataTable.Cell style={styles.cell}>{item.invoiceNumber}</DataTable.Cell>
                                         <DataTable.Cell style={styles.cell}>{item.invoiceDate}</DataTable.Cell>
                                         <DataTable.Cell style={styles.cell}>{item.payment}</DataTable.Cell>
                                         <DataTable.Cell style={styles.cell}>{item.status.type}</DataTable.Cell>
-                                        <DataTable.Cell style={styles.cell}>
+                                        <DataTable.Cell style={styles.cellRight}>
                                             ${item.total}
                                         </DataTable.Cell>
                                     </DataTable.Row>
@@ -411,7 +429,7 @@ const InvoiceTable = () => {
                                 underlayColor="transparent"
                                 iconStyle={{ fontSize: 20, marginRight: 5, padding: 0 }}
                                 color={"white"}>
-                                <Text style={[styles.uppercaseText, { fontWeight: '500', color: 'white', fontSize: '18px' }]}>{selectedInvoice.invoiceNumber}</Text>
+                                <Text style={[styles.uppercaseText, { fontWeight: '500', color: 'white', fontSize: '18px', fontFamily: 'inherit' }]}>{selectedInvoice.invoiceNumber}</Text>
                             </Icon.Button>
                             <Icon.Button
                                 name="times"
@@ -458,7 +476,7 @@ const InvoiceTable = () => {
                                             underlayColor="transparent"
                                             iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
                                             color={"#47bf93"}>
-                                            <Text style={[{ color: '#47bf93', fontSize: 14, marginLeft: '4px' }]}>Open</Text>
+                                            <Text style={[{ color: '#47bf93', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Open</Text>
                                         </Icon.Button>
                                     </View>
                                     {selectedInvoice.status.type === 'Pending Review' ? (
@@ -471,7 +489,7 @@ const InvoiceTable = () => {
                                                 underlayColor="transparent"
                                                 iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
                                                 color={"white"}>
-                                                <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px' }]}>Mark Reviewed</Text>
+                                                <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Mark Reviewed</Text>
                                             </Icon.Button>
                                             <Icon.Button
                                                 style={styles.blueBtn}
@@ -481,7 +499,7 @@ const InvoiceTable = () => {
                                                 underlayColor="transparent"
                                                 iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
                                                 color={"white"}>
-                                                <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px' }]}>Edit</Text>
+                                                <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Edit</Text>
                                             </Icon.Button>
                                             <Icon.Button
                                                 style={styles.blueTransparentBtn}
@@ -491,7 +509,7 @@ const InvoiceTable = () => {
                                                 underlayColor="transparent"
                                                 iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
                                                 color={"#47bf93"}>
-                                                <Text style={[{ color: '#47bf93', fontSize: 14, marginLeft: '4px' }]}>Reject</Text>
+                                                <Text style={[{ color: '#47bf93', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Reject</Text>
                                             </Icon.Button>
                                         </View>
                                     ) : selectedInvoice.status.type === 'Pending Approval' ? (
@@ -504,7 +522,7 @@ const InvoiceTable = () => {
                                                 underlayColor="transparent"
                                                 iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
                                                 color={"white"}>
-                                                <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px' }]}>Mark Approved</Text>
+                                                <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Mark Approved</Text>
                                             </Icon.Button>
                                             <Icon.Button
                                                 style={styles.blueBtn}
@@ -514,7 +532,7 @@ const InvoiceTable = () => {
                                                 underlayColor="transparent"
                                                 iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
                                                 color={"white"}>
-                                                <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px' }]}>Send for Review</Text>
+                                                <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Send for Review</Text>
                                             </Icon.Button>
                                             <Icon.Button
                                                 style={styles.blueTransparentBtn}
@@ -524,7 +542,7 @@ const InvoiceTable = () => {
                                                 underlayColor="transparent"
                                                 iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
                                                 color={"#47bf93"}>
-                                                <Text style={[{ color: '#47bf93', fontSize: 14, marginLeft: '4px' }]}>Reject</Text>
+                                                <Text style={[{ color: '#47bf93', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Reject</Text>
                                             </Icon.Button>
                                         </View>
                                     ) : selectedInvoice.status.type === 'Review-Rejected' || selectedInvoice.status.type === 'Approval-Rejected' ? (
@@ -542,7 +560,7 @@ const InvoiceTable = () => {
                                                 underlayColor="transparent"
                                                 iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
                                                 color={"white"}>
-                                                <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px' }]}>Pay Vendor</Text>
+                                                <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Pay Vendor</Text>
                                             </Icon.Button>
                                         </View>
                                     ) : (
@@ -567,7 +585,7 @@ const InvoiceTable = () => {
                                             underlayColor="transparent"
                                             iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
                                             color={"#47bf93"}>
-                                            <Text style={[{ color: '#47bf93', fontSize: 14, marginLeft: '4px' }]}>Cancel</Text>
+                                            <Text style={[{ color: '#47bf93', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Cancel</Text>
                                         </Icon.Button>
                                         <Icon.Button
                                             style={styles.blueBtn}
@@ -577,7 +595,7 @@ const InvoiceTable = () => {
                                             underlayColor="transparent"
                                             iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
                                             color={"white"}>
-                                            <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px' }]}>Submit</Text>
+                                            <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Submit</Text>
                                         </Icon.Button>
                                     </View>
                                 )}
@@ -638,15 +656,15 @@ const styles = StyleSheet.create({
     },
     tableNavBtnBlue: {
         position: "relative",
-        height: 40,
+        height: 37,
         margin: 3,
-        borderRadius: 5,
+        borderRadius: 12,
         backgroundColor: "#47bf93",
         justifyContent: "center"
     },
     tableNavBtnSky: {
         position: "relative",
-        height: 40,
+        height: 37,
         margin: 3,
         borderRadius: 5,
         backgroundColor: "#72b8f2",
@@ -660,14 +678,15 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     picker: {
-        height: 40,
+        height: 37,
         margin: 3,
-        borderRadius: 5,
+        borderRadius: 12,
         backgroundColor: "#47bf93",
         justifyContent: "center",
         color: '#ffffff',
         paddingHorizontal: 8,
-        fontSize: 15
+        fontSize: 15,
+        fontFamily: 'inherit'
     },
     pickerItem: {
         color: 'white',
@@ -685,7 +704,7 @@ const styles = StyleSheet.create({
         height: 40,
         backgroundColor: '#fff',
         border: '1px solid gray',
-        borderRadius: 5,
+        borderRadius: 12,
         paddingHorizontal: 10,
     },
     searchIcon: {
@@ -707,8 +726,28 @@ const styles = StyleSheet.create({
         borderBottomColor: 'black',
         backgroundColor: 'white'
     },
+    headerCell: {
+        paddingLeft: '10px'
+    },
+    headerCellFirst: {
+
+    },
+    headerCellRight: {
+        paddingLeft: '10px'
+    },
     cell: {
-        // paddingLeft: 10,
+        paddingLeft: '10px',
+        borderLeftWidth: 1,
+        borderLeftColor: '#dedede',
+    },
+    cellFirst: {
+        paddingLeft: '0px'
+    },
+    cellRight: {
+        paddingLeft: '10px',
+        justifyContent: 'flex-start',
+        borderLeftWidth: 1,
+        borderLeftColor: '#dedede',
     },
     evenRow: {
         backgroundColor: '#f2f0f0',
@@ -763,11 +802,11 @@ const styles = StyleSheet.create({
     blueBtn: {
         position: "relative",
         // width: 200,
-        height: 32,
+        height: 37,
         marginRight: 5,
         paddingHorizontal: 10,
         paddingVertical: 4,
-        borderRadius: 30,
+        borderRadius: 12,
         borderWidth: 2,
         borderColor: "#47bf93",
         backgroundColor: "#47bf93",
@@ -776,11 +815,11 @@ const styles = StyleSheet.create({
     blueTransparentBtn: {
         position: "relative",
         // width: 200,
-        height: 32,
+        height: 35,
         marginRight: 5,
         paddingHorizontal: 10,
         paddingVertical: 4,
-        borderRadius: 30,
+        borderRadius: 12,
         borderWidth: 2,
         borderColor: "#47bf93",
         // backgroundColor: "#0071cd",
