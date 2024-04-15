@@ -43,7 +43,7 @@ const LineChart = (props) => {
                     }
                 }
             }}
-            colors={{ scheme: "category10" }}
+            colors={{ scheme: "nivo" }}
             margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
             xScale={{ type: 'point' }}
             yScale={{
@@ -60,7 +60,7 @@ const LineChart = (props) => {
             axisBottom={{
                 tickSize: 5,
                 tickPadding: 5,
-                tickRotation: props.winWidth <= 450 ? -90 : 0,
+                tickRotation: -90,
                 legend: undefined,
                 legendOffset: 36,
                 legendPosition: 'middle'

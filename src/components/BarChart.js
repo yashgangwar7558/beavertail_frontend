@@ -40,21 +40,24 @@ const BarChart = (props) => {
                 }
             }}
             keys={[
-                'Burger',
-                'Chinese',
-                'Main Course',
-                'Mocktail',
-                'Pizza',
-                'Rolls',
-                'Shakes',
-                'Snacks'
+                // 'Burger',
+                // 'Chinese',
+                // 'Main Course',
+                // 'Mocktail',
+                // 'Pizza',
+                // 'Rolls',
+                // 'Shakes',
+                // 'Snacks'
+                'Food',
+                'Beverages'
             ]}
             indexBy="month"
             margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
             padding={0.3}
             valueScale={{ type: 'linear' }}
             indexScale={{ type: 'band', round: true }}
-            colors={{ scheme: 'category10' }}
+            groupMode="grouped"
+            colors={{ scheme: 'nivo' }}
             borderColor={{
                 from: 'color',
                 modifiers: [

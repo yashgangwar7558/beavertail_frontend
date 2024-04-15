@@ -1,12 +1,12 @@
 import React from 'react'
 import ProgressCircle from './ProgressCircle'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, Divider } from '@mui/material'
 import styled from 'styled-components'
 
 
 const StatBoxWrapper = styled(Box)`
     width: 100%;
-    margin: 0px 30px;
+    margin: 10px 20px;
 `
 
 const StatBox = (props) => {
@@ -14,6 +14,7 @@ const StatBox = (props) => {
         <StatBoxWrapper>
             <Box display='flex' justifyContent='space-between' margin='5px'>
                 <Box display='flex' flexDirection='column' justifyContent='space-between'>
+
                     <Typography variant="h7" fontWeight='bold' color='#121B28' fontFamily='inherit'>
                         {props.subtitle}
                     </Typography>
@@ -30,6 +31,8 @@ const StatBox = (props) => {
                         )}
                     </Box>
 
+                    <Divider style={{ margin: '10px 0px', flex: 1, width: '100%' }} />
+
                     <Typography variant="h7" fontWeight='bold' color='#121B28' fontFamily='inherit'>
                         {props.subtitle1}
                     </Typography>
@@ -45,7 +48,9 @@ const StatBox = (props) => {
                             </Typography>
                         )}
                     </Box>
+
                 </Box>
+
                 <Box display='flex' flexDirection='column' justifyContent='space-between'>
                     {props.icon}
                     {/* <ProgressCircle progress={props.progress} />

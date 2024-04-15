@@ -1,10 +1,11 @@
 import { HomeRounded, SettingsRounded, ViewListRounded, AddCard, PostAddRounded, ReceiptRounded, HistoryRounded, PointOfSaleOutlined, AnalyticsRounded, NoteAdd, MenuBook, LocalPharmacy, MonetizationOn } from "@mui/icons-material"
+// import { ReactComponent as HomeIcon } from '../assets/Icons/Home.svg';
 
 export const SidebarData = [
     {
         title: 'Dashboard',
         path: '/',
-        icon: <HomeRounded sx={{ fontSize: '22px' }} />,
+        icon: <HomeRounded sx={{ fontSize: '22px' }}/>,
     },
     {
         title: 'Food Cost',
