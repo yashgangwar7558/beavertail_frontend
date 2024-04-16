@@ -1,4 +1,4 @@
-import Logo from '../../assets/logo/logo.png';
+import Logo from '../../assets/logo/greenCactusAi.png';
 import Background from '../../assets/background1.jpg';
 import './SignUp.css'
 import { useNavigate } from 'react-router'
@@ -7,6 +7,7 @@ import { AuthContext } from '../../context/AuthContext';
 import client from '../../utils/ApiConfig'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Box, Button, IconButton, TextField, InputAdornment, StyledEngineProvider, Divider, Autocomplete, Radio } from '@mui/material'
+import { pink } from '@mui/material/colors'
 import { AccountCircleRounded, LockRounded, VisibilityOffRounded, VisibilityRounded, Person, MailRounded, CallRounded, LocationCityRounded, SearchRounded } from '@mui/icons-material';
 
 const SignUp = ({ navigation }) => {
@@ -50,8 +51,9 @@ const SignUp = ({ navigation }) => {
   return (
     <div className='signup-screen'>
       <div className='signup-card'>
-        <div className='logo-container'>
-          <img src={Logo} alt="logo" className='logo' />
+        <div className='logo-container-s'>
+          <img src={Logo} alt="logo" className='logo-image-s' />
+          <h1 className='logo-label-s'>cactus.ai</h1>
         </div>
         <Box>
           <Spinner visible={isLoading} />
@@ -144,7 +146,7 @@ const SignUp = ({ navigation }) => {
                     name="radio-buttons"
                     inputProps={{ 'aria-label': 'A' }}
                   />
-                  <label htmlFor="radio-buttons">User</label>
+                  <label htmlFor="radio-buttons" style={{ color: 'white' }}>User</label>
 
                   <Radio
                     checked={status === 'pending_superadmin_approval'}
@@ -153,7 +155,7 @@ const SignUp = ({ navigation }) => {
                     name="radio-buttons"
                     inputProps={{ 'aria-label': 'B' }}
                   />
-                  <label htmlFor="radio-buttons">Admin</label>
+                  <label htmlFor="radio-buttons" style={{ color: '#ffffff' }}>Admin</label>
                 </div>
                 <div className="input-container" id="tenant">
                   <Autocomplete

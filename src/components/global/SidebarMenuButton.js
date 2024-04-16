@@ -1,6 +1,6 @@
 import React from 'react'
 import { IconButton } from '@mui/material'
-import { MenuRounded } from '@mui/icons-material'
+import { MenuRounded, MenuOpen } from '@mui/icons-material'
 
 const SidebarMenuButton = (props) => {
 
@@ -9,8 +9,12 @@ const SidebarMenuButton = (props) => {
 	}
 
     return (
-        <IconButton onClick={toggleSidebar}>
-            <MenuRounded sx={{color: '#9CFCD8'}}/>
+        <IconButton onClick={toggleSidebar} sx={{ padding: '0px' }}>
+            {props.isSidebarCollapsed ? (
+                <MenuRounded sx={{ color: '#9CFCD8', fontSize: '30px'}} />
+            ) : (
+                <MenuOpen sx={{ color: '#9CFCD8', fontSize: '30px'}} /> 
+            )}
         </IconButton>
     )
 }

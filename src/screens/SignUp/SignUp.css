@@ -8,6 +8,7 @@
   left: 0;
   right: 0;
   margin: auto;
+  background-color: rgb(52, 49, 49);
 }
 
 .signup-card {
@@ -19,18 +20,27 @@
   width: 80%;
   padding-left: 10px;
   padding-right: 10px;
+  background-color: rgb(52, 49, 49);
   font-family: Helvetica;
 }
 
-.logo-container {
+.logo-container-s {
   display: flex;
-  padding-bottom: 10px;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between; 
+  background-color: rgb(52, 49, 49);
+  /* width: 100%;  */
 }
 
-.logo {
-  width: 70%;
+.logo-image-s {
+  width: 100%;
+  height: auto;
+}
+
+.logo-label-s {
+  margin-right: 20px; 
+  color: #9CFCD8;
+  font-size: 50px;
 }
 
 .form-container {
@@ -54,6 +64,10 @@
 
 .MuiSvgIcon-root {
   fill: #121b28;
+}
+
+#radio .MuiSvgIcon-root {
+  fill: #ececee;
 }
 
 /* .MuiInputBase-input {
@@ -103,7 +117,7 @@ input:-webkit-autofill:active {
   width: 50%;
   height: 50px;
   border-radius: 25px;
-  background-color: #1f0f0f;
+  background-color: #16181a;
   color: #d3cccc;
   font-weight: 500;
   border: none;
@@ -113,7 +127,7 @@ input:-webkit-autofill:active {
   font-size: 22px;
   cursor: pointer;
   &:hover {
-    background-color: #121b28;
+    background-color: #131212;
     color: #d3cccc;
   }
 }
@@ -132,7 +146,7 @@ input:-webkit-autofill:active {
   font-size: 22px;
   cursor: pointer;
   &:hover {
-    background-color: #69e1bd;
+    background-color: #47bf93;
     color: #121b28;
   }
 }
@@ -140,12 +154,13 @@ input:-webkit-autofill:active {
 .line {
   width: 45%;
   text-align: center;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #f8f4f4;
   line-height: 0.1em;
   padding: 0;
 }
 
 .line span {
-  background: #fff;
+  background-color: rgb(52, 49, 49);
   padding: 0 10px;
+  color: white
 }

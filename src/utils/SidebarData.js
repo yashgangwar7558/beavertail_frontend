@@ -1,41 +1,71 @@
 import { HomeRounded, SettingsRounded, ViewListRounded, AddCard, PostAddRounded, ReceiptRounded, HistoryRounded, PointOfSaleOutlined, AnalyticsRounded, NoteAdd, MenuBook, LocalPharmacy, MonetizationOn } from "@mui/icons-material"
-// import { ReactComponent as HomeIcon } from '../assets/Icons/Home.svg';
+
+//Sharp Icon Set
+import CalculateSharpIcon from '@mui/icons-material/CalculateSharp';
+import OtherHousesSharpIcon from '@mui/icons-material/OtherHousesSharp';
+import MonetizationOnSharpIcon from '@mui/icons-material/MonetizationOnSharp';
+import FileCopySharpIcon from '@mui/icons-material/FileCopySharp';
+import ReceiptLongSharpIcon from '@mui/icons-material/ReceiptLongSharp';
+import PostAddSharpIcon from '@mui/icons-material/PostAddSharp';
+import OutdoorGrillSharpIcon from '@mui/icons-material/OutdoorGrillSharp';
+import NoteAddSharpIcon from '@mui/icons-material/NoteAddSharp';
+import LibraryAddSharpIcon from '@mui/icons-material/LibraryAddSharp';
+import InsightsSharpIcon from '@mui/icons-material/InsightsSharp';
+import AutoGraphSharpIcon from '@mui/icons-material/AutoGraphSharp';
+import AutoAwesomeSharpIcon from '@mui/icons-material/AutoAwesomeSharp';
+import PhotoFilterSharpIcon from '@mui/icons-material/PhotoFilterSharp';
+import TipsAndUpdatesSharpIcon from '@mui/icons-material/TipsAndUpdatesSharp';
+import ManageAccountsSharpIcon from '@mui/icons-material/ManageAccountsSharp';
+
+//Outlined Icon set
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
+import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
+import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
+import PostAddOutlinedIcon from '@mui/icons-material/PostAddOutlined';
+import OutdoorGrillOutlinedIcon from '@mui/icons-material/OutdoorGrillOutlined';
+import LibraryAddOutlinedIcon from '@mui/icons-material/LibraryAddOutlined';
+import AutoGraphOutlinedIcon from '@mui/icons-material/AutoGraphOutlined';
+import TipsAndUpdatesOutlinedIcon from '@mui/icons-material/TipsAndUpdatesOutlined';
+import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
+
+const iconSize = '25px';
 
 export const SidebarData = [
     {
-        title: 'Dashboard',
+        title: 'Home',
         path: '/',
-        icon: <HomeRounded sx={{ fontSize: '22px' }}/>,
+        icon: <HomeOutlinedIcon sx={{ fontSize: iconSize }} />,
     },
     {
         title: 'Food Cost',
         path: '/foodcost',
-        icon: <PointOfSaleOutlined sx={{ fontSize: '22px' }} />,
+        icon: <CalculateOutlinedIcon sx={{ fontSize: iconSize }} />,
     },
     {
         title: 'Margin',
         path: '/margin',
-        icon: <MonetizationOn sx={{ fontSize: '22px' }} />,
+        icon: <MonetizationOnOutlinedIcon sx={{ fontSize: iconSize }} />,
     },
     {
         title: 'Invoices',
         path: '/invoices',
-        icon: <ReceiptRounded sx={{ fontSize: '22px' }} />,
+        icon: <ReceiptLongOutlinedIcon sx={{ fontSize: iconSize }} />,
     },
     {
         title: 'Add Invoice',
         path: '/add-invoice',
-        icon: <NoteAdd sx={{ fontSize: '22px' }} />,
+        icon: <PostAddOutlinedIcon sx={{ fontSize: iconSize }} />,
     },
     {
         title: 'Recipe Book',
         path: '/menu',
-        icon: <MenuBook sx={{ fontSize: '22px' }} />,
+        icon: <OutdoorGrillOutlinedIcon sx={{ fontSize: iconSize }} />,
     },
     {
         title: 'Add Recipe',
         path: '/menubuilder',
-        icon: <LocalPharmacy sx={{ fontSize: '22px' }} />,
+        icon: <LibraryAddOutlinedIcon sx={{ fontSize: iconSize }} />,
     },
     // {
     //     title: 'Purchase History',
@@ -45,16 +75,16 @@ export const SidebarData = [
     {
         title: 'Insights - Sales',
         path: '/analytics-sales',
-        icon: <AnalyticsRounded sx={{ fontSize: '22px' }} />,
+        icon: <AutoGraphOutlinedIcon sx={{ fontSize: iconSize }} />,
     },
     {
         title: 'Insights - Purchase',
         path: '/analytics-purchases',
-        icon: <AnalyticsRounded sx={{ fontSize: '22px' }} />,
+        icon: <TipsAndUpdatesOutlinedIcon sx={{ fontSize: iconSize }} />,
     },
     {
         title: 'Settings',
         path: '/settings/user-profile',
-        icon: <SettingsRounded sx={{ fontSize: '22px' }} />,
+        icon: <ManageAccountsOutlinedIcon sx={{ fontSize: iconSize }} />,
     }
 ]

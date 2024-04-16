@@ -8,37 +8,37 @@ export const TopPurchasesValueWise = () => {
     const data = [
         {
             date: '24-12-2024',
-            invoiceNo: 'INV-275649',
+            invoiceCount: '10',
             invoiceValue: '2500'
         },
         {
             date: '24-12-2024',
-            invoiceNo: 'INV-275649',
+            invoiceCount: '16',
             invoiceValue: '2500'
         },
         {
             date: '24-12-2024',
-            invoiceNo: 'INV-275649',
+            invoiceCount: '15',
             invoiceValue: '2500'
         },
         {
             date: '24-12-2024',
-            invoiceNo: 'INV-275649',
+            invoiceCount: '12',
             invoiceValue: '2500'
         },
         {
             date: '24-12-2024',
-            invoiceNo: 'INV-275649',
+            invoiceCount: '9',
             invoiceValue: '2500'
         },
         {
             date: '24-12-2024',
-            invoiceNo: 'INV-275649',
+            invoiceCount: '8',
             invoiceValue: '2500'
         },
         {
             date: '24-12-2024',
-            invoiceNo: 'INV-275649',
+            invoiceCount: '10',
             invoiceValue: '2500'
         },
     ]

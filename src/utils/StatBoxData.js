@@ -3,6 +3,11 @@ import { PointOfSaleRounded, ReceiptRounded, MonetizationOnRounded, ShoppingCart
 import { AuthContext } from '../context/AuthContext'
 import client from './ApiConfig'
 
+import PointOfSaleOutlinedIcon from '@mui/icons-material/PointOfSaleOutlined';
+import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
+import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+
 export const StatBoxData = () => {
     const { userInfo } = useContext(AuthContext);
     const [todaysData, setTodaysData] = useState({ totalSales: 0, totalExpense: 0, totalProfit: 0 });
@@ -199,7 +204,7 @@ export const StatBoxData = () => {
             percentIcon1: monthsData.totalSales >= prevMonthsData.totalSales ? <NorthRounded sx={{ color: '#1da32b', fontSize: '12px', stroke: "#1da32b", strokeWidth: 2 }} /> : <SouthRounded sx={{ color: '#b0192a', fontSize: '12px', stroke: "#b0192a", strokeWidth: 2 }} />,
             percentChange1: calculatePercentageChange(prevMonthsData.totalSales, monthsData.totalSales),
             color1: monthsData.totalSales >= prevMonthsData.totalSales ? '#1da32b' : '#b0192a',
-            icon: <PointOfSaleRounded sx={{ color: '#047c44', fontSize: '36px' }} />,
+            icon: <PointOfSaleOutlinedIcon sx={{ color: '#047c44', fontSize: '50px' }} />,
         },
         {
             title: `$ ${todaysData.totalExpense}`,
@@ -212,7 +217,7 @@ export const StatBoxData = () => {
             percentIcon1: monthsData.totalExpense >= prevMonthsData.totalExpense ? <NorthRounded sx={{ color: '#b0192a', fontSize: '12px', stroke: "#b0192a", strokeWidth: 2 }} /> : <SouthRounded sx={{ color: '#1da32b', fontSize: '12px', stroke: "#1da32b", strokeWidth: 2 }} />,
             percentChange1: calculatePercentageChange(prevMonthsData.totalExpense, monthsData.totalExpense),
             color1: monthsData.totalExpense >= prevMonthsData.totalExpense ? '#b0192a' : '#1da32b',
-            icon: <ReceiptRounded sx={{ color: '#047c44', fontSize: '36px' }} />,
+            icon: <ReceiptOutlinedIcon sx={{ color: '#047c44', fontSize: '50px' }} />,
         },
         {
             title: `$ ${todaysData.totalProfit}`,
@@ -225,7 +230,7 @@ export const StatBoxData = () => {
             percentIcon1: monthsData.totalProfit >= prevMonthsData.totalProfit ? <NorthRounded sx={{ color: '#1da32b', fontSize: '12px', stroke: "#1da32b", strokeWidth: 2 }} /> : <SouthRounded sx={{ color: '#b0192a', fontSize: '12px', stroke: "#b0192a", strokeWidth: 2 }} />,
             percentChange1: calculatePercentageChange(prevMonthsData.totalProfit, monthsData.totalProfit),
             color1: monthsData.totalProfit >= prevMonthsData.totalProfit ? '#1da32b' : '#b0192a',
-            icon: <MonetizationOnRounded sx={{ color: '#047c44', fontSize: '36px' }} />,
+            icon: <MonetizationOnOutlinedIcon sx={{ color: '#047c44', fontSize: '50px' }} />,
         },
         {
             title: ordersFulfilled,
@@ -240,7 +245,7 @@ export const StatBoxData = () => {
             percentIcon1: itemsSold >= yesterdayItemsSold ? <NorthRounded sx={{ color: '#1da32b', fontSize: '12px', stroke: "#1da32b", strokeWidth: 2 }} /> : <SouthRounded sx={{ color: '#b0192a', fontSize: '12px', stroke: "#b0192a", strokeWidth: 2 }} />,
             percentChange1: calculatePercentageChange(yesterdayItemsSold, itemsSold),
             color1: itemsSold >= yesterdayItemsSold ? '#1da32b' : '#b0192a',
-            icon: <ShoppingCartRounded sx={{ color: '#047c44', fontSize: '36px' }} />,
+            icon: <ShoppingCartOutlinedIcon sx={{ color: '#047c44', fontSize: '50px' }} />,
         },
         // {
         //     title: `$ 220`,
@@ -253,33 +258,33 @@ export const StatBoxData = () => {
         //     percentIcon1: <NorthRounded sx={{ color: '#1da32b', fontSize: '12px', stroke: "#1da32b", strokeWidth: 2 }} />,
         //     percentChange1: 5,
         //     color1: '#1da32b',
-        //     icon: <PointOfSaleRounded sx={{ color: '#047c44', fontSize: '36px' }} />,
-        // },
-        // {
-        //     title: `$ 50`,
-        //     subtitle: 'Todays Profit',
-        //     percentIcon: <NorthRounded sx={{ color: '#1da32b', fontSize: '12px', stroke: "#1da32b", strokeWidth: 2 }} />,
-        //     percentChange: 25,
-        //     color: '#1da32b',
-        //     title1: `$ 2000`,
-        //     subtitle1: 'Months Profit',
-        //     percentIcon1: <NorthRounded sx={{ color: '#1da32b', fontSize: '12px', stroke: "#1da32b", strokeWidth: 2 }} />,
-        //     percentChange1: 20,
-        //     color1: '#1da32b',
-        //     icon: <MonetizationOnRounded sx={{ color: '#047c44', fontSize: '36px' }} />,
+        //     icon: <PointOfSaleOutlinedIcon sx={{ color: '#047c44', fontSize: '36px' }} />,
         // },
         // {
         //     title: `$ 20`,
-        //     subtitle: 'Todays Expense',
+        //     subtitle: 'Todays Food Cost',
         //     percentIcon: <NorthRounded sx={{ color: '#b0192a', fontSize: '12px', stroke: "#b0192a", strokeWidth: 2 }} />,
         //     percentChange: 10,
         //     color: '#b0192a',
         //     title1: `$ 1050`,
-        //     subtitle1: 'Months Expense',
+        //     subtitle1: 'Months Food Cost',
         //     percentIcon1: <NorthRounded sx={{ color: '#b0192a', fontSize: '12px', stroke: "#b0192a", strokeWidth: 2 }} />,
         //     percentChange1: 3,
         //     color1: '#b0192a',
-        //     icon: <ReceiptRounded sx={{ color: '#047c44', fontSize: '36px' }} />,
+        //     icon: <MonetizationOnOutlinedIcon sx={{ color: '#047c44', fontSize: '36px' }} />,
+        // },
+        // {
+        //     title: `$ 50`,
+        //     subtitle: 'Todays Gross Profit',
+        //     percentIcon: <NorthRounded sx={{ color: '#1da32b', fontSize: '12px', stroke: "#1da32b", strokeWidth: 2 }} />,
+        //     percentChange: 25,
+        //     color: '#1da32b',
+        //     title1: `$ 2000`,
+        //     subtitle1: 'Months Gross Profit',
+        //     percentIcon1: <NorthRounded sx={{ color: '#1da32b', fontSize: '12px', stroke: "#1da32b", strokeWidth: 2 }} />,
+        //     percentChange1: 20,
+        //     color1: '#1da32b',
+        //     icon: <MonetizationOnRounded sx={{ color: '#047c44', fontSize: '36px' }} />,
         // },
         // {
         //     title: ordersFulfilled,
@@ -294,7 +299,7 @@ export const StatBoxData = () => {
         //     percentIcon1: <SouthRounded sx={{ color: '#b0192a', fontSize: '12px', stroke: "#b0192a", strokeWidth: 2 }} />,
         //     percentChange1: calculatePercentageChange(yesterdayItemsSold, itemsSold),
         //     color1: itemsSold >= yesterdayItemsSold ? '#1da32b' : '#b0192a',
-        //     icon: <ShoppingCartRounded sx={{ color: '#047c44', fontSize: '36px' }} />,
+        //     icon: <ShoppingCartOutlinedIcon sx={{ color: '#047c44', fontSize: '36px' }} />,
         // },
     ];
 

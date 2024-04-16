@@ -100,12 +100,12 @@ export const LineChartData = () => {
   const data = [
     {
       "id": "Food Cost",
-      "color": "hsl(84, 70%, 50%)",
+      "color": "hsl(0, 100%, 50%)",
       "data": expenseData
     },
     {
       "id": "Revenue",
-      "color": "hsl(142, 70%, 50%)",
+      "color": "hsl(199, 100%, 50%)",
       "data": revenueData
     }
   ]

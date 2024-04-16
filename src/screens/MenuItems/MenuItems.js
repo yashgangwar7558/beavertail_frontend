@@ -254,7 +254,7 @@ const MenuItems = () => {
                                     underlayColor="transparent"
                                     iconStyle={{ fontSize: 20, marginRight: 5, padding: 0 }}
                                     color={"white"}>
-                                    <Text style={[styles.uppercaseText, { fontWeight: '500', color: 'white', fontSize: '18px', fontFamily: 'inherit' }]}>{selectedRecipe.name}</Text>
+                                    <Text style={[styles.uppercaseText, { fontWeight: '600', color: 'white', fontSize: '18px', fontFamily: 'inherit' }]}>{selectedRecipe.name}</Text>
                                 </Icon.Button>
                                 <Icon.Button
                                     name="times"

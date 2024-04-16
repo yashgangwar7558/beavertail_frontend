@@ -10,6 +10,7 @@ import ImageCarousel from '../../components/ImageCarousel'
 import useWindowDimensions from '../../utils/windowDimensions'
 import { Box, Typography, Divider, Table, TableBody, TableCell, TableContainer, TableRow, TableHead, Paper } from '@mui/material'
 import { PaidRounded, PointOfSaleRounded } from '@mui/icons-material'
+import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 import styled from 'styled-components'
 
 const DashboardGrid = styled(Box)`
@@ -106,7 +107,7 @@ const TableGrid2 = styled(Box)`
 `
 const TableHeader = styled(Box)`
 	margin-top: 10px;
-	padding: 0px 10px;
+	padding: 0px 15px;
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
@@ -185,7 +186,7 @@ const Dashboard = (props) => {
             </Typography>
           </Box>
           <Box>
-            <PaidRounded sx={{ color: '#047c44', fontSize: '36px' }} />
+            <PaidOutlinedIcon sx={{ color: '#047c44', fontSize: '36px' }} />
           </Box>
         </ChartHeader>
         <Divider style={{ margin: '8px 0px', flex: 1, width: '100%' }} />
@@ -205,7 +206,12 @@ const Dashboard = (props) => {
             </Typography>
           </Box>
           <Box>
-            <PaidRounded sx={{ color: '#047c44', fontSize: '36px' }} />
+            <Typography variant="h6" fontFamily='inherit' fontWeight='600' color='#121B28'>
+              Food & Beverage Breakdown
+            </Typography>
+          </Box>
+          <Box>
+            <PaidOutlinedIcon sx={{ color: '#047c44', fontSize: '36px' }} />
           </Box>
         </ChartHeader>
         <Divider style={{ margin: '10px 0px', flex: 1, width: '100%' }} />
@@ -226,15 +232,12 @@ const Dashboard = (props) => {
           <Typography variant="h6" fontFamily='inherit' fontWeight='600' color='#121B28'>
             Purchases - Value Wise
           </Typography>
-          <Typography variant="body2" fontFamily='inherit' fontWeight='600' marginTop='5px' marginLeft='5px'>
-            (Last 7 Days)
-          </Typography>
         </TableHeader>
         <Divider style={{ marginTop: '8px', marginBotton: '0px', flex: 1, width: '100%' }} />
         <TableContainer style={{ overflow: 'hidden' }}>
           <Table size='small' aria-label="a dense table">
             <TableHead>
-              <TableRow style={{ backgroundColor: '#f2f0f0'}}>
+              <TableRow style={{ backgroundColor: '#f2f0f0' }}>
                 <TableCell style={{ fontWeight: 'bold' }}>Date</TableCell>
                 <TableCell style={{ fontWeight: 'bold' }}># of Invoices</TableCell>
                 <TableCell style={{ fontWeight: 'bold' }}>Invoice Value ($)</TableCell>
@@ -245,7 +248,7 @@ const Dashboard = (props) => {
                 topPurchasesValueWise.map((item, index) => (
                   <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
                     <TableCell>{item.date}</TableCell>
-                    <TableCell>{item.invoiceNo}</TableCell>
+                    <TableCell>{item.invoiceCount}</TableCell>
                     <TableCell>{item.invoiceValue}</TableCell>
                   </TableRow>
                 ))
@@ -260,15 +263,12 @@ const Dashboard = (props) => {
           <Typography variant="h6" fontFamily='inherit' fontWeight='600' color='#121B28'>
             Purchases - Top Change
           </Typography>
-          <Typography variant="body2" fontFamily='inherit' fontWeight='600' marginTop='5px' marginLeft='5px'>
-            (Top 7)
-          </Typography>
         </TableHeader>
         <Divider style={{ marginTop: '8px', marginBotton: '0px', flex: 1, width: '100%' }} />
         <TableContainer>
           <Table size='small' aria-label="a dense table">
             <TableHead>
-              <TableRow style={{ backgroundColor: '#f2f0f0'}}>
+              <TableRow style={{ backgroundColor: '#f2f0f0' }}>
                 <TableCell style={{ fontWeight: 'bold' }}>Date</TableCell>
                 <TableCell style={{ fontWeight: 'bold' }}>Vendor</TableCell>
                 <TableCell style={{ fontWeight: 'bold' }}>Item</TableCell>
@@ -279,7 +279,7 @@ const Dashboard = (props) => {
             <TableBody>
               {
                 purchasesTopChange.map((item, index) => (
-                  <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0'}}>
+                  <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
                     <TableCell>{item.date}</TableCell>
                     <TableCell>{item.vendor}</TableCell>
                     <TableCell>{item.item}</TableCell>
@@ -332,17 +332,17 @@ const Dashboard = (props) => {
       <TableGrid2>
         <TableHeader>
           <Typography variant="h7" fontFamily='inherit' fontWeight='600' color='#121B28'>
-            Top Categories
+            Top Categories - This Month
           </Typography>
-          <Typography variant="body2" fontSize='12px' fontFamily='inherit' fontWeight='600' marginTop='2px' marginLeft='3px'>
+          {/* <Typography variant="body2" fontSize='12px' fontFamily='inherit' fontWeight='600' marginTop='2px' marginLeft='3px'>
             - Sales Wise (This Month)
-          </Typography>
+          </Typography> */}
         </TableHeader>
         <Divider style={{ marginTop: '8px', marginBotton: '0px', flex: 1, width: '100%' }} />
         <TableContainer>
           <Table size='small' aria-label="a dense table">
             <TableHead>
-              <TableRow style={{ backgroundColor: '#f2f0f0'}}>
+              <TableRow style={{ backgroundColor: '#f2f0f0' }}>
                 <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
                 <TableCell style={{ fontWeight: 'bold' }}>Value ($)</TableCell>
               </TableRow>
@@ -350,7 +350,7 @@ const Dashboard = (props) => {
             <TableBody>
               {
                 topCategoriesSalesMonth.map((item, index) => (
-                  <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0'}}>
+                  <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
                     <TableCell>{item.category}</TableCell>
                     <TableCell>{item.value}</TableCell>
                   </TableRow>
@@ -364,17 +364,14 @@ const Dashboard = (props) => {
       <TableGrid2>
         <TableHeader>
           <Typography variant="h7" fontFamily='inherit' fontWeight='600' color='#121B28'>
-            Top Categories
-          </Typography>
-          <Typography variant="body2" fontSize='12px' fontFamily='inherit' fontWeight='600' marginTop='2px' marginLeft='3px'>
-            - Sales Wise (Today)
+            Top Categories - Today
           </Typography>
         </TableHeader>
         <Divider style={{ marginTop: '8px', marginBotton: '0px', flex: 1, width: '100%' }} />
         <TableContainer>
           <Table size='small' aria-label="a dense table">
             <TableHead>
-              <TableRow style={{ backgroundColor: '#f2f0f0'}}>
+              <TableRow style={{ backgroundColor: '#f2f0f0' }}>
                 <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
                 <TableCell style={{ fontWeight: 'bold' }}>Value ($)</TableCell>
               </TableRow>
@@ -382,7 +379,7 @@ const Dashboard = (props) => {
             <TableBody>
               {
                 topCategoriesSalesToday.map((item, index) => (
-                  <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0'}}>
+                  <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
                     <TableCell>{item.category}</TableCell>
                     <TableCell>{item.value}</TableCell>
                   </TableRow>
@@ -396,17 +393,14 @@ const Dashboard = (props) => {
       <TableGrid2>
         <TableHeader>
           <Typography variant="h7" fontFamily='inherit' fontWeight='600' color='#121B28'>
-            Top Item
-          </Typography>
-          <Typography variant="body2" fontSize='12px' fontFamily='inherit' fontWeight='600' marginTop='2px' marginLeft='3px'>
-            - Sales Wise (This Month)
+            Top Item - This Month
           </Typography>
         </TableHeader>
         <Divider style={{ marginTop: '8px', marginBotton: '0px', flex: 1, width: '100%' }} />
         <TableContainer>
-        <Table size='small' aria-label="a dense table">
+          <Table size='small' aria-label="a dense table">
             <TableHead>
-              <TableRow style={{ backgroundColor: '#f2f0f0'}}>
+              <TableRow style={{ backgroundColor: '#f2f0f0' }}>
                 <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
                 <TableCell style={{ fontWeight: 'bold' }}>Value ($)</TableCell>
               </TableRow>
@@ -414,7 +408,7 @@ const Dashboard = (props) => {
             <TableBody>
               {
                 topItemsSalesMonth.map((item, index) => (
-                  <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0'}}>
+                  <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
                     <TableCell>{item.item}</TableCell>
                     <TableCell>{item.value}</TableCell>
                   </TableRow>
@@ -428,17 +422,14 @@ const Dashboard = (props) => {
       <TableGrid2>
         <TableHeader>
           <Typography variant="h7" fontFamily='inherit' fontWeight='600' color='#121B28'>
-            Top Item
-          </Typography>
-          <Typography variant="body2" fontSize='12px' fontFamily='inherit' fontWeight='600' marginTop='2px' marginLeft='3px'>
-            - Sales Wise (Today)
+            Top Item - Today
           </Typography>
         </TableHeader>
         <Divider style={{ marginTop: '8px', marginBotton: '0px', flex: 1, width: '100%' }} />
         <TableContainer>
-        <Table size='small' aria-label="a dense table">
+          <Table size='small' aria-label="a dense table">
             <TableHead>
-              <TableRow style={{ backgroundColor: '#f2f0f0'}}>
+              <TableRow style={{ backgroundColor: '#f2f0f0' }}>
                 <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
                 <TableCell style={{ fontWeight: 'bold' }}>Value ($)</TableCell>
               </TableRow>
@@ -446,7 +437,7 @@ const Dashboard = (props) => {
             <TableBody>
               {
                 topItemsSalesToday.map((item, index) => (
-                  <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0'}}>
+                  <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
                     <TableCell>{item.item}</TableCell>
                     <TableCell>{item.value}</TableCell>
                   </TableRow>
@@ -456,6 +447,8 @@ const Dashboard = (props) => {
           </Table>
         </TableContainer>
       </TableGrid2>
+
+      <Divider style={{ marginTop: '8px', marginBotton: '0px', flex: 1, width: '100%' }} />
 
     </DashboardGrid>
   )

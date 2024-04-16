@@ -43,14 +43,15 @@ const LineChart = (props) => {
                     }
                 }
             }}
-            colors={{ scheme: "nivo" }}
+
+            colors={{ scheme: "set1" }}
             margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
             xScale={{ type: 'point' }}
             yScale={{
                 type: 'linear',
                 min: 'auto',
                 max: 'auto',
-                stacked: false,
+                stacked: true,
                 reverse: false
             }}
             yFormat=" >-.2f"
@@ -63,20 +64,22 @@ const LineChart = (props) => {
                 tickRotation: -90,
                 legend: undefined,
                 legendOffset: 36,
-                legendPosition: 'middle'
+                legendPosition: 'middle',
+                truncateTickAt: 0
             }}
             axisLeft={{
-                tickSize: 5,
+                tickSize: 2,
                 tickValues: 5,
                 tickPadding: 5,
                 tickRotation: 0,
                 legend: undefined,
                 legendOffset: -40,
-                legendPosition: 'middle'
+                legendPosition: 'middle',
+                truncateTickAt: 0
             }}
             enableGridX={false}
-            enableGridY={false}
-            pointSize={10}
+            enableGridY={true}
+            pointSize={4}
             pointColor={{ theme: 'background' }}
             pointBorderWidth={2}
             pointBorderColor={{ from: 'serieColor' }}

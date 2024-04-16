@@ -8,14 +8,16 @@ import useWindowDimensions from '../../../utils/windowDimensions'
 import { AuthContext } from '../../../context/AuthContext';
 import { Box, Button, Typography, StyledEngineProvider, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, IconButton } from '@mui/material'
 import { LogoutRounded } from '@mui/icons-material'
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import styled from 'styled-components'
 
 const NavIcon = styled.div`
     display: flex;
     justify-content: ${(props) => props.isCollapsed ? 'center' : 'space-between'};
     align-items: center;
-    padding: 15px 15px;
-	margin-bottom: 10px;
+    padding: 10px 15px;
+	margin-bottom: 5px;
 `
 const LogoWrapper = styled.div`
     display: flex;
@@ -23,7 +25,7 @@ const LogoWrapper = styled.div`
     align-items: center;
 `
 const LogoImage = styled.img`
-    width: 50px;
+    width: 40px;
     height: auto;
 `
 const LogoLabelMain = styled(Typography)`
@@ -53,6 +55,15 @@ const SidebarWrapper = styled.div`
 		width: ${(props) => props.isCollapsed ? '0px' : '250px'};
 	}
 `
+const RadioWrapper = styled(Box)`
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+    align-items: center;
+    padding: 0px 15px;
+	margin-bottom: 15px;
+`
+
 const MenuWrapper = styled(Box)`
 	width: 100%;
 	height: calc(100% - 93.7px);
@@ -95,6 +106,7 @@ const LogoutIconButton = styled(IconButton)`
 const Sidebar = (props) => {
 
 	const [selected, setSelected] = useState('Dashboard')
+	const [category, setCategory] = useState('all');
 	const navigate = useNavigate({});
 
 	const { width, height } = useWindowDimensions()
@@ -130,6 +142,69 @@ const Sidebar = (props) => {
 						)
 					}
 				</NavIcon>
+				{/* {
+					!(props.isSidebarCollapsed) && (
+						<RadioWrapper>
+							<Button
+								variant="outlined"
+								size='small'
+								sx={{
+									margin: '4px',
+									borderRadius: '10px',
+									color: category === 'all' ? '#121B28' : 'white',
+									borderColor: category === 'all' ? '#5fe3b3' : 'white',
+									backgroundColor: category === 'all' ? '#5fe3b3' : 'transparent',
+									'&:hover': {
+										color: category === 'all' ? '#121B28' : '#5fe3b3',
+										backgroundColor: category === 'all' ? '#5fe3b3' : 'transparent',
+										borderColor: category === 'all' ? '#5fe3b3' : '#5fe3b3',
+									},
+								}}
+								onClick={() => setCategory('all')}
+							>
+								All
+							</Button>
+							<Button
+								variant="outlined"
+								size='small'
+								sx={{
+									margin: '4px',
+									borderRadius: '10px',
+									color: category === 'food' ? '#121B28' : 'white',
+									borderColor: category === 'food' ? '#5fe3b3' : 'white',
+									backgroundColor: category === 'food' ? '#5fe3b3' : 'transparent',
+									'&:hover': {
+										color: category === 'food' ? '#121B28' : '#5fe3b3',
+										backgroundColor: category === 'food' ? '#5fe3b3' : 'transparent',
+										borderColor: category === 'food' ? '#5fe3b3' : '#5fe3b3',
+									},
+								}}
+								onClick={() => setCategory('food')}
+							>
+								Food
+							</Button>
+							<Button
+								variant="outlined"
+								size='small'
+								sx={{
+									margin: '4px',
+									borderRadius: '10px',
+									color: category === 'beverages' ? '#121B28' : 'white',
+									borderColor: category === 'beverages' ? '#5fe3b3' : 'white',
+									backgroundColor: category === 'beverages' ? '#5fe3b3' : 'transparent',
+									'&:hover': {
+										color: category === 'beverages' ? '#121B28' : '#5fe3b3',
+										backgroundColor: category === 'beverages' ? '#5fe3b3' : 'transparent',
+										borderColor: category === 'beverages' ? '#5fe3b3' : '#5fe3b3',
+									},
+								}}
+								onClick={() => setCategory('beverages')}
+							>
+								Beverages
+							</Button>
+						</RadioWrapper>
+					)
+				} */}
 				<MenuWrapper>
 					<Box width='100%'>
 						{SidebarData.filter(item => userInfo.user.userAllowedRoutes.includes(item.path)).map((item, index) => (
@@ -147,19 +222,19 @@ const Sidebar = (props) => {
 						{props.isSidebarCollapsed ? (
 							<LogoutIconButton onClick={() => setLogoutDialogOpen(true)}
 								disableRipple disableFocusRipple>
-								<LogoutRounded sx={{ fontSize: '25px', marginRight: '-3px' }} />
+								<LogoutOutlinedIcon sx={{ fontSize: '25px', marginRight: '-3px' }} />
 							</LogoutIconButton>
 						)
 							: (
 								<LogoutButton variant='text' onClick={() => setLogoutDialogOpen(true)}
 									disableRipple disableFocusRipple
-									startIcon={<LogoutRounded sx={{ fontSize: '25px', marginRight: '-3px' }} />}>
+									startIcon={<LogoutOutlinedIcon sx={{ fontSize: '25px', marginRight: '-3px' }} />}>
 									Logout
 								</LogoutButton>
 							)
 						}
 					</StyledEngineProvider>
-					<Dialog open={logoutDialogOpen} onClose={handleLogoutDialogClose}>
+					<Dialog open={logoutDialogOpen} onClose={handleLogoutDialogClose} PaperProps={{ sx: { borderRadius: '12px' } }}>
 						<DialogTitle fontFamily='helvetica'>
 							Logout
 						</DialogTitle>
