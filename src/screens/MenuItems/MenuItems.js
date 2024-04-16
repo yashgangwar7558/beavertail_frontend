@@ -555,6 +555,7 @@ const styles = StyleSheet.create({
         border: '3.5px solid #47bf93',
         borderRadius: 5,
         overflow: 'hidden',
+        marginRight: '10px'
     },
     recipeNameNavbar: {
         flexDirection: 'row',
