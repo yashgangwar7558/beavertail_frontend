@@ -18,6 +18,7 @@ import AnalyticsSales from '../../screens/AnalyticsSales';
 import AnalyticsPurchases from '../../screens/AnalyticsPurchases';
 import MenuBuilder from '../../screens/MenuBuilder';
 import MenuItems from '../../screens/MenuItems';
+import Ingredients from '../../screens/Ingredients';
 import AddInvoice from '../../screens/AddInvoice';
 import InvoiceTable from '../../screens/InvoiceTable';
 import PurchaseHistory from '../../screens/PurchaseHistory';
@@ -72,6 +73,7 @@ const Navigation = () => {
     { path: '/analytics-purchases', component: AnalyticsPurchases },
     { path: '/menubuilder', component: MenuBuilder },
     { path: '/menu', component: MenuItems },
+    { path: '/ingredients', component: Ingredients },
     { path: '/add-invoice', component: AddInvoice },
     { path: '/invoices', component: InvoiceTable },
     { path: '/purchasehistory', component: PurchaseHistory },

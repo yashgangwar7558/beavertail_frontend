@@ -9,11 +9,13 @@ import client from '../../utils/ApiConfig'
 import { sortSalesReport } from '../../helpers/sort.js'
 import { DatePicker } from '@mui/x-date-pickers';
 import { ExpandMore, ExpandLess, KeyboardArrowDown } from '@mui/icons-material'
-// import KeyboardArrowDownIcon  from '@mui/icons-material/KeyboardArrowDownIcon'
 import dayjs from 'dayjs';
 import {
-    FormControl, InputLabel, MenuItem, Select,
+    FormControl, InputLabel, MenuItem, Select, ToggleButton
 } from '@mui/material'
+import ToggleButtonGroup, {
+    toggleButtonGroupClasses,
+} from '@mui/material/ToggleButtonGroup'
 
 
 const FoodCostCalculator = () => {
@@ -167,10 +169,11 @@ const FoodCostCalculator = () => {
     const [loading, setLoading] = useState(false);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+    const [typeToggle, setTypeToggle] = useState('Food')
+    const [selectedTypeWiseSales, setSelectedTypeWiseSales] = useState([])
+    const [sortOption, setSortOption] = useState('quantitySold_descending')
     const [sortedTypeSales, setSortedTypeSales] = useState([]);
     const [sortedRecipeSales, setSortedRecipeSales] = useState([]);
-    const [sortOption, setSortOption] = useState('quantitySold_descending')
-    const [rowCount, setRowCount] = useState(0);
     const today = dayjs();
 
     const getRecipesSalesData = async () => {
@@ -200,12 +203,25 @@ const FoodCostCalculator = () => {
     }, [startDate, endDate]);
 
     useEffect(() => {
+        let filteredSales = [];
+        if (typeToggle === 'Food') {
+            filteredSales = typeWiseSales.filter(sale => sale.type === 'Food');
+        } else if (typeToggle === 'Beverage') {
+            filteredSales = typeWiseSales.filter(sale => sale.type === 'Beverage');
+        } else {
+            filteredSales = typeWiseSales;
+        }
+        setSelectedTypeWiseSales(filteredSales);
+    }, [typeWiseSales, typeToggle]);
+
+    useEffect(() => {
         const [sortBy, sortOrder] = sortOption.split('_');
-        const sortedTypes = sortSalesReport(typeWiseSales, sortBy, sortOrder);
+        const sortedTypes = sortSalesReport(selectedTypeWiseSales, sortBy, sortOrder);
         const sortedRecipes = sortSalesReport(recipeWiseSales, sortBy, sortOrder);
         setSortedTypeSales(sortedTypes)
         setSortedRecipeSales(sortedRecipes)
-    }, [typeWiseSales, recipeWiseSales, sortOption]);
+    }, [selectedTypeWiseSales, recipeWiseSales, sortOption]);
+
 
     const handleStartDateChange = (date) => {
         setStartDate(date.format('YYYY-MM-DD'));
@@ -217,16 +233,16 @@ const FoodCostCalculator = () => {
         console.log(date.format('YYYY-MM-DD'));
     };
 
-    const handleTypesToggle = (typeName) => {
+    const handleTypesToggle = (subTypeName) => {
         setExpandedTypes((prevExpanded) =>
-            prevExpanded.includes(typeName)
-                ? prevExpanded.filter((type) => type !== typeName)
-                : [...prevExpanded, typeName]
+            prevExpanded.includes(subTypeName)
+                ? prevExpanded.filter((subType) => subType !== subTypeName)
+                : [...prevExpanded, subTypeName]
         );
     };
 
-    const renderAccordionContent = (typeName, typeRowIndex) => {
-        const typeWiseRecipes = sortedRecipeSales.filter((item) => item.type === typeName);
+    const renderAccordionContent = (subTypeName, typeRowIndex) => {
+        const typeWiseRecipes = sortedRecipeSales.filter((item) => item.subType === subTypeName);
         return (
             typeWiseRecipes.map((item, index) => {
                 const recipeRowIndex = typeRowIndex + index + 1;
@@ -236,14 +252,14 @@ const FoodCostCalculator = () => {
                         style={recipeRowIndex % 2 === 0 ? styles.whiteRow : styles.greyRow}
                     >
                         {/* <DataTable.Cell style={[styles.cell, { flex: 0.2 }]}></DataTable.Cell> */}
-                        <DataTable.Cell style={[styles.cellLeft, { flex: 1.2 }]}><span style={{ fontSize: '14px', fontWeight: '400', color: '#1c1b1f', marginLeft: '27px' }}>{item.type}</span></DataTable.Cell>
+                        <DataTable.Cell style={[styles.cellLeft, { flex: 1.2 }]}><span style={{ fontFamily: 'roboto', fontSize: '14px', fontWeight: '400', color: '#1c1b1f', marginLeft: '27px' }}>{item.subType}</span></DataTable.Cell>
                         <DataTable.Cell style={[styles.cellLeft, { flex: 0.8 }]}>{item.name}</DataTable.Cell>
-                        <DataTable.Cell style={styles.cellRight}>{(item.avgCost).toFixed(2)}</DataTable.Cell>
+                        <DataTable.Cell style={styles.cellRight}>${(item.avgCost).toFixed(2)}</DataTable.Cell>
                         <DataTable.Cell style={styles.cellRight}>{item.quantitySold}</DataTable.Cell>
-                        <DataTable.Cell style={styles.cellRight}>{(item.totalFoodCost).toFixed(2)}</DataTable.Cell>
-                        <DataTable.Cell style={styles.cellRight}>{(item.totalSales).toFixed(2)}</DataTable.Cell>
-                        <DataTable.Cell style={styles.cellRight}><span style={{ color: item.totalProfitWomc < 0 ? 'red' : '#1c1b1f', fontWeight: '400', fontSize: '14px' }}>{(Math.abs(item.totalProfitWomc)).toFixed(2)}</span></DataTable.Cell>
-                        <DataTable.Cell style={styles.cellLast}><span style={{ color: item.totalProfitWomc < 0 ? 'red' : '#1c1b1f', fontWeight: '400', fontSize: '14px' }}>{(Math.abs(item.theoreticalCostWomc)).toFixed(2)}</span></DataTable.Cell>
+                        <DataTable.Cell style={styles.cellRight}>${(item.totalFoodCost).toFixed(2)}</DataTable.Cell>
+                        <DataTable.Cell style={styles.cellRight}>${(item.totalSales).toFixed(2)}</DataTable.Cell>
+                        <DataTable.Cell style={styles.cellRight}><span style={{ color: item.totalProfitWomc < 0 ? 'red' : '#1c1b1f', fontWeight: '400', fontSize: '14px', fontFamily: 'roboto' }}>${(item.totalProfitWomc).toFixed(2)}</span></DataTable.Cell>
+                        <DataTable.Cell style={styles.cellLast}><span style={{ color: item.totalProfitWomc < 0 ? 'red' : '#1c1b1f', fontWeight: '400', fontSize: '14px', fontFamily: 'roboto' }}>{(item.theoreticalCostWomc).toFixed(2)}%</span></DataTable.Cell>
                     </DataTable.Row>
                 )
             })
@@ -299,12 +315,47 @@ const FoodCostCalculator = () => {
                     </View>
 
                     <View style={styles.rightTableButtons}>
+                        {/* <ToggleButtonGroup
+                            color="success"
+                            size='small'
+                            value={typeToggle}
+                            exclusive
+                            onChange={() => setTypeToggle(prevToggleType => {
+                                return prevToggleType === 'Food' ? 'Beverage' : 'Food';
+                            })}
+                            aria-label="Select"
+                            sx={{
+                                [`& .${toggleButtonGroupClasses.grouped}`]: {
+                                    border: 1,
+                                    borderRadius: '12px',
+                                    height: '38px',
+                                    marignTop: '10px'
+                                },
+                            }}
+                        >
+                            <ToggleButton value="Food">Food</ToggleButton>
+                            <ToggleButton value="Beverage">Beverage</ToggleButton>
+                        </ToggleButtonGroup> */}
+                        <FormControl style={styles.picker}>
+                            <Select
+                                labelId="picker-label"
+                                value={typeToggle}
+                                onChange={(e) => setTypeToggle(e.target.value)}
+                                style={{ color: '#ffffff', width: '100%', height: '100%', border: 'none', outline: 'none', borderRadius: '12px' }}
+                                IconComponent={KeyboardArrowDown}
+                                sx={{ '& .MuiSvgIcon-root': { color: '#ffffff' } }}
+                            >
+                                <MenuItem value="All">All</MenuItem>
+                                <MenuItem value="Food">Food</MenuItem>
+                                <MenuItem value="Beverage">Beverages</MenuItem>
+                            </Select>
+                        </FormControl>
                         <FormControl style={styles.picker}>
                             <Select
                                 labelId="picker-label"
                                 value={sortOption}
                                 onChange={(e) => setSortOption(e.target.value)}
-                                style={{ color: '#ffffff', width: '100%', height: '100%', border: 'none', outline: 'none', borderRadius: '12px'}}
+                                style={{ color: '#ffffff', width: '100%', height: '100%', border: 'none', outline: 'none', borderRadius: '12px' }}
                                 IconComponent={KeyboardArrowDown}
                                 sx={{ '& .MuiSvgIcon-root': { color: '#ffffff' } }}
                             >
@@ -356,7 +407,7 @@ const FoodCostCalculator = () => {
                         sortedTypeSales.map((item, index) => {
                             let totalSubRows = 0;
                             for (let i = 0; i <= index - 1; i++) {
-                                if (expandedTypes.includes(sortedTypeSales[i].type)) {
+                                if (expandedTypes.includes(sortedTypeSales[i].subType)) {
                                     totalSubRows += sortedTypeSales[i].count;
                                 }
                             }
@@ -365,30 +416,30 @@ const FoodCostCalculator = () => {
                                 <React.Fragment key={index}>
                                     <DataTable.Row
                                         style={typeRowIndex % 2 === 0 ? styles.whiteRow : styles.greyRow}
-                                        onPress={() => handleTypesToggle(item.type)}
+                                        onPress={() => handleTypesToggle(item.subType)}
                                     >
                                         {/* <DataTable.Cell style={[styles.cell, { flex: 0.2 }]}> */}
                                         <DataTable.Cell style={[styles.cellLeft, { flex: 1.2 }]}>
                                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', padding: 0, margin: 0 }}>
-                                                {expandedTypes.includes(item.type) ? (
+                                                {expandedTypes.includes(item.subType) ? (
                                                     <ExpandLess sx={{ fontSize: '25px', marginRight: '3px', color: '#47bf93' }} />
                                                 ) : (
                                                     <ExpandMore sx={{ fontSize: '25px', marginRight: '3px', color: '#47bf93' }} />
                                                 )}
-                                                <span style={{ fontSize: '14px', fontWeight: '600', color: '#1c1b1f', verticalAlign: 'middle', marginRight: '3px' }}>{item.type}</span>
-                                                <span style={{ fontSize: '14px', fontWeight: '600', color: '#1c1b1f', verticalAlign: 'middle' }}>({item.count})</span>
+                                                <span style={{ fontFamily: 'roboto', fontSize: '14px', fontWeight: '600', color: '#1c1b1f', verticalAlign: 'middle', marginRight: '3px' }}>{item.subType}</span>
+                                                <span style={{ fontFamily: 'roboto', fontSize: '14px', fontWeight: '600', color: '#1c1b1f', verticalAlign: 'middle' }}>({item.count})</span>
                                             </div>
                                         </DataTable.Cell>
                                         <DataTable.Cell style={[styles.cellLeft, { flex: 0.8 }]}></DataTable.Cell>
-                                        <DataTable.Cell style={styles.cellRight}><span style={{ fontWeight: '600', fontSize: '14px', color: '#1c1b1f' }}>{(item.avgCost).toFixed(2)}</span></DataTable.Cell>
-                                        <DataTable.Cell style={styles.cellRight}><span style={{ fontWeight: '600', fontSize: '14px', color: '#1c1b1f' }}>{item.quantitySold}</span></DataTable.Cell>
-                                        <DataTable.Cell style={styles.cellRight}><span style={{ fontWeight: '600', fontSize: '14px', color: '#1c1b1f' }}>{(item.totalFoodCost).toFixed(2)}</span></DataTable.Cell>
-                                        <DataTable.Cell style={styles.cellRight}><span style={{ fontWeight: '600', fontSize: '14px', color: '#1c1b1f' }}>{(item.totalSales).toFixed(2)}</span></DataTable.Cell>
-                                        <DataTable.Cell style={styles.cellRight}><span style={{ fontWeight: '600', fontSize: '14px', color: item.totalProfitWomc < 0 ? 'red' : '#1c1b1f' }}>{(Math.abs(item.totalProfitWomc)).toFixed(2)}</span></DataTable.Cell>
-                                        <DataTable.Cell style={styles.cellLast}><span style={{ fontWeight: '600', fontSize: '14px', color: item.totalProfitWomc < 0 ? 'red' : '#1c1b1f' }}>{(Math.abs(item.theoreticalCostWomc)).toFixed(2)}</span></DataTable.Cell>
+                                        <DataTable.Cell style={styles.cellRight}><span style={{ fontFamily: 'roboto', fontWeight: '600', fontSize: '14px', color: '#1c1b1f' }}>${(item.avgCost).toFixed(2)}</span></DataTable.Cell>
+                                        <DataTable.Cell style={styles.cellRight}><span style={{ fontFamily: 'roboto', fontWeight: '600', fontSize: '14px', color: '#1c1b1f' }}>{item.quantitySold}</span></DataTable.Cell>
+                                        <DataTable.Cell style={styles.cellRight}><span style={{ fontFamily: 'roboto', fontWeight: '600', fontSize: '14px', color: '#1c1b1f' }}>${(item.totalFoodCost).toFixed(2)}</span></DataTable.Cell>
+                                        <DataTable.Cell style={styles.cellRight}><span style={{ fontFamily: 'roboto', fontWeight: '600', fontSize: '14px', color: '#1c1b1f' }}>${(item.totalSales).toFixed(2)}</span></DataTable.Cell>
+                                        <DataTable.Cell style={styles.cellRight}><span style={{ fontFamily: 'roboto', fontWeight: '600', fontSize: '14px', color: item.totalProfitWomc < 0 ? 'red' : '#1c1b1f' }}>${(item.totalProfitWomc).toFixed(2)}</span></DataTable.Cell>
+                                        <DataTable.Cell style={styles.cellLast}><span style={{ fontFamily: 'roboto', fontWeight: '600', fontSize: '14px', color: item.totalProfitWomc < 0 ? 'red' : '#1c1b1f' }}>{(item.theoreticalCostWomc).toFixed(2)}%</span></DataTable.Cell>
                                     </DataTable.Row>
 
-                                    {expandedTypes.includes(item.type) && renderAccordionContent(item.type, typeRowIndex)}
+                                    {expandedTypes.includes(item.subType) && renderAccordionContent(item.subType, typeRowIndex)}
                                 </React.Fragment>
                             )
                         })

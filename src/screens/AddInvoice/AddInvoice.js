@@ -96,6 +96,44 @@ const AddInvoice = () => {
         }
     }, [invoiceData])
 
+    const handleInvoiceExtraction = async () => {
+        try {
+            const file = new FormData()
+            file.append('invoiceFile', invoiceData.invoiceFile)
+            const result = await client.post('/extract-invoice-data', file, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            })
+            const extractedData = result.data.extractedData
+            console.log(result.data);
+            if (result.data.success) {
+                setInvoiceData({
+                    ...invoiceData,
+                    invoiceNumber: extractedData.invoiceNumber,
+                    vendor: extractedData.vendor,
+                    invoiceDate: dayjs(extractedData.invoiceDate),
+                    ingredients: extractedData.ingredients || [],
+                    payment: extractedData.payment,
+                    total: extractedData.total,
+                });
+            }
+        } catch (err) {
+            console.log(`error invoice data extraction`);
+        }
+    }
+
+    const cancelInvoiceExtraction = async () => {
+        setInvoiceData({
+            tenantId: userInfo.user.tenant,
+            invoiceNumber: '',
+            vendor: '',
+            invoiceDate: '',
+            invoiceFile: null,
+            ingredients: [{ name: '', quantity: '', unit: '', unitPrice: '', total: '' }],
+            payment: '',
+            total: '',
+        });
+    }
+
     const onDrop = (acceptedFiles) => {
         if (acceptedFiles.length > 1) {
             alert('Please upload only one file.');
@@ -235,7 +273,7 @@ const AddInvoice = () => {
                         <View style={styles.inputContainer}>
                             <div {...getRootProps()} style={styles.dropzone}>
                                 <input {...getInputProps()} />
-                                <p style={{fontFamily: 'inherit'}}>Drag 'n' drop your invoice here, or click to select one</p>
+                                <p style={{ fontFamily: 'inherit' }}>Drag 'n' drop your invoice here, or click to select one</p>
                             </div>
                             {invoiceData.invoiceFile && (
                                 <View style={styles.postUploadContainer}>
@@ -251,6 +289,7 @@ const AddInvoice = () => {
                                     <View style={styles.postUploadButtonsContainer}>
                                         <Icon.Button
                                             style={styles.postUploadButtonBlue}
+                                            onPress={() => handleInvoiceExtraction()}
                                             name="search-plus"
                                             backgroundColor="transparent"
                                             underlayColor="transparent"
@@ -261,7 +300,7 @@ const AddInvoice = () => {
                                         </Icon.Button>
                                         <Icon.Button
                                             style={styles.postUploadButtonTrans}
-                                            onPress={() => setInvoiceData({ ...invoiceData, invoiceFile: null })}
+                                            onPress={() => cancelInvoiceExtraction()}
                                             name="remove"
                                             backgroundColor="transparent"
                                             underlayColor="transparent"
@@ -276,7 +315,7 @@ const AddInvoice = () => {
 
                         </View>
                         <Divider style={styles.divider}>
-                            <Chip label="Or" size="small" style={{ backgroundColor: '#47bf93', color: '#ffffff' }}/>
+                            <Chip label="Or" size="small" style={{ backgroundColor: '#47bf93', color: '#ffffff' }} />
                         </Divider>
                         <Text style={styles.headingLabel}>Manually Fill Invoice Details</Text>
                     </View>
@@ -502,7 +541,7 @@ const AddInvoice = () => {
                                 iconStyle={{ fontSize: 19 }}
                                 color={"#47bf93"}
                             >
-                                <Text style={{ color: '#47bf93', fontSize: 16, fontFamily: 'inherit'}}>Save & Mark Reviewed</Text>
+                                <Text style={{ color: '#47bf93', fontSize: 16, fontFamily: 'inherit' }}>Save & Mark Reviewed</Text>
                             </Icon.Button>
                         </View>
                     )
@@ -545,7 +584,7 @@ const styles = {
         marginLeft: 5,
         paddingHorizontal: 13,
         paddingVertical: 6,
-        borderRadius: 30,
+        borderRadius: 12,
         borderWidth: 2,
         borderColor: "#47bf93",
         backgroundColor: "#47bf93",
@@ -560,7 +599,7 @@ const styles = {
         marginLeft: 5,
         paddingHorizontal: 13,
         paddingVertical: 6,
-        borderRadius: 30,
+        borderRadius: 12,
         borderWidth: 2,
         borderColor: "#47bf93",
         backgroundColor: "white",

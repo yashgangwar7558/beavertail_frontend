@@ -28,6 +28,7 @@ import LibraryAddOutlinedIcon from '@mui/icons-material/LibraryAddOutlined';
 import AutoGraphOutlinedIcon from '@mui/icons-material/AutoGraphOutlined';
 import TipsAndUpdatesOutlinedIcon from '@mui/icons-material/TipsAndUpdatesOutlined';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 
 const iconSize = '25px';
 
@@ -46,6 +47,11 @@ export const SidebarData = [
         title: 'Margin',
         path: '/margin',
         icon: <MonetizationOnOutlinedIcon sx={{ fontSize: iconSize }} />,
+    },
+    {
+        title: 'Ingredients',
+        path: '/ingredients',
+        icon: <ShoppingCartOutlinedIcon sx={{ fontSize: iconSize }} />,
     },
     {
         title: 'Invoices',

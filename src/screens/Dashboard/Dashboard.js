@@ -249,7 +249,7 @@ const Dashboard = (props) => {
                   <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
                     <TableCell>{item.date}</TableCell>
                     <TableCell>{item.invoiceCount}</TableCell>
-                    <TableCell>{item.invoiceValue}</TableCell>
+                    <TableCell>${item.invoiceValue}</TableCell>
                   </TableRow>
                 ))
               }
@@ -283,8 +283,8 @@ const Dashboard = (props) => {
                     <TableCell>{item.date}</TableCell>
                     <TableCell>{item.vendor}</TableCell>
                     <TableCell>{item.item}</TableCell>
-                    <TableCell>{item.value_impact}</TableCell>
-                    <TableCell>{item.change}</TableCell>
+                    <TableCell>${item.value_impact}</TableCell>
+                    <TableCell>{item.change}%</TableCell>
                   </TableRow>
                 ))
               }
@@ -352,7 +352,7 @@ const Dashboard = (props) => {
                 topCategoriesSalesMonth.map((item, index) => (
                   <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
                     <TableCell>{item.category}</TableCell>
-                    <TableCell>{item.value}</TableCell>
+                    <TableCell>${item.value}</TableCell>
                   </TableRow>
                 ))
               }
@@ -381,7 +381,7 @@ const Dashboard = (props) => {
                 topCategoriesSalesToday.map((item, index) => (
                   <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
                     <TableCell>{item.category}</TableCell>
-                    <TableCell>{item.value}</TableCell>
+                    <TableCell>${item.value}</TableCell>
                   </TableRow>
                 ))
               }
@@ -410,7 +410,7 @@ const Dashboard = (props) => {
                 topItemsSalesMonth.map((item, index) => (
                   <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
                     <TableCell>{item.item}</TableCell>
-                    <TableCell>{item.value}</TableCell>
+                    <TableCell>${item.value}</TableCell>
                   </TableRow>
                 ))
               }
@@ -439,7 +439,7 @@ const Dashboard = (props) => {
                 topItemsSalesToday.map((item, index) => (
                   <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
                     <TableCell>{item.item}</TableCell>
-                    <TableCell>{item.value}</TableCell>
+                    <TableCell>${item.value}</TableCell>
                   </TableRow>
                 ))
               }

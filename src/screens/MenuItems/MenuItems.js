@@ -202,9 +202,6 @@ const MenuItems = () => {
                             placeholder='Search'
                             placeholderTextColor="gray"
                         />
-                        {/* <View style={styles.searchIcon}>
-                            <Icon name="search" size={20} color="gray" />
-                        </View> */}
                     </View>
                 </View>
 
@@ -231,12 +228,12 @@ const MenuItems = () => {
                                             style={index % 2 === 0 ? styles.evenRow : styles.oddRow}
                                         >
                                             <DataTable.Cell style={styles.cellLeft}>{item.name}</DataTable.Cell>
-                                            <DataTable.Cell style={[styles.cellLeft, { flex: 0.8 }]}>{item.category}</DataTable.Cell>
+                                            <DataTable.Cell style={[styles.cellLeft, { flex: 0.8 }]}>{item.subCategory}</DataTable.Cell>
                                             <DataTable.Cell style={styles.cellRight}>{item.inventory ? 'Yes' : 'No'}</DataTable.Cell>
-                                            <DataTable.Cell style={styles.cellRight}>{(item.cost).toFixed(2)}</DataTable.Cell>
-                                            <DataTable.Cell style={styles.cellRight}>{(item.menuPrice).toFixed(2)}</DataTable.Cell>
-                                            <DataTable.Cell style={styles.cellRight}><span style={{ color: item.menuPrice - item.cost < 0 ? 'red' : '#1c1b1f', fontWeight: '400', fontSize: '14px' }}>{(Math.abs(item.menuPrice - item.cost)).toFixed(2)}</span></DataTable.Cell>
-                                            <DataTable.Cell style={styles.cellLast}><span style={{ color: item.menuPrice - item.cost < 0 ? 'red' : '#1c1b1f', fontWeight: '400', fontSize: '14px' }}>{(Math.abs((item.cost / item.menuPrice) * 100)).toFixed(2)}</span></DataTable.Cell>
+                                            <DataTable.Cell style={styles.cellRight}>${(item.cost).toFixed(2)}</DataTable.Cell>
+                                            <DataTable.Cell style={styles.cellRight}>${(item.menuPrice).toFixed(2)}</DataTable.Cell>
+                                            <DataTable.Cell style={styles.cellRight}><span style={{ color: item.menuPrice - item.cost < 0 ? 'red' : '#1c1b1f', fontWeight: '400', fontSize: '14px', fontFamily: 'roboto'}}>${(Math.abs(item.menuPrice - item.cost)).toFixed(2)}</span></DataTable.Cell>
+                                            <DataTable.Cell style={styles.cellLast}><span style={{ color: item.menuPrice - item.cost < 0 ? 'red' : '#1c1b1f', fontWeight: '400', fontSize: '14px', fontFamily: 'roboto' }}>{((item.cost / item.menuPrice) * 100).toFixed(2)}%</span></DataTable.Cell>
                                         </DataTable.Row>
                                     </TouchableOpacity>
                                 ))

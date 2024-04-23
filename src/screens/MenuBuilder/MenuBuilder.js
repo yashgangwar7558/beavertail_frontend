@@ -17,6 +17,7 @@ const MenuBuilder = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [subCategories, setSubCategories] = useState([]);
     const [ingredients, setIngredient] = useState([]);
     const [selectedIngredient, setSelectedIngredient] = useState({});
     const [currentCost, setCurrentCost] = useState();
@@ -26,6 +27,7 @@ const MenuBuilder = () => {
         tenantId: userInfo.user.tenant,
         name: '',
         category: '',
+        subCategory: '',
         yields: [{ quantity: '', unit: '' }],
         photo: null,
         methodPrep: '',
@@ -46,8 +48,22 @@ const MenuBuilder = () => {
             const result = await client.post('/get-types', tenant, {
                 headers: { 'Content-Type': 'application/json' },
             })
-            const extractedCategories = result.data.types.map((item) => item.type)
+            const extractedCategories = Array.from(new Set(result.data.types.map(item => item.type)));
             setCategories(extractedCategories)
+        } catch (error) {
+            console.log(`getting categories error ${error}`);
+        }
+    }
+
+    const getSubCategories = async () => {
+        try {
+            const data = { tenantId: userInfo.user.tenant, type: recipeData.category };
+            const result = await client.post('/get-subtypes', data, {
+                headers: { 'Content-Type': 'application/json' },
+            })
+            const extractedSubCategories = result.data.subTypes.map((item) => item.subType)
+            setSubCategories(extractedSubCategories)
+            console.log(extractedSubCategories);
         } catch (error) {
             console.log(`getting categories error ${error}`);
         }
@@ -104,6 +120,7 @@ const MenuBuilder = () => {
 
     useEffect(() => {
         getCategories();
+        getSubCategories();
         getIngredients();
         getUnitMaps();
         costEstimation();
@@ -112,6 +129,7 @@ const MenuBuilder = () => {
                 tenantId: userInfo.user.tenant,
                 name: editRecipeData.name,
                 category: editRecipeData.category,
+                subCategory: editRecipeData.subCategory,
                 yields: editRecipeData.yields || [{ quantity: '', unit: '' }],
                 photo: editRecipeData.photo || null,
                 methodPrep: editRecipeData.methodPrep || '',
@@ -133,7 +151,6 @@ const MenuBuilder = () => {
     };
 
     const handleIngredientSearch = (text) => {
-        // Filter ingredients based on search term  
         const results = ingredients.filter(ingredient =>
             ingredient.name.toLowerCase().includes(text.toLowerCase())
         );
@@ -141,7 +158,7 @@ const MenuBuilder = () => {
         if (text.length == 0) {
             setSearchResults([])
         }
-    };
+    }
 
     const handleAddIngredient = (ingredient) => {
         setSelectedIngredient({ ingredient });
@@ -201,6 +218,7 @@ const MenuBuilder = () => {
             data.append('tenantId', recipeData.tenantId);
             data.append('name', recipeData.name);
             data.append('category', recipeData.category);
+            data.append('subCategory', recipeData.subCategory);
             data.append('yields', JSON.stringify(recipeData.yields));
             data.append('photo', recipeData.photo);
             data.append('methodPrep', recipeData.methodPrep);
@@ -232,6 +250,7 @@ const MenuBuilder = () => {
                     tenantId: userInfo.user.tenant,
                     name: '',
                     category: '',
+                    subCategory: '',
                     yields: [{ quantity: '', unit: '' }],
                     photo: null,
                     methodPrep: '',
@@ -277,6 +296,20 @@ const MenuBuilder = () => {
                     >
                         <Picker.Item label="Select a Recipe Type..." value="" />
                         {categories.map((category, index) => (
+                            <Picker.Item key={index} label={category} value={category} />
+                        ))}
+                    </Picker>
+                </View>
+
+                <View style={styles.inputContainer}>
+                    <Text style={styles.label}>Sub Type</Text>
+                    <Picker
+                        style={styles.input}
+                        selectedValue={recipeData.subCategory}
+                        onValueChange={(itemValue) => setRecipeData({ ...recipeData, subCategory: itemValue })}
+                    >
+                        <Picker.Item label="Select a Recipe Sub Type..." value="" />
+                        {subCategories.map((category, index) => (
                             <Picker.Item key={index} label={category} value={category} />
                         ))}
                     </Picker>
