@@ -14,6 +14,7 @@ import dayjs from 'dayjs';
 import {
     FormControl, InputLabel, MenuItem, Select,
 } from '@mui/material'
+import io from 'socket.io-client'
 
 const Ingredients = () => {
     const navigate = useNavigate({});
@@ -24,6 +25,7 @@ const Ingredients = () => {
     const [searchTerm, setSearchTerm] = useState('')
     const [editingIndex, setEditingIndex] = useState('')
     const [newThreshold, setNewThreshold] = useState('')
+    const [alerts, setAlerts] = useState([])
 
     const getAllIngredients = async () => {
         try {
@@ -44,6 +46,21 @@ const Ingredients = () => {
 
     useEffect(() => {
         getAllIngredients();
+    }, []);
+
+    useEffect(() => {
+        const socket = io('http://localhost:8080');
+
+        socket.on('newAlert', (newAlert) => {
+            setAlerts(prevAlerts => [...prevAlerts, newAlert]);
+            console.log(newAlert);
+        });
+
+        console.log(alerts);
+
+        return () => {
+            socket.disconnect();
+        };
     }, []);
 
     const clearSearch = () => {
@@ -320,7 +337,7 @@ const styles = StyleSheet.create({
         marginLeft: 15,
     },
     tickButton: {
-        
+
     },
 })
 

@@ -315,7 +315,7 @@ const FoodCostCalculator = () => {
                     </View>
 
                     <View style={styles.rightTableButtons}>
-                        {/* <ToggleButtonGroup
+                        <ToggleButtonGroup
                             color="success"
                             size='small'
                             value={typeToggle}
@@ -335,7 +335,7 @@ const FoodCostCalculator = () => {
                         >
                             <ToggleButton value="Food">Food</ToggleButton>
                             <ToggleButton value="Beverage">Beverage</ToggleButton>
-                        </ToggleButtonGroup> */}
+                        </ToggleButtonGroup>
                         <FormControl style={styles.picker}>
                             <Select
                                 labelId="picker-label"
