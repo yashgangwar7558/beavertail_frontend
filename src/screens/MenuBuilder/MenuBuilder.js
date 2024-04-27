@@ -68,7 +68,7 @@ const MenuBuilder = () => {
             console.log(`getting categories error ${error}`);
         }
     }
-    
+
     const getIngredients = async () => {
         try {
             const tenant = { tenantId: userInfo.user.tenant };
@@ -371,7 +371,7 @@ const MenuBuilder = () => {
                     </Text>
                     <div {...getRootProps()} style={styles.dropzone}>
                         <input {...getInputProps()} />
-                        <p style={{fontFamily: 'inherit'}}>Drag 'n' drop your media here, or click to select one</p>
+                        <p style={{ fontFamily: 'inherit' }}>Drag 'n' drop your media here, or click to select one</p>
                     </div>
                     {recipeData.photo && (
                         <Text style={{ color: '#47bf93' }}>Files Added Successfully! <span style={{ color: 'blue', cursor: 'pointer' }} onClick={() => setRecipeData({ ...recipeData, photo: null })}>Reset</span></Text>
@@ -442,23 +442,27 @@ const MenuBuilder = () => {
                                 setSearchTerm(text);
                                 handleIngredientSearch(text);
                             }}
+                            onFocus={() => setSearchResults(ingredients)}
                         />
                     </View>
                     {/* Search Results */}
                     {searchResults.length > 0 && (
-                        <FlatList
-                            style={styles.dropdownMenu}
-                            data={searchResults}
-                            keyExtractor={(item) => item._id}
-                            renderItem={({ item }) => (
-                                <TouchableOpacity
-                                    style={styles.dropdownItem}
-                                    onPress={() => handleAddIngredient(item)}
-                                >
-                                    <Text>{item.name}</Text>
-                                </TouchableOpacity>
-                            )}
-                        />
+                        <View style={{ maxHeight: 200 }}>
+                            <FlatList
+                                style={styles.dropdownMenu}
+                                data={searchResults}
+                                keyExtractor={(item) => item._id}
+                                renderItem={({ item }) => (
+                                    <TouchableOpacity
+                                        style={styles.dropdownItem}
+                                        onPress={() => handleAddIngredient(item)}
+                                    >
+                                        <Text>{item.name}</Text>
+                                    </TouchableOpacity>
+                                )}
+                                contentContainerStyle={{ flexGrow: 1 }}
+                            />
+                        </View>
                     )}
                     {/* Ingredient Inputs */}
                     {recipeData.ingredients.map((ingredient, index) => (

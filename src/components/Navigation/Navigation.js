@@ -24,6 +24,8 @@ import InvoiceTable from '../../screens/InvoiceTable';
 import PurchaseHistory from '../../screens/PurchaseHistory';
 import FoodCostCalculator from '../../screens/FoodCostCalculator';
 import MarginCalculator from '../../screens/MarginCalculator';
+import PosSimulator from '../../screens/PosSimulator';
+import Alerts from '../../screens/Alerts';
 // import Settings from '../../screens/Settings';
 import { UserProfile } from '../../screens/Settings/UserProfile.js';
 import { TenantInfo } from '../../screens/Settings/TenantInfo.js';
@@ -79,6 +81,8 @@ const Navigation = () => {
     { path: '/purchasehistory', component: PurchaseHistory },
     { path: '/foodcost', component: FoodCostCalculator },
     { path: '/margin', component: MarginCalculator },
+    { path: '/pos-simulator', component: PosSimulator },
+    { path: '/alerts', component: Alerts },
     // { path: '/settings', component: Settings },
     { path: '/settings/user-profile', component: UserProfile },
     { path: '/settings/tenant-info', component: TenantInfo },
@@ -103,7 +107,7 @@ const Navigation = () => {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Sidebar setHeaderTitle={setHeaderTitle} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
             <Content isSidebarCollapsed={isSidebarCollapsed}>
-              <Header title={headerTitle} username={userInfo.user.firstName} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
+              <Header title={headerTitle}  setHeaderTitle={setHeaderTitle} username={userInfo.user.firstName} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
               <Routes>
                 {/* <Route path="/" element={<Dashboard renderCarousel={isSidebarCollapsed} />} />
                 <Route path="/analytics-sales" element={<AnalyticsSales />} />

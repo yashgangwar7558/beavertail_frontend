@@ -29,6 +29,7 @@ import AutoGraphOutlinedIcon from '@mui/icons-material/AutoGraphOutlined';
 import TipsAndUpdatesOutlinedIcon from '@mui/icons-material/TipsAndUpdatesOutlined';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
 
 const iconSize = '25px';
 
@@ -72,6 +73,11 @@ export const SidebarData = [
         title: 'Add Recipe',
         path: '/menubuilder',
         icon: <LibraryAddOutlinedIcon sx={{ fontSize: iconSize }} />,
+    },
+    {
+        title: 'Billing',
+        path: '/pos-simulator',
+        icon: <ReceiptOutlinedIcon sx={{ fontSize: iconSize }} />,
     },
     // {
     //     title: 'Purchase History',

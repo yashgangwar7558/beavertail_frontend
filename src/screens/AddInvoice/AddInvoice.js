@@ -377,23 +377,27 @@ const AddInvoice = () => {
                                 setSearchTerm(text);
                                 handleIngredientSearch(text);
                             }}
+                            onFocus={() => setSearchResults(ingredients)}
                         />
                     </View>
                     {/* Search Results */}
                     {searchResults.length > 0 && (
-                        <FlatList
-                            style={styles.dropdownMenu}
-                            data={searchResults}
-                            keyExtractor={(item) => item._id}
-                            renderItem={({ item }) => (
-                                <TouchableOpacity
-                                    style={styles.dropdownItem}
-                                    onPress={() => handleAddIngredient(item)}
-                                >
-                                    <Text>{item.name}</Text>
-                                </TouchableOpacity>
-                            )}
-                        />
+                        <View style={{ maxHeight: 200 }}>
+                            <FlatList
+                                style={styles.dropdownMenu}
+                                data={searchResults}
+                                keyExtractor={(item) => item._id}
+                                renderItem={({ item }) => (
+                                    <TouchableOpacity
+                                        style={styles.dropdownItem}
+                                        onPress={() => handleAddIngredient(item)}
+                                    >
+                                        <Text>{item.name}</Text>
+                                    </TouchableOpacity>
+                                )}
+                                contentContainerStyle={{ flexGrow: 1 }}
+                            />
+                        </View>
                     )}
                     {/* Ingredient Inputs */}
                     {invoiceData.ingredients.map((ingredient, index) => (

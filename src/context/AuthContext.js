@@ -99,7 +99,7 @@ export const AuthProvider = ({ children }) => {
                 }
             }
         ).then(async (res) => {
-            AsyncStorage.removeItem('userInfo');
+            await AsyncStorage.removeItem('userInfo');
             setUserInfo({});
             setIsLoading(false);
             setError(null)

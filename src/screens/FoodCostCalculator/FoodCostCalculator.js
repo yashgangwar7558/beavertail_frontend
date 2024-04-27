@@ -11,12 +11,24 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { ExpandMore, ExpandLess, KeyboardArrowDown } from '@mui/icons-material'
 import dayjs from 'dayjs';
 import {
-    FormControl, InputLabel, MenuItem, Select, ToggleButton
+    FormControl, InputLabel, MenuItem, Select, ToggleButton, Switch, Typography, withStyles
 } from '@mui/material'
+import { styled } from '@mui/system'
 import ToggleButtonGroup, {
     toggleButtonGroupClasses,
 } from '@mui/material/ToggleButtonGroup'
 
+const GreenSwitch = styled(Switch)({
+    '& .MuiSwitch-switchBase.Mui-checked': {
+        color: '#47bf93',
+        '&:hover': {
+            backgroundColor: 'rgba(76, 175, 80, 0.08)',
+        },
+    },
+    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+        backgroundColor: '#47bf93',
+    },
+});
 
 const FoodCostCalculator = () => {
     const { userInfo, isLoading, logout } = useContext(AuthContext);
@@ -312,10 +324,19 @@ const FoodCostCalculator = () => {
                                 },
                             }}
                         />
+                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginLeft: '15px' }}>
+                            <Typography variant="body2" sx={{ color: '#5e615f', font: 'inherit', fontWeight: '600' }}>Food</Typography>
+                            <GreenSwitch
+                                checked={typeToggle === 'Beverage'}
+                                onChange={() => setTypeToggle(typeToggle === 'Food' ? 'Beverage' : 'Food')}
+                                inputProps={{ 'aria-label': 'Toggle Food/Beverage' }}
+                            />
+                            <Typography variant="body2" sx={{ color: '#5e615f', font: 'inherit', fontWeight: '600' }}>Beverage</Typography>
+                        </View>
                     </View>
 
                     <View style={styles.rightTableButtons}>
-                        <ToggleButtonGroup
+                        {/* <ToggleButtonGroup
                             color="success"
                             size='small'
                             value={typeToggle}
@@ -335,8 +356,8 @@ const FoodCostCalculator = () => {
                         >
                             <ToggleButton value="Food">Food</ToggleButton>
                             <ToggleButton value="Beverage">Beverage</ToggleButton>
-                        </ToggleButtonGroup>
-                        <FormControl style={styles.picker}>
+                        </ToggleButtonGroup> */}
+                        {/* <FormControl style={styles.picker}>
                             <Select
                                 labelId="picker-label"
                                 value={typeToggle}
@@ -349,7 +370,7 @@ const FoodCostCalculator = () => {
                                 <MenuItem value="Food">Food</MenuItem>
                                 <MenuItem value="Beverage">Beverages</MenuItem>
                             </Select>
-                        </FormControl>
+                        </FormControl> */}
                         <FormControl style={styles.picker}>
                             <Select
                                 labelId="picker-label"

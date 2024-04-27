@@ -48,21 +48,6 @@ const Ingredients = () => {
         getAllIngredients();
     }, []);
 
-    useEffect(() => {
-        const socket = io('http://localhost:8080');
-
-        socket.on('newAlert', (newAlert) => {
-            setAlerts(prevAlerts => [...prevAlerts, newAlert]);
-            console.log(newAlert);
-        });
-
-        console.log(alerts);
-
-        return () => {
-            socket.disconnect();
-        };
-    }, []);
-
     const clearSearch = () => {
         setSearchTerm('')
         setSearchResults(allIngredients)

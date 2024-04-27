@@ -4,6 +4,10 @@ import SidebarMenuButton from '../SidebarMenuButton'
 import { Box, Typography } from '@mui/material'
 import { AccountCircleRounded } from '@mui/icons-material'
 import styled from 'styled-components'
+import { useNavigate } from 'react-router'
+import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
+import NotificationsTwoToneIcon from '@mui/icons-material/NotificationsTwoTone';
+import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 
 const NavIcon = styled.div`
     display: flex;
@@ -41,41 +45,46 @@ const headerFontStyle = {
 
 const Header = (props) => {
 
-	const {width, height} = useWindowDimensions()
+	const { width, height } = useWindowDimensions()
+	const navigate = useNavigate({});
 
 	return (
 		<HeaderWrapper>
-			{ width <= 800 ? (
-					<>
-						<NavIcon>
-							<SidebarMenuButton isSidebarCollapsed={props.isSidebarCollapsed} setIsSidebarCollapsed={props.setIsSidebarCollapsed}/>
-							<Typography variant='h4' style={headerFontStyle}>{props.title}</Typography>
-						</NavIcon>
-						<AccountWrapper>
-							{
-								width <= 400 ? (
-									<AccountCircleRounded sx={{color: '#ffffff'}}/>
-								)
+			{width <= 800 ? (
+				<>
+					<NavIcon>
+						<SidebarMenuButton isSidebarCollapsed={props.isSidebarCollapsed} setIsSidebarCollapsed={props.setIsSidebarCollapsed} />
+						<Typography variant='h4' style={headerFontStyle}>{props.title}</Typography>
+					</NavIcon>
+					<AccountWrapper>
+						{
+							width <= 400 ? (
+								<>
+									<NotificationsTwoToneIcon onClick={() => {navigate('/alerts'), props.setHeaderTitle('Alerts')}} sx={{ color: '#ffffff', marginRight: '30px' }} />
+									<AccountCircleRounded onClick={() => {navigate('/settings/user-profile'), props.setHeaderTitle('Settings')}} sx={{ color: '#ffffff' }} />
+								</>
+							)
 								: (
 									<>
+										<NotificationsTwoToneIcon onClick={() => {navigate('/alerts'), props.setHeaderTitle('Alerts')}} sx={{ color: '#ffffff', marginRight: '30px' }} />
 										<Typography variant='h6' style={headerFontStyle}>{props.user}</Typography>
-										<AccountCircleRounded sx={{color: '#ffffff'}}/>
+										<AccountCircleRounded onClick={() => {navigate('/settings/user-profile'), props.setHeaderTitle('Settings')}} sx={{ color: '#ffffff' }} />
 									</>
 								)
-							}
-						</AccountWrapper>
-					</>
-				)
+						}
+					</AccountWrapper>
+				</>
+			)
 				: (
 					<>
 						<Typography variant='h4' style={headerFontStyle}>{props.title}</Typography>
 						<AccountWrapper>
+							<NotificationsTwoToneIcon onClick={() => {navigate('/alerts'), props.setHeaderTitle('Alerts')}} sx={{ color: '#ffffff', marginRight: '30px' }} />
 							<Typography variant='h6' style={headerFontStyle}>{props.username}</Typography>
-							<AccountCircleRounded sx={{color: '#ffffff'}}/>
+							<AccountCircleRounded onClick={() => {navigate('/settings/user-profile'), props.setHeaderTitle('Settings')}} sx={{ color: '#ffffff' }} />
 						</AccountWrapper>
 					</>
 				)
-
 			}
 		</HeaderWrapper>
 	)
