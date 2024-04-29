@@ -67,4 +67,41 @@ exports.sortSalesReport = (sales, sortBy, sortOrder) => {
     return sortedSales;
 };
 
+exports.sortAlerts = (alerts, sortBy, sortOrder) => {
+    const sortedAlerts = [...alerts]
+
+    switch (sortBy) {
+        case 'date':
+            sortedAlerts.sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+
+                return sortOrder === 'ascending' ? dateA.getTime() - dateB.getTime() : dateB.getTime() - dateA.getTime();
+            });
+            break;
+        case 'severity':
+            sortedAlerts.sort((a, b) => {
+                const severityOrder = {
+                    'Low': 0,
+                    'Medium': 1,
+                    'Critical': 2
+                };
+
+                const severityA = severityOrder[a.severity];
+                const severityB = severityOrder[b.severity];
+
+                if (sortOrder === 'ascending') {
+                    return severityA - severityB;
+                } else {
+                    return severityB - severityA;
+                }
+            });
+            break;
+        default:
+            console.error('Invalid sortBy parameter')
+    }
+
+    return sortedAlerts;
+}
+
 

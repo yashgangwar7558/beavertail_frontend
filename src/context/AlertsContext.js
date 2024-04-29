@@ -8,10 +8,12 @@ export const AlertsContext = createContext();
 export const AlertsProvider = ({ children }) => {
     const { userInfo } = useContext(AuthContext);
     const [alerts, setAlerts] = useState([]);
+    const [alertsLoading, setAlertsLoading] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setAlertsLoading(true)
                 const data = {
                     tenantId: userInfo.user.tenant,
                 };
@@ -19,8 +21,9 @@ export const AlertsProvider = ({ children }) => {
                     headers: { 'Content-Type': 'application/json' },
                 })
                 setAlerts(result.data.alerts)
-                console.log(result.data.alerts);
+                setAlertsLoading(false)
             } catch (error) {
+                setAlertsLoading(false)
                 console.log(`getting alerts error ${error}`);
             }
         };
@@ -42,7 +45,7 @@ export const AlertsProvider = ({ children }) => {
     }, []);
 
     return (
-        <AlertsContext.Provider value={{ alerts, setAlerts }}>
+        <AlertsContext.Provider value={{ alerts, setAlerts, alertsLoading, setAlertsLoading }}>
             {children}
         </AlertsContext.Provider>
     );

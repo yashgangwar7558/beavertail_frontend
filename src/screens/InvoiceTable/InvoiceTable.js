@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Image, ActivityIn
 import { Button, DataTable } from 'react-native-paper';
 import { SouthRounded, NorthRounded, ImportExportRounded, KeyboardArrowDown } from "@mui/icons-material"
 import { useNavigate } from 'react-router'
+import { useLocation } from 'react-router-dom';
 import LoadingScreen from '../../components/LoadingScreen';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -23,6 +24,7 @@ import dayjs from 'dayjs';
 
 const InvoiceTable = () => {
     const navigate = useNavigate({});
+    const location = useLocation();
     const [editingStatusRows, setEditingStatusRows] = useState([])
     const { userInfo, isLoading, logout } = useContext(AuthContext);
     const [invoices, setInvoices] = useState([]);
@@ -31,7 +33,7 @@ const InvoiceTable = () => {
     const [statusLoading, setStatusLoading] = useState(false);
     const [loadingScreen, setLoadingScreen] = useState(false);
     const [invoiceFiles, setInvoiceFiles] = useState(null)
-    const [selectedInvoice, setSelectedInvoice] = useState(null);
+    const [selectedInvoice, setSelectedInvoice] = useState(location.state?.selectedInvoice || null);
     const [openModal, setOpenModal] = useState(false)
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);

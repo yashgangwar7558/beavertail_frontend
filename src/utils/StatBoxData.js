@@ -71,7 +71,6 @@ export const StatBoxData = () => {
                 headers: { 'Content-Type': 'application/json' },
             });
             setMonthsData(result.data);
-            console.log(result.data);
         } catch (err) {
             console.log(`Getting live data error ${err}`);
         }

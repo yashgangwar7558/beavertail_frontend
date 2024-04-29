@@ -126,9 +126,7 @@ const PosSimulator = () => {
             const itemTotal = parseFloat(item.total) || 0;
             return sum + itemTotal;
         }, 0)
-        console.log(billData.tax);
         const payableAmount = totalAmount + ((totalAmount * billData.tax) / 100)
-        console.log(payableAmount);
 
         setBillData((prevBillData) => ({
             ...prevBillData,

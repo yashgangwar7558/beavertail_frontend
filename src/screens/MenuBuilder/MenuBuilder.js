@@ -63,7 +63,6 @@ const MenuBuilder = () => {
             })
             const extractedSubCategories = result.data.subTypes.map((item) => item.subType)
             setSubCategories(extractedSubCategories)
-            console.log(extractedSubCategories);
         } catch (error) {
             console.log(`getting categories error ${error}`);
         }
