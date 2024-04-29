@@ -46,7 +46,7 @@ const EditableChip = styled(Chip)({
   marginBottom: '8px',
 });
 
-export const TenantInfo = () => {
+export const TenantInfo = (props) => {
   const { userInfo } = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -62,6 +62,10 @@ export const TenantInfo = () => {
     invoiceEmails: [],
     billEmails: [],
   });
+
+  useEffect(() => {
+    props.setHeaderTitle('Settings')
+  }, [])
 
   const getTenantDetails = async () => {
     try {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components';
 
 const PermissionDeniedContainer = styled.div`
@@ -24,17 +24,20 @@ const PermissionDeniedText = styled.p`
   margin-bottom: 30px;
 `;
 
-const PermissionDeniedPage = () => {
-    return (
-        <PermissionDeniedContainer>
-            <PermissionDeniedContent>
-                <PermissionDeniedTitle>Permission Denied</PermissionDeniedTitle>
-                <PermissionDeniedText>
-                    Sorry, you don't have permission to access this page. 
-                </PermissionDeniedText>
-            </PermissionDeniedContent>
-        </PermissionDeniedContainer>
-    );
+const PermissionDeniedPage = (props) => {
+  useEffect(() => {
+    props.setHeaderTitle('')
+  }, [])
+  return (
+    <PermissionDeniedContainer>
+      <PermissionDeniedContent>
+        <PermissionDeniedTitle>Permission Denied</PermissionDeniedTitle>
+        <PermissionDeniedText>
+          Sorry, you don't have permission to access this page.
+        </PermissionDeniedText>
+      </PermissionDeniedContent>
+    </PermissionDeniedContainer>
+  );
 };
 
 export default PermissionDeniedPage;

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import StatBox from '../../components/StatBox'
 import { StatBoxData } from '../../utils/StatBoxData'
 import { LineChartHeaderData } from '../../utils/ChartData'
@@ -129,6 +129,10 @@ const Dashboard = (props) => {
   const topCategoriesSalesToday = TopCategoriesSalesToday()
   const topItemsSalesMonth = TopItemsSalesMonth()
   const topItemsSalesToday = TopItemsSalesToday()
+
+  useEffect(() => {
+    props.setHeaderTitle('Home')
+  }, [])
 
   return (
     <DashboardGrid>

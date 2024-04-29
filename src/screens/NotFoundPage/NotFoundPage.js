@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 const NotFoundContainer = styled.div`
@@ -20,7 +20,10 @@ const NotFoundSubtitle = styled.p`
   color: #555;
 `;
 
-const NotFoundPage = () => {
+const NotFoundPage = (props) => {
+  useEffect(() => {
+    props.setHeaderTitle('')
+  }, [])
   return (
     <NotFoundContainer>
       <NotFoundTitle>Uh-ohh! Page not found</NotFoundTitle>

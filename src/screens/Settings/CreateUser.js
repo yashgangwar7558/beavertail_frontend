@@ -48,7 +48,7 @@ const MenuProps = {
     },
 };
 
-export const CreateUser = () => {
+export const CreateUser = (props) => {
     const navigate = useNavigate({});
     const { userInfo, register, error, setError } = useContext(AuthContext);
     const [roles, setRoles] = useState([]);
@@ -62,6 +62,10 @@ export const CreateUser = () => {
     const [mobileNo, setMobileNo] = useState(null)
     const [rolesAssigned, setRolesAssigned] = useState([])
     const [status, setStatus] = useState('approved')
+
+    useEffect(() => {
+        props.setHeaderTitle('Settings')
+    }, [])
 
     const getUserRoles = async () => {
         try {
@@ -87,7 +91,7 @@ export const CreateUser = () => {
             if (rolesAssigned.length == 0) {
                 return setError('Choose atleast one role.')
             }
-            const data = {username, password, confirmPassword, firstName, lastName, email, mobileNo, address: '', rolesAssigned, tenantId: userInfo.user.tenant, status};
+            const data = { username, password, confirmPassword, firstName, lastName, email, mobileNo, address: '', rolesAssigned, tenantId: userInfo.user.tenant, status };
             const result = await client.post('/create-user', data, {
                 headers: { 'Content-Type': 'application/json' },
             })

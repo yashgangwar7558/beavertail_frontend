@@ -86,8 +86,8 @@ const Navigation = () => {
     // { path: '/settings', component: Settings },
     { path: '/settings/user-profile', component: UserProfile },
     { path: '/settings/tenant-info', component: TenantInfo },
-    { path: '/settings/user-management', component: UserManagement},
-    { path: '/settings/create-user', component: CreateUser},
+    { path: '/settings/user-management', component: UserManagement },
+    { path: '/settings/create-user', component: CreateUser },
   ];
 
   const hasPermissionForRoute = (routePath) => {
@@ -107,37 +107,26 @@ const Navigation = () => {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Sidebar setHeaderTitle={setHeaderTitle} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
             <Content isSidebarCollapsed={isSidebarCollapsed}>
-              <Header title={headerTitle}  setHeaderTitle={setHeaderTitle} username={userInfo.user.firstName} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
+              <Header title={headerTitle} setHeaderTitle={setHeaderTitle} username={userInfo.user.firstName} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
               <Routes>
-                {/* <Route path="/" element={<Dashboard renderCarousel={isSidebarCollapsed} />} />
-                <Route path="/analytics-sales" element={<AnalyticsSales />} />
-                <Route path="/analytics-purchases" element={<AnalyticsPurchases />} />
-                <Route path="/menubuilder" element={<MenuBuilder />} />
-                <Route path="/menu" element={<MenuItems />} />
-                <Route path="/add-invoice" element={<AddInvoice />} />
-                <Route path="/invoices" element={<InvoiceTable />} />
-                <Route path="/purchasehistory" element={<PurchaseHistory />} />
-                <Route path="/foodcost" element={<FoodCostCalculator />} />
-                <Route path="/margin" element={<MarginCalculator />} />
-                <Route path="/permission-denied" element={<PermissionDeniedPage />} /> */}
                 {allowedRoutes.map(route => (
                   <Route
                     key={route.path}
                     path={route.path}
                     element={
                       hasPermissionForRoute(route.path) ? (
-                        <route.component />
+                        <>
+                          <route.component setHeaderTitle={setHeaderTitle}/>
+                        </>
                       ) : (
                         <Navigate to="/permission-denied" replace />
                       )
                     }
                   />
                 ))}
-                <Route path="/permission-denied" element={<PermissionDeniedPage />} />
-                <Route path="*" element={<Navigate to="/page-not-found" />} />
-                <Route path="/page-not-found" element={<NotFoundPage />} />
-                {/* <Route path="/signin" element={<SignIn />} />
-                <Route path="/signup" element={<SignUp />} /> */}
+                <Route path="/permission-denied" element={<PermissionDeniedPage setHeaderTitle={setHeaderTitle}/>} />
+                <Route path="*" element={<Navigate to="/page-not-found" setHeaderTitle={setHeaderTitle}/>} />
+                <Route path="/page-not-found" element={<NotFoundPage setHeaderTitle={setHeaderTitle}/>} />
               </Routes>
             </Content>
           </LocalizationProvider>

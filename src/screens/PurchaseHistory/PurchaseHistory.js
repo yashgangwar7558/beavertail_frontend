@@ -11,7 +11,7 @@ import client from '../../utils/ApiConfig'
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 
-const PurchaseHistory = () => {
+const PurchaseHistory = (props) => {
     const { userInfo, isLoading, logout } = useContext(AuthContext);
     const [purchaseHistory, setPurchaseHistory] = useState([]);
     const [ingredients, setIngredient] = useState([]);
@@ -20,6 +20,10 @@ const PurchaseHistory = () => {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const today = dayjs();
+
+    useEffect(() => {
+        props.setHeaderTitle('Purchase History')
+      }, [])
 
     const getPurchaseHistory = async () => {
         try {

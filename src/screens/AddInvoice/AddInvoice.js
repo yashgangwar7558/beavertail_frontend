@@ -12,7 +12,7 @@ import Divider from '@mui/material/Divider';
 import Chip from '@mui/material/Chip';
 import dayjs from 'dayjs';
 
-const AddInvoice = () => {
+const AddInvoice = (props) => {
     const navigate = useNavigate({});
     const location = useLocation();
     const today = dayjs();
@@ -78,6 +78,7 @@ const AddInvoice = () => {
     };
 
     useEffect(() => {
+        props.setHeaderTitle('Add Invoice')
         getIngredients()
         getUnitMaps()
         // calculateTotalAmount()

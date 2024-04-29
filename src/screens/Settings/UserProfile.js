@@ -21,7 +21,7 @@ const StyledButtonTrans = styled(Button)({
     '&:hover': {
         backgroundColor: '#f2faf7',
         borderColor: '#47bf93',
-        color: '#47bf93', 
+        color: '#47bf93',
     },
 });
 
@@ -31,8 +31,8 @@ const StyledButtonFill = styled(Button)({
     backgroundColor: '#47bf93',
     borderRadius: '12px',
     '&:hover': {
-        backgroundColor: '#47bf93', 
-        color: '#ffffff', 
+        backgroundColor: '#47bf93',
+        color: '#ffffff',
     },
 });
 
@@ -40,7 +40,7 @@ const EditableTextField = styled(TextField)({
     marginBottom: '16px',
 });
 
-export const UserProfile = () => {
+export const UserProfile = (props) => {
     const { userInfo } = useContext(AuthContext);
     const [isEditing, setIsEditing] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -50,6 +50,10 @@ export const UserProfile = () => {
     const [newPassword, setNewPassword] = useState('');
     const [confNewPassword, setConfNewPassword] = useState('');
     const [error, setError] = useState(null);
+
+    useEffect(() => {
+        props.setHeaderTitle('Settings')
+    }, [])
 
     const getUserDetails = async () => {
         try {
@@ -238,7 +242,7 @@ export const UserProfile = () => {
                                         <strong>Roles Assigned:</strong>{' '}
                                         {userDetails.roles.map((item, index) => (
                                             <React.Fragment key={index}>
-                                                <Chip label={item.roleName} style={{margin: '3px'}}/>
+                                                <Chip label={item.roleName} style={{ margin: '3px' }} />
                                             </React.Fragment>
                                         ))}
                                     </Typography>

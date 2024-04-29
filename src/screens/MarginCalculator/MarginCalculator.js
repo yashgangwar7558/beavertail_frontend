@@ -31,7 +31,7 @@ const GreenSwitch = styled(Switch)({
     },
 });
 
-const MarginCalculator = () => {
+const MarginCalculator = (props) => {
     const { userInfo, isLoading, logout } = useContext(AuthContext);
     const [typeWiseSales, setTypeWiseSales] = useState([
         // {
@@ -188,6 +188,10 @@ const MarginCalculator = () => {
     const [sortedTypeSales, setSortedTypeSales] = useState([]);
     const [sortedRecipeSales, setSortedRecipeSales] = useState([]);
     const today = dayjs();
+
+    useEffect(() => {
+        props.setHeaderTitle('Margin')
+    }, [])
 
     const getRecipesSalesData = async () => {
         try {

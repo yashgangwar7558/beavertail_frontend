@@ -10,7 +10,7 @@ import Header from '../../components/global/Header/index.js';
 import client from '../../utils/ApiConfig'
 import { useNavigate } from 'react-router'
 
-const MenuItems = () => {
+const MenuItems = (props) => {
     const navigate = useNavigate({});
     const { userInfo, isLoading, logout } = useContext(AuthContext);
     const [recipes, setRecipes] = useState([
@@ -122,6 +122,10 @@ const MenuItems = () => {
     const [selectedRecipe, setSelectedRecipe] = useState(null);
     const [loading, setLoading] = useState(false);
 
+    useEffect(() => {
+        props.setHeaderTitle('Recipe Book')
+    }, [])
+
     const getRecipes = async () => {
         try {
             setLoading(true)
@@ -232,7 +236,7 @@ const MenuItems = () => {
                                             <DataTable.Cell style={styles.cellRight}>{item.inventory ? 'Yes' : 'No'}</DataTable.Cell>
                                             <DataTable.Cell style={styles.cellRight}>${(item.cost).toFixed(2)}</DataTable.Cell>
                                             <DataTable.Cell style={styles.cellRight}>${(item.menuPrice).toFixed(2)}</DataTable.Cell>
-                                            <DataTable.Cell style={styles.cellRight}><span style={{ color: item.menuPrice - item.cost < 0 ? 'red' : '#1c1b1f', fontWeight: '400', fontSize: '14px', fontFamily: 'roboto'}}>${(Math.abs(item.menuPrice - item.cost)).toFixed(2)}</span></DataTable.Cell>
+                                            <DataTable.Cell style={styles.cellRight}><span style={{ color: item.menuPrice - item.cost < 0 ? 'red' : '#1c1b1f', fontWeight: '400', fontSize: '14px', fontFamily: 'roboto' }}>${(Math.abs(item.menuPrice - item.cost)).toFixed(2)}</span></DataTable.Cell>
                                             <DataTable.Cell style={styles.cellLast}><span style={{ color: item.menuPrice - item.cost < 0 ? 'red' : '#1c1b1f', fontWeight: '400', fontSize: '14px', fontFamily: 'roboto' }}>{((item.cost / item.menuPrice) * 100).toFixed(2)}%</span></DataTable.Cell>
                                         </DataTable.Row>
                                     </TouchableOpacity>

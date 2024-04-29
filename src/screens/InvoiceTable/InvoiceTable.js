@@ -22,7 +22,7 @@ import {
 } from '@mui/material'
 import dayjs from 'dayjs';
 
-const InvoiceTable = () => {
+const InvoiceTable = (props) => {
     const navigate = useNavigate({});
     const location = useLocation();
     const [editingStatusRows, setEditingStatusRows] = useState([])
@@ -44,8 +44,11 @@ const InvoiceTable = () => {
     const [showRejectionInputs, setShowRejectionInputs] = useState([]);
     const [invoiceRejectionReason, setInvoiceRejectionReason] = useState([]);
     const today = dayjs();
-
     const statusTypes = ['Pending Review', 'Pending Approval', 'Proccessed-PendingPayment', 'Processed-Paid', 'Review-Rejected', 'Approval-Rejected']
+
+    useEffect(() => {
+        props.setHeaderTitle('Invoices')
+    }, [])
 
     const getInvoices = async () => {
         try {
@@ -285,7 +288,7 @@ const InvoiceTable = () => {
                                     labelId="picker-label"
                                     value={filterByVendor}
                                     onChange={(e) => setFilterByVendor(e.target.value)}
-                                    style={{ color: '#ffffff', width: '100%', height: '100%', border: 'none', outline: 'none', borderRadius: '12px'}}
+                                    style={{ color: '#ffffff', width: '100%', height: '100%', border: 'none', outline: 'none', borderRadius: '12px' }}
                                     IconComponent={KeyboardArrowDown}
                                     sx={{ '& .MuiSvgIcon-root': { color: '#ffffff' } }}
                                 >
@@ -301,7 +304,7 @@ const InvoiceTable = () => {
                                     labelId="picker-label"
                                     value={filterByStatus}
                                     onChange={(e) => setFilterByStatus(e.target.value)}
-                                    style={{ color: '#ffffff', width: '100%', height: '100%', border: 'none', outline: 'none', borderRadius: '12px'}}
+                                    style={{ color: '#ffffff', width: '100%', height: '100%', border: 'none', outline: 'none', borderRadius: '12px' }}
                                     IconComponent={KeyboardArrowDown}
                                     sx={{ '& .MuiSvgIcon-root': { color: '#ffffff' } }}
                                 >

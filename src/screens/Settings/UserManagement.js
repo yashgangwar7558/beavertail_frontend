@@ -72,7 +72,7 @@ const MenuProps = {
     },
 };
 
-export const UserManagement = () => {
+export const UserManagement = (props) => {
     const navigate = useNavigate({});
     const { userInfo } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
@@ -80,6 +80,10 @@ export const UserManagement = () => {
     const [nonApprovedUsers, setNonApprovedUsers] = useState([]);
     const [roles, setRoles] = useState([]);
     const [selectedRoles, setSelectedRoles] = useState({});
+
+    useEffect(() => {
+        props.setHeaderTitle('Settings')
+    }, [])
 
     const getApprovedUsers = async () => {
         try {
@@ -166,7 +170,7 @@ export const UserManagement = () => {
         <div>
             <SettingsTabs />
             <div>
-                <Paper elevation={3} style={{ margin: '16px', padding: '10px', borderRadius: '12px'}}>
+                <Paper elevation={3} style={{ margin: '16px', padding: '10px', borderRadius: '12px' }}>
                     <Typography variant="h5" gutterBottom>
                         Users
                     </Typography>
@@ -192,7 +196,7 @@ export const UserManagement = () => {
                                             <CompactTableCell>{user.email}</CompactTableCell>
                                             <CompactTableCell>
                                                 {user.roles.map((role, index) => (
-                                                    <Chip label={role.roleName} key={index} style={{margin: '3px'}}/>
+                                                    <Chip label={role.roleName} key={index} style={{ margin: '3px' }} />
                                                 ))}
                                             </CompactTableCell>
                                             <CompactTableCell>
@@ -237,8 +241,8 @@ export const UserManagement = () => {
                                                     value={selectedRoles[user._id] || []}
                                                     onChange={(e) => handleRoleChange(user._id, e.target.value)}
                                                     renderValue={(selected) => selected.map((item) => item.roleName).join(', ')}
-                                                    style={{ minWidth: '150px', maxWidth: '150px', height: '50px', borderRadius: '12px'}}
-                                                    // MenuProps={MenuProps}
+                                                    style={{ minWidth: '150px', maxWidth: '150px', height: '50px', borderRadius: '12px' }}
+                                                // MenuProps={MenuProps}
                                                 >
                                                     <MenuItem disabled value="">
                                                         <em>Choose atleast one...</em>

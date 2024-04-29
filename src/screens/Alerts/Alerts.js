@@ -8,7 +8,7 @@ import { AlertsContext } from '../../context/AlertsContext.js';
 import { sortAlerts } from '../../helpers/sort.js';
 import { filterAlerts } from '../../helpers/filter.js';
 
-const Alerts = () => {
+const Alerts = (props) => {
   const navigate = useNavigate({})
   const { userInfo } = useContext(AuthContext)
   const { alerts, setAlerts, alertsLoading, setAlertsLoading } = useContext(AlertsContext)
@@ -19,6 +19,7 @@ const Alerts = () => {
   const [filteredAlerts, setFilteredAlerts] = useState([])
 
   useEffect(() => {
+    props.setHeaderTitle('Alerts')
     setAlertsLoading(true)
     const [sortBy, sortOrder] = sortOption.split('_');
     const sorted = sortAlerts(alerts, sortBy, sortOrder);

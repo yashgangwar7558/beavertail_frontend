@@ -82,10 +82,11 @@ const AnalyticsPurchases = (props) => {
 
     useEffect(() => {
         (async () => {
+            props.setHeaderTitle('Insights - Purchase')
             const data = await d3.csv(csv)
             const dateFormatParser = d3.timeParse('%d/%m/%Y %H:%M')
-
             data.forEach((d) => {
+
                 d.Sales = +(d.Total.slice(1).replace(/\,/g, ''))
                 d.date = dateFormatParser(d.InvoiceDate)
                 d.month = d3.timeMonth(d.date)

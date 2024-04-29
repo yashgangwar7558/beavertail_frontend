@@ -30,7 +30,7 @@ const GreenSwitch = styled(Switch)({
     },
 });
 
-const FoodCostCalculator = () => {
+const FoodCostCalculator = (props) => {
     const { userInfo, isLoading, logout } = useContext(AuthContext);
     const [typeWiseSales, setTypeWiseSales] = useState([
         // {
@@ -187,6 +187,10 @@ const FoodCostCalculator = () => {
     const [sortedTypeSales, setSortedTypeSales] = useState([]);
     const [sortedRecipeSales, setSortedRecipeSales] = useState([]);
     const today = dayjs();
+
+    useEffect(() => {
+        props.setHeaderTitle('Food Cost')
+    }, [])
 
     const getRecipesSalesData = async () => {
         try {

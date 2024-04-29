@@ -8,7 +8,7 @@ import client from '../../utils/ApiConfig'
 import { AuthContext } from '../../context/AuthContext.js'
 import LoadingScreen from '../../components/LoadingScreen';
 
-const MenuBuilder = () => {
+const MenuBuilder = (props) => {
     const navigate = useNavigate({});
     const location = useLocation();
     const { userInfo, isLoading, logout } = useContext(AuthContext);
@@ -36,11 +36,13 @@ const MenuBuilder = () => {
         menuPrice: '',
         menuType: '',
     });
-
     const menuTypes = ['Special', 'Breads', 'Breakfast', 'MainCourse', 'Starters', 'Chefs Special', 'Shakes'];
     const yieldUnits = ['Each', 'Serving'];
-
     const editRecipeData = location.state?.editRecipeData || null;
+
+    useEffect(() => {
+        props.setHeaderTitle('Add Recipe')
+    }, [])
 
     const getCategories = async () => {
         try {

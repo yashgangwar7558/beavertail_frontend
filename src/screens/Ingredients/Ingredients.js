@@ -16,7 +16,7 @@ import {
 } from '@mui/material'
 import io from 'socket.io-client'
 
-const Ingredients = () => {
+const Ingredients = (props) => {
     const navigate = useNavigate({});
     const { userInfo, isLoading, logout } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
@@ -26,6 +26,10 @@ const Ingredients = () => {
     const [editingIndex, setEditingIndex] = useState('')
     const [newThreshold, setNewThreshold] = useState('')
     const [alerts, setAlerts] = useState([])
+
+    useEffect(() => {
+        props.setHeaderTitle('Ingredients')
+    }, [])
 
     const getAllIngredients = async () => {
         try {

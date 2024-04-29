@@ -12,7 +12,7 @@ import Divider from '@mui/material/Divider';
 import Chip from '@mui/material/Chip';
 import dayjs from 'dayjs';
 
-const PosSimulator = () => {
+const PosSimulator = (props) => {
     const navigate = useNavigate({});
     const location = useLocation();
     const today = dayjs();
@@ -32,6 +32,10 @@ const PosSimulator = () => {
         tax: 10,
         total: ''
     });
+
+    useEffect(() => {
+        props.setHeaderTitle('Billing')
+      }, [])
 
     const getRecipes = async () => {
         try {

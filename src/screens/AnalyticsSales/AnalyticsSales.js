@@ -84,6 +84,7 @@ const AnalyticsSales = (props) => {
 
     useEffect(() => {
         (async () => {
+            props.setHeaderTitle('Insights - Sales')
             const data = await d3.csv(csv)
             const dateFormatParser = d3.timeParse('%d/%m/%Y %H:%M')
 
