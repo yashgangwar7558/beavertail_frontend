@@ -74,7 +74,7 @@ const Alerts = (props) => {
         const result = await client.post('/get-recipe', data, {
           headers: { 'Content-Type': 'application/json' },
         })
-        if(result.data.success){
+        if (result.data.success) {
           navigate('/menubuilder', { state: { editRecipeData: result.data.recipe } })
         }
         setAlertsLoading(false)
@@ -88,7 +88,7 @@ const Alerts = (props) => {
         const result = await client.post('/get-invoice', data, {
           headers: { 'Content-Type': 'application/json' },
         })
-        if(result.data.success){
+        if (result.data.success) {
           navigate('/invoices', { state: { selectedInvoice: result.data.invoice } })
         }
         setAlertsLoading(false)
@@ -101,7 +101,7 @@ const Alerts = (props) => {
 
   return (
     <Grid container direction="column" spacing={0}>
-      <Paper elevation={2} style={{ margin: '5px 10px', padding: '10px' }}>
+      <Paper elevation={2} style={{ margin: '5px 10px', padding: '10px', position: 'sticky', top: '70px', zIndex: 1 }}>
         <Grid container spacing={2} justifyContent='center'>
           <Grid item xs={3}>
             <FormControl fullWidth>
@@ -172,7 +172,7 @@ const Alerts = (props) => {
         </Grid>
       </Paper>
 
-      <Paper elevation={2} style={{ background: '#e8e8e8', margin: '5px 10px', padding: '10px' }}>
+      <Paper elevation={2} style={{ background: '#e8e8e8', margin: '5px 10px', padding: '10px', position: 'sticky', top: '135px', zIndex: 1 }}>
         <Grid container spacing={0}>
           <Grid item container xs={1.5} alignItems='center' onClick={toggleSeveritySort}>
             <Typography variant="subtitle1" fontWeight="bold" sx={{ cursor: 'pointer' }}>Severity</Typography>
@@ -208,57 +208,59 @@ const Alerts = (props) => {
         </Grid>
       </Paper>
 
-      {
-        alertsLoading ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '30px' }}>
-            <CircularProgress />
-          </Box>
-        ) :
-          filteredAlerts.length === 0 ? (
-            <Typography color="textSecondary" style={{ marginTop: '40px', textAlign: 'center' }}>No alerts to display.</Typography>
-          ) : (
-            filteredAlerts.map((alert, index) => (
-              <Paper item key={index} elevation={2} style={{ margin: '5px 10px', padding: '10px' }}>
-                <Grid container spacing={0} alignItems='flex-start' justifyContent='center'>
-                  <Grid item xs={1.5}>
-                    <Chip
-                      label={alert.severity}
-                      style={{ ...getChipColor(alert.severity), fontWeight: 'bold', borderRadius: '5px', paddingHorizontal: '8px' }}
-                    />
+      <div style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)', scrollbarWidth: 'none', '-ms-overflow-style': 'none', WebkitScrollbar: 'none' }}>
+        {
+          alertsLoading ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '30px' }}>
+              <CircularProgress />
+            </Box>
+          ) :
+            filteredAlerts.length === 0 ? (
+              <Typography color="textSecondary" style={{ marginTop: '40px', textAlign: 'center' }}>No alerts to display.</Typography>
+            ) : (
+              filteredAlerts.map((alert, index) => (
+                <Paper item key={index} elevation={2} style={{ margin: '5px 10px', padding: '10px' }}>
+                  <Grid container spacing={0} alignItems='flex-start' justifyContent='center'>
+                    <Grid item xs={1.5}>
+                      <Chip
+                        label={alert.severity}
+                        style={{ ...getChipColor(alert.severity), fontWeight: 'bold', borderRadius: '5px', paddingHorizontal: '8px' }}
+                      />
+                    </Grid>
+                    <Grid item xs={2}>
+                      <Typography variant="body1" color="textSecondary" fontWeight="bold">{alert.name}</Typography>
+                    </Grid>
+                    <Grid item xs={2}>
+                      <Typography color="textSecondary">{formatDateTime(alert.date)}</Typography>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Typography color="textSecondary">{alert.message}</Typography>
+                    </Grid>
+                    <Grid item xs={0.5}></Grid>
+                    <Grid item xs={2} container justifyContent="flex-start">
+                      <Button
+                        variant="contained"
+                        size="small"
+                        // onClick={() => navigate(alert.reference)}
+                        onClick={() => handleAction(alert.type, alert.details)}
+                        style={{ marginRight: '5px', backgroundColor: '#47bf93' }}
+                      >
+                        Action
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        size="small"
+                        style={{}}
+                      >
+                        Discard
+                      </Button>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={2}>
-                    <Typography variant="body1" color="textSecondary" fontWeight="bold">{alert.name}</Typography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Typography color="textSecondary">{formatDateTime(alert.date)}</Typography>
-                  </Grid>
-                  <Grid item xs={4}>
-                    <Typography color="textSecondary">{alert.message}</Typography>
-                  </Grid>
-                  <Grid item xs={0.5}></Grid>
-                  <Grid item xs={2} container justifyContent="flex-start">
-                    <Button
-                      variant="contained"
-                      size="small"
-                      // onClick={() => navigate(alert.reference)}
-                      onClick={() => handleAction(alert.type, alert.details)}
-                      style={{ marginRight: '5px', backgroundColor: '#47bf93' }}
-                    >
-                      Action
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="error"
-                      size="small"
-                      style={{}}
-                    >
-                      Discard
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Paper>
-            ))
-          )}
+                </Paper>
+              ))
+            )}
+      </div>
     </Grid>
   );
 }

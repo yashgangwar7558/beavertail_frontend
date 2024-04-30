@@ -277,7 +277,7 @@ const MenuBuilder = (props) => {
     return (
         <View style={{ flex: 1 }}>
             <ScrollView
-                style={styles.formContainer}
+                style={[styles.formContainer]}
             >
                 <View style={styles.inputContainer}>
                     <Text style={styles.label}>Name</Text>
