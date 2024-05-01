@@ -413,10 +413,12 @@ const AddInvoice = (props) => {
                             />
                             <TextInput
                                 style={styles.smallInput}
+                                maxLength={5}
+                                keyboardType='numeric'
                                 placeholder="Enter Quantity"
                                 placeholderTextColor="gray"
-                                value={ingredient.quantity ? ingredient.quantity.toString() : ''}
-                                onChangeText={(text) => { handleIngredientsChange(index, 'quantity', parseFloat(text)), calculateTotalAmount() }}
+                                value={ingredient.quantity ? ingredient.quantity : ''}
+                                onChangeText={(text) => { handleIngredientsChange(index, 'quantity', text), calculateTotalAmount() }}
                             />
                             <Picker
                                 style={styles.smallInput}
@@ -436,13 +438,16 @@ const AddInvoice = (props) => {
                             </Picker>
                             <TextInput
                                 style={styles.smallInput}
+                                maxLength={8}
+                                keyboardType='numeric'
                                 placeholder="Unit Price"
                                 placeholderTextColor="gray"
-                                value={ingredient.unitPrice ? ingredient.unitPrice.toString() : ''}
-                                onChangeText={(text) => { handleIngredientsChange(index, 'unitPrice', parseFloat(text)), calculateTotalAmount() }}
+                                value={ingredient.unitPrice ? ingredient.unitPrice : ''}
+                                onChangeText={(text) => { handleIngredientsChange(index, 'unitPrice', text), calculateTotalAmount() }}
                             />
                             <TextInput
                                 style={styles.smallInput}
+                                keyboardType='numeric'
                                 placeholder="Total"
                                 placeholderTextColor="gray"
                                 value={ingredient.total}

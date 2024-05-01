@@ -258,9 +258,11 @@ const PosSimulator = (props) => {
                             />
                             <TextInput
                                 style={styles.smallInput}
+                                keyboardType='numeric'
                                 placeholder="Quantity"
                                 placeholderTextColor="gray"
-                                value={item.quantity ? item.quantity.toString() : ''}
+                                maxLength={3}
+                                value={item.quantity ? item.quantity : ''}
                                 onChangeText={(text) => { handleItemChange(index, 'quantity', parseFloat(text)), calculateSubTotalAmount(), calculateTotalPayableAmount() }}
                             />
                             <TextInput
@@ -307,6 +309,7 @@ const PosSimulator = (props) => {
                     <TextInput
                         style={[styles.input]}
                         keyboardType='numeric'
+                        maxLength={5}
                         value={billData.tax}
                         onChangeText={handleTaxChange}
                     />

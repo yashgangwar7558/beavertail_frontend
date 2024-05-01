@@ -331,6 +331,7 @@ const MenuBuilder = (props) => {
                         <View key={index} style={styles.rowContainer}>
                             <TextInput
                                 style={styles.smallInput}
+                                maxLength={2}
                                 keyboardType='numeric'
                                 placeholder="Enter a quantity"
                                 placeholderTextColor="gray"
@@ -486,10 +487,12 @@ const MenuBuilder = (props) => {
                             />
                             <TextInput
                                 style={styles.smallInput}
+                                maxLength={6}
+                                keyboardType='numeric'
                                 placeholder="Enter a Quantity"
                                 placeholderTextColor="gray"
-                                value={ingredient.quantity ? ingredient.quantity.toString() : ''}
-                                onChangeText={(text) => handleIngredientsChange(index, 'quantity', parseFloat(text))}
+                                value={ingredient.quantity ? ingredient.quantity : ''}
+                                onChangeText={(text) => handleIngredientsChange(index, 'quantity', text)}
                             />
                             <Picker
                                 style={styles.smallInput}
@@ -527,9 +530,10 @@ const MenuBuilder = (props) => {
                     <Text style={styles.label}>Additional Cost</Text>
                     <TextInput
                         style={styles.input}
+                        maxLength={6}
                         keyboardType='numeric'
-                        value={recipeData.modifierCost ? recipeData.modifierCost.toString() : ''}
-                        onChangeText={(text) => setRecipeData({ ...recipeData, modifierCost: parseFloat(text) })}
+                        value={recipeData.modifierCost ? recipeData.modifierCost : ''}
+                        onChangeText={(text) => setRecipeData({ ...recipeData, modifierCost: text })}
                     />
                 </View>
 
@@ -537,9 +541,10 @@ const MenuBuilder = (props) => {
                     <Text style={styles.label}>Menu Price</Text>
                     <TextInput
                         style={styles.input}
+                        maxLength={6}
                         keyboardType='numeric'
-                        value={recipeData.menuPrice ? recipeData.menuPrice.toString() : ''}
-                        onChangeText={(text) => setRecipeData({ ...recipeData, menuPrice: parseFloat(text) })}
+                        value={recipeData.menuPrice ? recipeData.menuPrice : ''}
+                        onChangeText={(text) => setRecipeData({ ...recipeData, menuPrice: text })}
                     />
                 </View>
 
@@ -557,6 +562,7 @@ const MenuBuilder = (props) => {
                     </Picker>
                 </View>
 
+
                 <Icon.Button
                     style={styles.createBtn}
                     onPress={handleSubmit}
@@ -565,6 +571,12 @@ const MenuBuilder = (props) => {
                     underlayColor="transparent"
                     iconStyle={{ fontSize: 19 }}
                     color={"white"}
+                    onKeyDown={(event) => {
+                        if (event.key === 'Enter') {
+                            event.preventDefault();
+                            handleSubmit()
+                        }
+                    }}
                 >
                     <Text style={{ color: 'white', fontSize: 20, fontFamily: 'inherit' }}>{editRecipeData ? 'Update Recipe' : 'Create Recipe'}</Text>
                 </Icon.Button>

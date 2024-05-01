@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import client from '../utils/ApiConfig'
+import { PasswordOutlined } from '@mui/icons-material';
 export const AuthContext = createContext();
 // import { useNavigate } from 'react-router'
 
@@ -16,6 +17,21 @@ export const AuthProvider = ({ children }) => {
     const register = async (username, password, confirmPassword, firstName, lastName, email, mobileNo, address, rolesAssigned, tenantId, status, navigate) => {
         setIsLoading(true)
         try {
+            if (username.includes(' ')) {
+                setError('Invalid Username!')
+                setIsLoading(false)
+                return
+            }
+            if (password.includes(' ')) {
+                setError('Invalid Password!')
+                setIsLoading(false)
+                return
+            }
+            if (confirmPassword.includes(' ')) {
+                setError('Invalid Confirm Password!')
+                setIsLoading(false)
+                return
+            }
             const { data } = await client.post(
                 '/create-user',
                 {
@@ -58,6 +74,16 @@ export const AuthProvider = ({ children }) => {
     const login = async (username, password, navigate) => {
         setIsLoading(true);
         try {
+            if (username.includes(' ')) {
+                setError('Invalid Username!')
+                setIsLoading(false)
+                return
+            }
+            if (password.includes(' ')) {
+                setError('Invalid Password!')
+                setIsLoading(false)
+                return
+            }
             const { data } = await client.post(
                 '/sign-in',
                 {

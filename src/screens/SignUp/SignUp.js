@@ -32,6 +32,13 @@ const SignUp = ({ navigation }) => {
     event.preventDefault();
   }
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      register(username, password, confirmPassword, firstName, lastName, email, mobileNo, address, [], tenantId, status, navigate)
+    }
+  }
+
   const getTenantIds = async () => {
     try {
       const result = await client.post('/get-tenantids', {
@@ -64,6 +71,7 @@ const SignUp = ({ navigation }) => {
                   <TextField type="text" fullWidth placeholder='Firstname'
                     name='firstname' value={firstName}
                     onChange={(event) => setFirstName(event.target.value)}
+                    onKeyDown={handleKeyDown}
                     variant='standard'
                     InputProps={{
                       startAdornment: (
@@ -79,6 +87,7 @@ const SignUp = ({ navigation }) => {
                   <TextField type="text" fullWidth placeholder='Lastname'
                     name='lastname' value={lastName}
                     onChange={(event) => setLastName(event.target.value)}
+                    onKeyDown={handleKeyDown}
                     variant='standard'
                     InputProps={{
                       startAdornment: (
@@ -94,6 +103,7 @@ const SignUp = ({ navigation }) => {
                   <TextField type="text" fullWidth placeholder='Email'
                     name='email' value={email}
                     onChange={(event) => setEmail(event.target.value)}
+                    onKeyDown={handleKeyDown}
                     variant='standard'
                     InputProps={{
                       startAdornment: (
@@ -109,6 +119,7 @@ const SignUp = ({ navigation }) => {
                   <TextField type="text" fullWidth placeholder='Mobile Number'
                     name='mobileNo' value={mobileNo}
                     onChange={(event) => setMobileNo(event.target.value)}
+                    onKeyDown={handleKeyDown}
                     variant='standard'
                     InputProps={{
                       startAdornment: (
@@ -124,6 +135,7 @@ const SignUp = ({ navigation }) => {
                   <TextField type="text" fullWidth placeholder='Address'
                     name='address' value={address}
                     onChange={(event) => setAddress(event.target.value)}
+                    onKeyDown={handleKeyDown}
                     variant='standard'
                     InputProps={{
                       startAdornment: (
@@ -142,6 +154,7 @@ const SignUp = ({ navigation }) => {
                   <Radio
                     checked={status === 'pending_admin_approval'}
                     onChange={(event) => setStatus(event.target.value)}
+                    onKeyDown={handleKeyDown}
                     value="pending_admin_approval"
                     name="radio-buttons"
                     inputProps={{ 'aria-label': 'A' }}
@@ -151,6 +164,7 @@ const SignUp = ({ navigation }) => {
                   <Radio
                     checked={status === 'pending_superadmin_approval'}
                     onChange={(event) => setStatus(event.target.value)}
+                    onKeyDown={handleKeyDown}
                     value="pending_superadmin_approval"
                     name="radio-buttons"
                     inputProps={{ 'aria-label': 'B' }}
@@ -183,12 +197,14 @@ const SignUp = ({ navigation }) => {
                         setTenantId(newValue.id);
                       }
                     }}
+                    onKeyDown={handleKeyDown}
                   />
                 </div>
                 <div className='input-container' id='username'>
                   <TextField type="text" fullWidth placeholder='Username'
                     name='username' value={username}
                     onChange={(event) => setUsername(event.target.value)}
+                    onKeyDown={handleKeyDown}
                     variant='standard'
                     InputProps={{
                       startAdornment: (
@@ -204,6 +220,7 @@ const SignUp = ({ navigation }) => {
                   <TextField type={showPassword ? 'text' : 'password'} fullWidth placeholder='Password'
                     name='password' value={password}
                     onChange={(event) => setPassword(event.target.value)}
+                    onKeyDown={handleKeyDown}
                     variant='standard'
                     InputProps={{
                       startAdornment: (
@@ -229,6 +246,7 @@ const SignUp = ({ navigation }) => {
                   <TextField type={showPassword ? 'text' : 'password'} fullWidth placeholder='Confirm Password'
                     name='confirmPassword' value={confirmPassword}
                     onChange={(event) => setConfirmPassword(event.target.value)}
+                    onKeyDown={handleKeyDown}
                     variant='standard'
                     InputProps={{
                       startAdornment: (
@@ -258,7 +276,11 @@ const SignUp = ({ navigation }) => {
             ) : null}
 
             <div className="button-container">
-              <Button type="submit" className='register-button' variant='contained' onClick={() => register(username, password, confirmPassword, firstName, lastName, email, mobileNo, address, [], tenantId, status, navigate)}>Register User</Button>
+              <Button type="submit" className='register-button' variant='contained'
+                autoFocus
+                focusRipple={false}
+                onKeyDown={handleKeyDown}
+                onClick={() => register(username, password, confirmPassword, firstName, lastName, email, mobileNo, address, [], tenantId, status, navigate)}>Register User</Button>
               <h4 className="line"><span>Or</span></h4>
               <Button type="submit" className='login-button' variant='contained' onClick={() => { navigate('/'), setError('') }}>Login</Button>
             </div>

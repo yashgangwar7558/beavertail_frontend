@@ -166,6 +166,7 @@ const Ingredients = (props) => {
                                         <TextInput
                                             style={styles.editInput}
                                             value={newThreshold}
+                                            maxLength={5}
                                             onChangeText={(threshold) => setNewThreshold(threshold)}
                                         />
                                         <TouchableOpacity onPress={() => { setEditingIndex(null); handleThresholdUpdate(item._id, newThreshold); }} style={styles.tickButton}>

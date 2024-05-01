@@ -3,7 +3,7 @@ import Logo from '../../assets/logo/greenCactusAi.png';
 import Background from '../../assets/background1.jpg';
 import './SignIn.css'
 import { useNavigate } from 'react-router'
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import client from '../../utils/ApiConfig'
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -22,6 +22,13 @@ const SignIn = ({ navigation }) => {
         event.preventDefault();
     }
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            login(username, password, navigate);
+        }
+    }
+
     return (
         <div className='login-screen'>
             <div className='login-card'>
@@ -38,6 +45,7 @@ const SignIn = ({ navigation }) => {
                                     name='username' value={username}
                                     onChange={(event) => setUsername(event.target.value)}
                                     variant='standard'
+                                    onKeyDown={handleKeyDown}
                                     InputProps={{
                                         startAdornment: (
                                             <InputAdornment position='start'>
@@ -53,6 +61,7 @@ const SignIn = ({ navigation }) => {
                                     name='password' value={password}
                                     onChange={(event) => setPassword(event.target.value)}
                                     variant='standard'
+                                    onKeyDown={handleKeyDown}
                                     InputProps={{
                                         startAdornment: (
                                             <InputAdornment position='start'>
@@ -83,7 +92,17 @@ const SignIn = ({ navigation }) => {
                             ) : null}
 
                             <div className="loginbutton-container-l">
-                                <Button type="submit" className='login-button-l' variant='contained' onClick={() => login(username, password, navigate)}>Login</Button>
+                                <Button
+                                    type="submit"
+                                    className="login-button-l"
+                                    autoFocus
+                                    variant="contained"
+                                    focusRipple={false}
+                                    onKeyDown={handleKeyDown}
+                                    onClick={() => login(username, password, navigate)}
+                                >
+                                    Login
+                                </Button>
                             </div>
 
                             <h4 className="loginline"><span>Or</span></h4>
