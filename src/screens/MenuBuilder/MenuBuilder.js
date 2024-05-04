@@ -527,7 +527,7 @@ const MenuBuilder = (props) => {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Additional Cost</Text>
+                    <Text style={styles.label}>Additional Cost ($)</Text>
                     <TextInput
                         style={styles.input}
                         maxLength={6}
@@ -538,7 +538,7 @@ const MenuBuilder = (props) => {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Menu Price</Text>
+                    <Text style={styles.label}>Menu Price ($)</Text>
                     <TextInput
                         style={styles.input}
                         maxLength={6}

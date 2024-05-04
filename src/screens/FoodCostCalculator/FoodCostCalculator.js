@@ -181,7 +181,7 @@ const FoodCostCalculator = (props) => {
     const [loading, setLoading] = useState(false);
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-    const [typeToggle, setTypeToggle] = useState('Food')
+    const [typeToggle, setTypeToggle] = useState('All')
     const [selectedTypeWiseSales, setSelectedTypeWiseSales] = useState([])
     const [sortOption, setSortOption] = useState('quantitySold_descending')
     const [sortedTypeSales, setSortedTypeSales] = useState([]);
@@ -328,7 +328,7 @@ const FoodCostCalculator = (props) => {
                                 },
                             }}
                         />
-                        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginLeft: '15px' }}>
+                        {/* <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginLeft: '15px' }}>
                             <Typography variant="body2" sx={{ color: '#5e615f', font: 'inherit', fontWeight: '600' }}>Food</Typography>
                             <GreenSwitch
                                 checked={typeToggle === 'Beverage'}
@@ -336,7 +336,7 @@ const FoodCostCalculator = (props) => {
                                 inputProps={{ 'aria-label': 'Toggle Food/Beverage' }}
                             />
                             <Typography variant="body2" sx={{ color: '#5e615f', font: 'inherit', fontWeight: '600' }}>Beverage</Typography>
-                        </View>
+                        </View> */}
                     </View>
 
                     <View style={styles.rightTableButtons}>
@@ -361,7 +361,7 @@ const FoodCostCalculator = (props) => {
                             <ToggleButton value="Food">Food</ToggleButton>
                             <ToggleButton value="Beverage">Beverage</ToggleButton>
                         </ToggleButtonGroup> */}
-                        {/* <FormControl style={styles.picker}>
+                        <FormControl style={styles.picker}>
                             <Select
                                 labelId="picker-label"
                                 value={typeToggle}
@@ -370,11 +370,11 @@ const FoodCostCalculator = (props) => {
                                 IconComponent={KeyboardArrowDown}
                                 sx={{ '& .MuiSvgIcon-root': { color: '#ffffff' } }}
                             >
-                                <MenuItem value="All">All</MenuItem>
+                                <MenuItem value="All">Category: All</MenuItem>
                                 <MenuItem value="Food">Food</MenuItem>
                                 <MenuItem value="Beverage">Beverages</MenuItem>
                             </Select>
-                        </FormControl> */}
+                        </FormControl>
                         <FormControl style={styles.picker}>
                             <Select
                                 labelId="picker-label"

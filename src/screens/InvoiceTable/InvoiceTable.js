@@ -466,7 +466,7 @@ const InvoiceTable = (props) => {
                                                 <DataTable.Cell>{item.name}</DataTable.Cell>
                                                 <DataTable.Cell>{item.quantity}</DataTable.Cell>
                                                 <DataTable.Cell>{item.unit}</DataTable.Cell>
-                                                <DataTable.Cell>{item.unitPrice}</DataTable.Cell>
+                                                <DataTable.Cell>${(item.unitPrice).toFixed(2)}</DataTable.Cell>
                                             </DataTable.Row>
                                         ))
                                     }

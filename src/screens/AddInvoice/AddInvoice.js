@@ -348,7 +348,7 @@ const AddInvoice = (props) => {
                         value={invoiceData.invoiceDate}
                         onChange={(date) => setInvoiceData({ ...invoiceData, invoiceDate: date })}
                         formatDensity="spacious"
-                        format="DD-MM-YYYY"
+                        // format="DD-MM-YYYY"
                         slotProps={{ textField: { size: 'small' } }}
                     />
                 </View>
@@ -417,7 +417,7 @@ const AddInvoice = (props) => {
                                 keyboardType='numeric'
                                 placeholder="Enter Quantity"
                                 placeholderTextColor="gray"
-                                value={ingredient.quantity ? ingredient.quantity : ''}
+                                value={ingredient.quantity ? (ingredient.quantity) : ''}
                                 onChangeText={(text) => { handleIngredientsChange(index, 'quantity', text), calculateTotalAmount() }}
                             />
                             <Picker
@@ -466,7 +466,7 @@ const AddInvoice = (props) => {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Total Amount:</Text>
+                    <Text style={styles.label}>Total Amount ($)</Text>
                     <TextInput
                         style={[styles.input]}
                         keyboardType='numeric'

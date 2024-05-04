@@ -11,7 +11,7 @@ import { filterAlerts } from '../../helpers/filter.js';
 const Alerts = (props) => {
   const navigate = useNavigate({})
   const { userInfo } = useContext(AuthContext)
-  const { alerts, setAlerts, alertsLoading, setAlertsLoading } = useContext(AlertsContext)
+  const { fetchAlerts, alerts, setAlerts, alertsLoading, setAlertsLoading, alertStatus, setAlertStatus, discardAlert } = useContext(AlertsContext)
   const [sortOption, setSortOption] = useState('date_descending')
   const [filterByType, setFilterByType] = useState('All')
   const [filterBySeverity, setFilterBySeverity] = useState('All')
@@ -19,26 +19,30 @@ const Alerts = (props) => {
   const [filteredAlerts, setFilteredAlerts] = useState([])
 
   useEffect(() => {
+    fetchAlerts()
+  }, [])
+
+  useEffect(() => {
     props.setHeaderTitle('Alerts')
     setAlertsLoading(true)
     const [sortBy, sortOrder] = sortOption.split('_');
-    const sorted = sortAlerts(alerts, sortBy, sortOrder);
-    const typeFiltered = filterAlerts(sorted, 'type', filterByType);
-    const severityFiltered = filterAlerts(typeFiltered, 'severity', filterBySeverity);
-    const timeFiltered = filterAlerts(severityFiltered, 'time', filterByTime);
+    const sorted = sortAlerts(alerts, sortBy, sortOrder)
+    const typeFiltered = filterAlerts(sorted, 'type', filterByType)
+    const severityFiltered = filterAlerts(typeFiltered, 'severity', filterBySeverity)
+    const timeFiltered = filterAlerts(severityFiltered, 'time', filterByTime)
     setFilteredAlerts(timeFiltered)
     setAlertsLoading(false)
-  }, [alerts, sortOption, filterByType, filterBySeverity, filterByTime]);
+  }, [alerts, sortOption, filterByType, filterBySeverity, filterByTime])
 
   const toggleSeveritySort = () => {
-    const newSortOption = sortOption === 'severity_ascending' ? 'severity_descending' : 'severity_ascending';
-    setSortOption(newSortOption);
+    const newSortOption = sortOption === 'severity_ascending' ? 'severity_descending' : 'severity_ascending'
+    setSortOption(newSortOption)
   };
 
   const toggleDateSort = () => {
-    const newSortOption = sortOption === 'date_ascending' ? 'date_descending' : 'date_ascending';
-    setSortOption(newSortOption);
-  };
+    const newSortOption = sortOption === 'date_ascending' ? 'date_descending' : 'date_ascending'
+    setSortOption(newSortOption)
+  }
 
   const formatDateTime = (dateString) => {
     const date = new Date(dateString)
@@ -203,7 +207,7 @@ const Alerts = (props) => {
           <Grid item xs={0.5}>
           </Grid>
           <Grid item xs={2} container justifyContent='flex-start'>
-            <Typography variant="subtitle1" fontWeight="bold">Action</Typography>
+            <Typography variant="subtitle1" fontWeight="bold">Status</Typography>
           </Grid>
         </Grid>
       </Paper>
@@ -238,23 +242,31 @@ const Alerts = (props) => {
                     </Grid>
                     <Grid item xs={0.5}></Grid>
                     <Grid item xs={2} container justifyContent="flex-start">
-                      <Button
-                        variant="contained"
-                        size="small"
-                        // onClick={() => navigate(alert.reference)}
-                        onClick={() => handleAction(alert.type, alert.details)}
-                        style={{ marginRight: '5px', backgroundColor: '#47bf93' }}
-                      >
-                        Action
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        color="error"
-                        size="small"
-                        style={{}}
-                      >
-                        Discard
-                      </Button>
+                      {alert.active ? (
+                        <>
+                          <Button
+                            variant="contained"
+                            size="small"
+                            onClick={() => handleAction(alert.type, alert.details)}
+                            style={{ marginRight: '5px', backgroundColor: '#47bf93' }}
+                          >
+                            Action
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            color="error"
+                            size="small"
+                            onClick={() => discardAlert(alert._id)}
+                            style={{}}
+                          >
+                            Discard
+                          </Button>
+                        </>
+                      ) : (
+                        <Typography variant="body1" color="textSecondary">
+                          Inactive
+                        </Typography>
+                      )}
                     </Grid>
                   </Grid>
                 </Paper>

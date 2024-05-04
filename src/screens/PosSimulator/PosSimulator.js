@@ -197,7 +197,7 @@ const PosSimulator = (props) => {
                         value={billData.billingDate}
                         onChange={(date) => setBillData({ ...billData, billingDate: date })}
                         formatDensity="spacious"
-                        format="DD-MM-YYYY"
+                        // format="DD-MM-YYYY"
                         slotProps={{ textField: { size: 'small' } }}
                     />
                 </View>
@@ -269,7 +269,7 @@ const PosSimulator = (props) => {
                                 style={styles.smallInputNonEditable}
                                 placeholder="Price"
                                 placeholderTextColor="gray"
-                                value={item.menuPrice}
+                                value={(item.menuPrice).toFixed(2)}
                                 editable={false}
                                 onChangeText={(text) => handleItemChange(index, 'menuPrice', text)}
                             />
@@ -294,7 +294,7 @@ const PosSimulator = (props) => {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Sub Total: ($)</Text>
+                    <Text style={styles.label}>Sub Total ($)</Text>
                     <TextInput
                         style={[styles.input]}
                         keyboardType='numeric'
@@ -305,7 +305,7 @@ const PosSimulator = (props) => {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Tax: (%)</Text>
+                    <Text style={styles.label}>Tax (%)</Text>
                     <TextInput
                         style={[styles.input]}
                         keyboardType='numeric'
@@ -316,7 +316,7 @@ const PosSimulator = (props) => {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Total Payable Amount: ($)</Text>
+                    <Text style={styles.label}>Total Payable Amount ($)</Text>
                     <TextInput
                         style={[styles.input]}
                         keyboardType='numeric'
