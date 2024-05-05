@@ -176,9 +176,9 @@ const Ingredients = (props) => {
                                 ) : (
                                     <DataTable.Cell style={styles.cellRight} onPress={() => { setEditingIndex(index); setNewThreshold(item.threshold) }}>{item.threshold}%</DataTable.Cell>
                                 )}
-                                <DataTable.Cell style={styles.cellRight}>${(item.avgCost).toFixed(2)}</DataTable.Cell>
-                                <DataTable.Cell style={styles.cellRight}>${(item.medianPurchasePrice).toFixed(2)}</DataTable.Cell>
-                                <DataTable.Cell style={styles.cellLast}>${(item.lastPurchasePrice).toFixed(2)}</DataTable.Cell>
+                                <DataTable.Cell style={styles.cellRight}>${(item.avgCost)}</DataTable.Cell>
+                                <DataTable.Cell style={styles.cellRight}>${(item.medianPurchasePrice)}</DataTable.Cell>
+                                <DataTable.Cell style={styles.cellLast}>${(item.lastPurchasePrice)}</DataTable.Cell>
                             </DataTable.Row>
                         ))
                     )

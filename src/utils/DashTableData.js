@@ -157,42 +157,98 @@ export const SalesLastSevenDays = () => {
 
 export const TopCategoriesSalesMonth = () => {
     const { userInfo } = useContext(AuthContext);
+    const [typeWiseMonthSales, setTypeWiseMonthSales] = useState([])
 
-    const data = [
-        {
-            category: 'Chinese',
-            value: '200'
-        },
-        {
-            category: 'Burger',
-            value: '180'
-        },
-        {
-            category: 'Pizza',
-            value: '100'
-        },
-    ]
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const currentDate = new Date()
+                const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                const data = {
+                    tenantId: userInfo.user.tenant,
+                    startDate: startOfMonth,
+                    endDate: endOfMonth,
+                };
+                const result = await client.post('/get-typewise-sales', data, {
+                    headers: { 'Content-Type': 'application/json' },
+                });
+                setTypeWiseMonthSales(result.data.allTypesSalesData);
+            } catch (error) {
+                console.log(`Error fetching typewise sales data: ${error}`);
+            }
+        };
+        fetchData();
+    }, [])
+
+    const data = typeWiseMonthSales
+        .sort((a, b) => b.totalSales - a.totalSales)
+        .slice(0, 3)
+        .map(item => ({ category: item.subType, value: item.totalSales.toString() }));
+
+    // const data = [
+    //     {
+    //         category: 'Chinese',
+    //         value: '200'
+    //     },
+    //     {
+    //         category: 'Burger',
+    //         value: '180'
+    //     },
+    //     {
+    //         category: 'Pizza',
+    //         value: '100'
+    //     },
+    // ]
 
     return data
 }
 
 export const TopCategoriesSalesToday = () => {
     const { userInfo } = useContext(AuthContext);
+    const [typeWiseTodaySales, setTypeWiseTodaySales] = useState([])
 
-    const data = [
-        {
-            category: 'Chinese',
-            value: '100'
-        },
-        {
-            category: 'Burger',
-            value: '80'
-        },
-        {
-            category: 'Pizza',
-            value: '75'
-        },
-    ]
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const currentDate = new Date()
+                const startOfDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+                const endOfDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1);
+                const data = {
+                    tenantId: userInfo.user.tenant,
+                    startDate: startOfDay,
+                    endDate: endOfDay,
+                };
+                const result = await client.post('/get-typewise-sales', data, {
+                    headers: { 'Content-Type': 'application/json' },
+                });
+                setTypeWiseTodaySales(result.data.allTypesSalesData);
+            } catch (error) {
+                console.log(`Error fetching typewise sales data: ${error}`);
+            }
+        };
+        fetchData();
+    }, [])
+
+    const data = typeWiseTodaySales
+        .sort((a, b) => b.totalSales - a.totalSales)
+        .slice(0, 3)
+        .map(item => ({ category: item.subType, value: item.totalSales.toString() }));
+
+    // const data = [
+    //     {
+    //         category: 'Chinese',
+    //         value: '100'
+    //     },
+    //     {
+    //         category: 'Burger',
+    //         value: '80'
+    //     },
+    //     {
+    //         category: 'Pizza',
+    //         value: '75'
+    //     },
+    // ]
 
     return data
 }
