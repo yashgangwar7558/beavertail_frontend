@@ -141,82 +141,82 @@ export const BarChartData = () => {
     getMonthlyData()
   }, []);
 
-  // const data = monthWiseData.map(({ month, salesData }) => {
-  //   const monthlyData = {
-  //     month: month,
-  //   };
+  const data = monthWiseData.map(({ month, salesData }) => {
+    const monthlyData = {
+      month: month,
+    };
 
-  //   monthlyData[`month`] = month
-  //   salesData.forEach(({ type, totalProfitWmc }) => {
-  //     monthlyData[`${type}`] = totalProfitWmc.toFixed(2);
-  //     // monthlyData[`${type}Color`] = getColor(type);
-  //   });
+    monthlyData[`month`] = month
+    salesData.forEach(({ type, totalProfitWomc }) => {
+      monthlyData[`${type}`] = totalProfitWomc.toFixed(2);
+      // monthlyData[`${type}Color`] = getColor(type);
+    });
 
-  //   return monthlyData;
-  // })
+    return monthlyData;
+  })
 
-  const data = [
-    {
-      "month": "Apr-23",
-      "Food": 92,
-      "Beverages": 50
-    },
-    {
-      "month": "May-23",
-      "Food": 40,
-      "Beverages": 80
-    },
-    {
-      "month": "June-23",
-      "Food": 65,
-      "Beverages": 50
-    },
-    {
-      "month": "July-23",
-      "Food": 80,
-      "Beverages": 60
-    },
-    {
-      "month": "Aug-23",
-      "Food": 50,
-      "Beverages": 68
-    },
-    {
-      "month": "Sept-23",
-      "Food": 92,
-      "Beverages": 50
-    },
-    {
-      "month": "Oct-23",
-      "Food": 92,
-      "Beverages": 70
-    },
-    {
-      "month": "Nov-23",
-      "Food": 80,
-      "Beverages": 50
-    },
-    {
-      "month": "Dec-23",
-      "Food": 45,
-      "Beverages": 58
-    },
-    {
-      "month": "Jan-23",
-      "Food": 86,
-      "Beverages": 45
-    },
-    {
-      "month": "Feb-23",
-      "Food": 78,
-      "Beverages": 65
-    },
-    {
-      "month": "Mar-23",
-      "Food": 100,
-      "Beverages": 50
-    },
-  ]
+  // const data = [
+  //   {
+  //     "month": "Apr-23",
+  //     "Food": 92,
+  //     "Beverages": 50
+  //   },
+  //   {
+  //     "month": "May-23",
+  //     "Food": 40,
+  //     "Beverages": 80
+  //   },
+  //   {
+  //     "month": "June-23",
+  //     "Food": 65,
+  //     "Beverages": 50
+  //   },
+  //   {
+  //     "month": "July-23",
+  //     "Food": 80,
+  //     "Beverages": 60
+  //   },
+  //   {
+  //     "month": "Aug-23",
+  //     "Food": 50,
+  //     "Beverages": 68
+  //   },
+  //   {
+  //     "month": "Sept-23",
+  //     "Food": 92,
+  //     "Beverages": 50
+  //   },
+  //   {
+  //     "month": "Oct-23",
+  //     "Food": 92,
+  //     "Beverages": 70
+  //   },
+  //   {
+  //     "month": "Nov-23",
+  //     "Food": 80,
+  //     "Beverages": 50
+  //   },
+  //   {
+  //     "month": "Dec-23",
+  //     "Food": 45,
+  //     "Beverages": 58
+  //   },
+  //   {
+  //     "month": "Jan-23",
+  //     "Food": 86,
+  //     "Beverages": 45
+  //   },
+  //   {
+  //     "month": "Feb-23",
+  //     "Food": 78,
+  //     "Beverages": 65
+  //   },
+  //   {
+  //     "month": "Mar-23",
+  //     "Food": 100,
+  //     "Beverages": 50
+  //   },
+  // ]
 
   return data
 }

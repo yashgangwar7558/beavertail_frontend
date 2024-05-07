@@ -248,7 +248,11 @@ const Dashboard = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {
+              {topPurchasesValueWise.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={2} style={{ textAlign: 'center', color: '#666666' }}>No data</TableCell>
+                </TableRow>
+              ) : (
                 topPurchasesValueWise.map((item, index) => (
                   <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
                     <TableCell>{item.date}</TableCell>
@@ -256,7 +260,7 @@ const Dashboard = (props) => {
                     <TableCell>${item.invoiceValue}</TableCell>
                   </TableRow>
                 ))
-              }
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -281,7 +285,11 @@ const Dashboard = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {
+              {purchasesTopChange.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={2} style={{ textAlign: 'center', color: '#666666' }}>No data</TableCell>
+                </TableRow>
+              ) : (
                 purchasesTopChange.map((item, index) => (
                   <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
                     <TableCell>{item.date}</TableCell>
@@ -291,7 +299,7 @@ const Dashboard = (props) => {
                     <TableCell>{item.change}%</TableCell>
                   </TableRow>
                 ))
-              }
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -352,14 +360,18 @@ const Dashboard = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {
+              {topCategoriesSalesMonth.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={2} style={{ textAlign: 'center', color: '#666666' }}>No data</TableCell>
+                </TableRow>
+              ) : (
                 topCategoriesSalesMonth.map((item, index) => (
                   <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
                     <TableCell>{item.category}</TableCell>
                     <TableCell>${item.value}</TableCell>
                   </TableRow>
                 ))
-              }
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -381,14 +393,18 @@ const Dashboard = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {
+              {topCategoriesSalesToday.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={2} style={{ textAlign: 'center', color: '#666666' }}>No data</TableCell>
+                </TableRow>
+              ) : (
                 topCategoriesSalesToday.map((item, index) => (
                   <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
                     <TableCell>{item.category}</TableCell>
                     <TableCell>${item.value}</TableCell>
                   </TableRow>
                 ))
-              }
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -405,19 +421,23 @@ const Dashboard = (props) => {
           <Table size='small' aria-label="a dense table">
             <TableHead>
               <TableRow style={{ backgroundColor: '#f2f0f0' }}>
-                <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
+                <TableCell style={{ fontWeight: 'bold' }}>Item</TableCell>
                 <TableCell style={{ fontWeight: 'bold' }}>Value ($)</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {
+              {topItemsSalesMonth.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={2} style={{ textAlign: 'center', color: '#666666' }}>No data</TableCell>
+                </TableRow>
+              ) : (
                 topItemsSalesMonth.map((item, index) => (
                   <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
                     <TableCell>{item.item}</TableCell>
                     <TableCell>${item.value}</TableCell>
                   </TableRow>
                 ))
-              }
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -434,19 +454,23 @@ const Dashboard = (props) => {
           <Table size='small' aria-label="a dense table">
             <TableHead>
               <TableRow style={{ backgroundColor: '#f2f0f0' }}>
-                <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
+                <TableCell style={{ fontWeight: 'bold' }}>Item</TableCell>
                 <TableCell style={{ fontWeight: 'bold' }}>Value ($)</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {
+              {topItemsSalesToday.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={2} style={{ textAlign: 'center', color: '#666666' }}>No data</TableCell>
+                </TableRow>
+              ) : (
                 topItemsSalesToday.map((item, index) => (
                   <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
                     <TableCell>{item.item}</TableCell>
                     <TableCell>${item.value}</TableCell>
                   </TableRow>
                 ))
-              }
+              )}
             </TableBody>
           </Table>
         </TableContainer>
