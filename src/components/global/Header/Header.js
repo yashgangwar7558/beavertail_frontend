@@ -24,7 +24,7 @@ const HeaderWrapper = styled(Box)`
 	background-color: #121B28;
 	overflow: hidden;
 	position: sticky;
-	z-index: 5;
+	z-index: 100;
   	top: 0;
 `
 

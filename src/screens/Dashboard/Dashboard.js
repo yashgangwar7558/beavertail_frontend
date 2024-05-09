@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import StatBox from '../../components/StatBox'
 import { StatBoxData } from '../../utils/StatBoxData'
 import { LineChartHeaderData } from '../../utils/ChartData'
@@ -18,7 +18,6 @@ const DashboardGrid = styled(Box)`
 	grid-template-columns: repeat(12, 1fr);
 	grid-template-rows: 1fr 2fr 2fr;
 	grid-auto-rows: auto;
-	height: calc(100vh - 150px);
 	gap: 15px;
 	margin: 15px 15px;
 
@@ -116,12 +115,14 @@ const TableHeader = styled(Box)`
 const Dashboard = (props) => {
 
   const { width, height } = useWindowDimensions()
-  const statBoxData = StatBoxData()
+  const [typeToggle, setTypeToggle] = useState('Food');
+
+  const statBoxData = StatBoxData(typeToggle)
   const lineChartHeaderData = LineChartHeaderData()
-  const topRecipesCarouselData = TopRecipesCarouselData()
-  const topTypesCarouselData = TopTypesCarouselData()
-  const topPurchasedIngredientsCarouselData = TopPurchasedIngredientsCarouselData()
-  const topVendorsCarouselData = TopVendorsCarouselData()
+  // const topRecipesCarouselData = TopRecipesCarouselData()
+  // const topTypesCarouselData = TopTypesCarouselData()
+  // const topPurchasedIngredientsCarouselData = TopPurchasedIngredientsCarouselData()
+  // const topVendorsCarouselData = TopVendorsCarouselData()
   const topPurchasesValueWise = TopPurchasesValueWise()
   const purchasesTopChange = PurchasesTopChange()
   const salesLastSevenDays = SalesLastSevenDays()
@@ -135,30 +136,31 @@ const Dashboard = (props) => {
   }, [])
 
   return (
-    <DashboardGrid>
-      {statBoxData.map((item, index) => {
-        return (
-          <StatBoxGrid>
-            <StatBox
-              title={item.title}
-              subtitle={item.subtitle}
-              percentIcon={item.percentIcon}
-              percentChange={item.percentChange}
-              color={item.color}
-              title1={item.title1}
-              subtitle1={item.subtitle1}
-              percentIcon1={item.percentIcon1}
-              percentChange1={item.percentChange1}
-              color1={item.color1}
-              icon={item.icon}
-            />
-          </StatBoxGrid>
-        )
-      })}
+    <div style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 65px)', scrollbarWidth: 'none', '-ms-overflow-style': 'none', WebkitScrollbar: 'none' }}>
+      <DashboardGrid>
+        {statBoxData.map((item, index) => {
+          return (
+            <StatBoxGrid>
+              <StatBox
+                title={item.title}
+                subtitle={item.subtitle}
+                percentIcon={item.percentIcon}
+                percentChange={item.percentChange}
+                color={item.color}
+                title1={item.title1}
+                subtitle1={item.subtitle1}
+                percentIcon1={item.percentIcon1}
+                percentChange1={item.percentChange1}
+                color1={item.color1}
+                icon={item.icon}
+              />
+            </StatBoxGrid>
+          )
+        })}
 
-      <LineChartGrid>
-        <ChartHeader>
-          {/* {
+        <LineChartGrid>
+          <ChartHeader>
+            {/* {
             lineChartHeaderData.map((item) => {
               return (
                 <Box>
@@ -173,139 +175,139 @@ const Dashboard = (props) => {
             }
             )
           } */}
-          <Box>
-            <Typography variant="h6" fontFamily='inherit' fontWeight='600' color='#121B28'>
-              {lineChartHeaderData[0].title}
-            </Typography>
-            <Typography variant="h7" fontFamily='inherit' fontWeight='600' color='#047c44'>
-              {lineChartHeaderData[0].subtitle}
-            </Typography>
+            <Box>
+              <Typography variant="h6" fontFamily='inherit' fontWeight='600' color='#121B28'>
+                {lineChartHeaderData.length > 0 ? lineChartHeaderData[0].title : '0'}
+              </Typography>
+              <Typography variant="h7" fontFamily='inherit' fontWeight='600' color='#047c44'>
+                ${lineChartHeaderData.length > 0 ? lineChartHeaderData[0].subtitle.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : '0'}
+              </Typography>
+            </Box>
+            <Box>
+              <Typography variant="h6" fontFamily='inherit' fontWeight='600' color='#121B28'>
+                {lineChartHeaderData.length > 0 ? lineChartHeaderData[1].title : '0'}
+              </Typography>
+              <Typography variant="h7" fontFamily='inherit' fontWeight='600' color='#047c44'>
+                ${lineChartHeaderData.length > 0 ? lineChartHeaderData[1].subtitle.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : '0'}
+              </Typography>
+            </Box>
+            <Box>
+              <PaidOutlinedIcon sx={{ color: '#047c44', fontSize: '36px' }} />
+            </Box>
+          </ChartHeader>
+          <Divider style={{ margin: '8px 0px', flex: 1, width: '100%' }} />
+          <Box height="225px" mt="-25px" mb="10px">
+            <LineChart winWidth={width} />
           </Box>
-          <Box>
-            <Typography variant="h6" fontFamily='inherit' fontWeight='600' color='#121B28'>
-              {lineChartHeaderData[1].title}
-            </Typography>
-            <Typography variant="h7" fontFamily='inherit' fontWeight='600' color='#047c44'>
-              {lineChartHeaderData[1].subtitle}
-            </Typography>
-          </Box>
-          <Box>
-            <PaidOutlinedIcon sx={{ color: '#047c44', fontSize: '36px' }} />
-          </Box>
-        </ChartHeader>
-        <Divider style={{ margin: '8px 0px', flex: 1, width: '100%' }} />
-        <Box height="225px" mt="-25px" mb="10px">
-          <LineChart winWidth={width} />
-        </Box>
-      </LineChartGrid>
+        </LineChartGrid>
 
-      <BarChartGrid>
-        <ChartHeader>
-          <Box>
-            <Typography variant="h6" fontFamily='inherit' fontWeight='600' color='#121B28'>
-              {lineChartHeaderData[2].title}
-            </Typography>
-            <Typography variant="h7" fontFamily='inherit' fontWeight='600' color='#047c44'>
-              {lineChartHeaderData[2].subtitle}
-            </Typography>
+        <BarChartGrid>
+          <ChartHeader>
+            <Box>
+              <Typography variant="h6" fontFamily='inherit' fontWeight='600' color='#121B28'>
+                {lineChartHeaderData.length > 0 ? lineChartHeaderData[2].title : '0'}
+              </Typography>
+              <Typography variant="h7" fontFamily='inherit' fontWeight='600' color='#047c44'>
+                ${lineChartHeaderData.length > 0 ? lineChartHeaderData[2].subtitle.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : '0'}
+              </Typography>
+            </Box>
+            <Box>
+              <Typography variant="h6" fontFamily='inherit' fontWeight='600' color='#121B28'>
+                Food & Beverage Breakdown
+              </Typography>
+            </Box>
+            <Box>
+              <PaidOutlinedIcon sx={{ color: '#047c44', fontSize: '36px' }} />
+            </Box>
+          </ChartHeader>
+          <Divider style={{ margin: '10px 0px', flex: 1, width: '100%' }} />
+          <Box height="225px" mt="-30px" mb="10px">
+            <BarChart winWidth={width} />
           </Box>
-          <Box>
-            <Typography variant="h6" fontFamily='inherit' fontWeight='600' color='#121B28'>
-              Food & Beverage Breakdown
-            </Typography>
-          </Box>
-          <Box>
-            <PaidOutlinedIcon sx={{ color: '#047c44', fontSize: '36px' }} />
-          </Box>
-        </ChartHeader>
-        <Divider style={{ margin: '10px 0px', flex: 1, width: '100%' }} />
-        <Box height="225px" mt="-30px" mb="10px">
-          <BarChart winWidth={width} />
-        </Box>
-      </BarChartGrid>
+        </BarChartGrid>
 
-      {/* <ImageCarousel title='Top Items with Highest Margin' data={topRecipesCarouselData.topMargin} renderCarousel={props.renderCarousel} winWidth={width} />
+        {/* <ImageCarousel title='Top Items with Highest Margin' data={topRecipesCarouselData.topMargin} renderCarousel={props.renderCarousel} winWidth={width} />
       <ImageCarousel title='Top Items with Highest Sell' data={topRecipesCarouselData.topSales} renderCarousel={props.renderCarousel} winWidth={width} />
       <ImageCarousel title='Top Categories with Highest Margin' data={topTypesCarouselData.topMargin} renderCarousel={props.renderCarousel} winWidth={width} />
       <ImageCarousel title='Top Categories with Highest Sell' data={topTypesCarouselData.topSales} renderCarousel={props.renderCarousel} winWidth={width} />
       <ImageCarousel title='Top Ingredients Bought this week' data={topPurchasedIngredientsCarouselData.topIngredients} renderCarousel={props.renderCarousel} winWidth={width} />
       <ImageCarousel title='Top Vendors' data={topVendorsCarouselData.topVendors} renderCarousel={props.renderCarousel} winWidth={width} /> */}
 
-      <TableGrid1>
-        <TableHeader>
-          <Typography variant="h6" fontFamily='inherit' fontWeight='600' color='#121B28'>
-            Purchases - Value Wise
-          </Typography>
-        </TableHeader>
-        <Divider style={{ marginTop: '8px', marginBotton: '0px', flex: 1, width: '100%' }} />
-        <TableContainer style={{ overflow: 'hidden' }}>
-          <Table size='small' aria-label="a dense table">
-            <TableHead>
-              <TableRow style={{ backgroundColor: '#f2f0f0' }}>
-                <TableCell style={{ fontWeight: 'bold' }}>Date</TableCell>
-                <TableCell style={{ fontWeight: 'bold' }}># of Invoices</TableCell>
-                <TableCell style={{ fontWeight: 'bold' }}>Invoice Value ($)</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {topPurchasesValueWise.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={2} style={{ textAlign: 'center', color: '#666666' }}>No data</TableCell>
+        <TableGrid1>
+          <TableHeader>
+            <Typography variant="h6" fontFamily='inherit' fontWeight='600' color='#121B28'>
+              Purchases - Value Wise
+            </Typography>
+          </TableHeader>
+          <Divider style={{ marginTop: '8px', marginBotton: '0px', flex: 1, width: '100%' }} />
+          <TableContainer style={{ overflow: 'hidden' }}>
+            <Table size='small' aria-label="a dense table">
+              <TableHead>
+                <TableRow style={{ backgroundColor: '#f2f0f0' }}>
+                  <TableCell style={{ fontWeight: 'bold' }}>Date</TableCell>
+                  <TableCell style={{ fontWeight: 'bold' }}># of Invoices</TableCell>
+                  <TableCell style={{ fontWeight: 'bold' }}>Invoice Value ($)</TableCell>
                 </TableRow>
-              ) : (
-                topPurchasesValueWise.map((item, index) => (
-                  <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
-                    <TableCell>{item.date}</TableCell>
-                    <TableCell>{item.invoiceCount}</TableCell>
-                    <TableCell>${item.invoiceValue}</TableCell>
+              </TableHead>
+              <TableBody>
+                {topPurchasesValueWise.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={3} style={{ textAlign: 'center', color: '#666666' }}>No data</TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </TableGrid1>
+                ) : (
+                  topPurchasesValueWise.map((item, index) => (
+                    <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
+                      <TableCell>{item.date}</TableCell>
+                      <TableCell>{item.invoiceCount}</TableCell>
+                      <TableCell>${item.invoiceValue}</TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </TableGrid1>
 
-      <TableGrid1>
-        <TableHeader>
-          <Typography variant="h6" fontFamily='inherit' fontWeight='600' color='#121B28'>
-            Purchases - Top Change
-          </Typography>
-        </TableHeader>
-        <Divider style={{ marginTop: '8px', marginBotton: '0px', flex: 1, width: '100%' }} />
-        <TableContainer>
-          <Table size='small' aria-label="a dense table">
-            <TableHead>
-              <TableRow style={{ backgroundColor: '#f2f0f0' }}>
-                <TableCell style={{ fontWeight: 'bold' }}>Date</TableCell>
-                <TableCell style={{ fontWeight: 'bold' }}>Vendor</TableCell>
-                <TableCell style={{ fontWeight: 'bold' }}>Item</TableCell>
-                <TableCell style={{ fontWeight: 'bold' }}>Value Impact ($)</TableCell>
-                <TableCell style={{ fontWeight: 'bold' }}>Change (%)</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {purchasesTopChange.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={2} style={{ textAlign: 'center', color: '#666666' }}>No data</TableCell>
+        <TableGrid1>
+          <TableHeader>
+            <Typography variant="h6" fontFamily='inherit' fontWeight='600' color='#121B28'>
+              Purchases - Top Change
+            </Typography>
+          </TableHeader>
+          <Divider style={{ marginTop: '8px', marginBotton: '0px', flex: 1, width: '100%' }} />
+          <TableContainer>
+            <Table size='small' aria-label="a dense table">
+              <TableHead>
+                <TableRow style={{ backgroundColor: '#f2f0f0' }}>
+                  <TableCell style={{ fontWeight: 'bold' }}>Date</TableCell>
+                  <TableCell style={{ fontWeight: 'bold' }}>Vendor</TableCell>
+                  <TableCell style={{ fontWeight: 'bold' }}>Item</TableCell>
+                  <TableCell style={{ fontWeight: 'bold' }}>Value Impact ($)</TableCell>
+                  <TableCell style={{ fontWeight: 'bold' }}>Change (%)</TableCell>
                 </TableRow>
-              ) : (
-                purchasesTopChange.map((item, index) => (
-                  <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
-                    <TableCell>{item.date}</TableCell>
-                    <TableCell>{item.vendor}</TableCell>
-                    <TableCell>{item.item}</TableCell>
-                    <TableCell>${item.value_impact}</TableCell>
-                    <TableCell>{item.change}%</TableCell>
+              </TableHead>
+              <TableBody>
+                {purchasesTopChange.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} style={{ textAlign: 'center', color: '#666666' }}>No data</TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </TableGrid1>
+                ) : (
+                  purchasesTopChange.map((item, index) => (
+                    <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
+                      <TableCell>{item.date}</TableCell>
+                      <TableCell>{item.vendor}</TableCell>
+                      <TableCell>{item.item}</TableCell>
+                      <TableCell>${item.value_impact}</TableCell>
+                      <TableCell>{item.change}%</TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </TableGrid1>
 
-      {/* <TableGrid1>
+        {/* <TableGrid1>
         <TableHeader>
           <Typography variant="h6" fontFamily='inherit' fontWeight='600' color='#121B28'>
             Sales
@@ -341,144 +343,145 @@ const Dashboard = (props) => {
         </TableContainer>
       </TableGrid1> */}
 
-      <TableGrid2>
-        <TableHeader>
-          <Typography variant="h7" fontFamily='inherit' fontWeight='600' color='#121B28'>
-            Top Categories - This Month
-          </Typography>
-          {/* <Typography variant="body2" fontSize='12px' fontFamily='inherit' fontWeight='600' marginTop='2px' marginLeft='3px'>
+        <TableGrid2>
+          <TableHeader>
+            <Typography variant="h7" fontFamily='inherit' fontWeight='600' color='#121B28'>
+              Top Categories - This Month
+            </Typography>
+            {/* <Typography variant="body2" fontSize='12px' fontFamily='inherit' fontWeight='600' marginTop='2px' marginLeft='3px'>
             - Sales Wise (This Month)
           </Typography> */}
-        </TableHeader>
-        <Divider style={{ marginTop: '8px', marginBotton: '0px', flex: 1, width: '100%' }} />
-        <TableContainer>
-          <Table size='small' aria-label="a dense table">
-            <TableHead>
-              <TableRow style={{ backgroundColor: '#f2f0f0' }}>
-                <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
-                <TableCell style={{ fontWeight: 'bold' }}>Value ($)</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {topCategoriesSalesMonth.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={2} style={{ textAlign: 'center', color: '#666666' }}>No data</TableCell>
+          </TableHeader>
+          <Divider style={{ marginTop: '8px', marginBotton: '0px', flex: 1, width: '100%' }} />
+          <TableContainer>
+            <Table size='small' aria-label="a dense table">
+              <TableHead>
+                <TableRow style={{ backgroundColor: '#f2f0f0' }}>
+                  <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
+                  <TableCell style={{ fontWeight: 'bold' }}>Value ($)</TableCell>
                 </TableRow>
-              ) : (
-                topCategoriesSalesMonth.map((item, index) => (
-                  <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
-                    <TableCell>{item.category}</TableCell>
-                    <TableCell>${item.value}</TableCell>
+              </TableHead>
+              <TableBody>
+                {topCategoriesSalesMonth.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={2} style={{ textAlign: 'center', color: '#666666' }}>No data</TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </TableGrid2>
+                ) : (
+                  topCategoriesSalesMonth.map((item, index) => (
+                    <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
+                      <TableCell>{item.category}</TableCell>
+                      <TableCell>${item.value}</TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </TableGrid2>
 
-      <TableGrid2>
-        <TableHeader>
-          <Typography variant="h7" fontFamily='inherit' fontWeight='600' color='#121B28'>
-            Top Categories - Today
-          </Typography>
-        </TableHeader>
-        <Divider style={{ marginTop: '8px', marginBotton: '0px', flex: 1, width: '100%' }} />
-        <TableContainer>
-          <Table size='small' aria-label="a dense table">
-            <TableHead>
-              <TableRow style={{ backgroundColor: '#f2f0f0' }}>
-                <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
-                <TableCell style={{ fontWeight: 'bold' }}>Value ($)</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {topCategoriesSalesToday.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={2} style={{ textAlign: 'center', color: '#666666' }}>No data</TableCell>
+        <TableGrid2>
+          <TableHeader>
+            <Typography variant="h7" fontFamily='inherit' fontWeight='600' color='#121B28'>
+              Top Categories - Today
+            </Typography>
+          </TableHeader>
+          <Divider style={{ marginTop: '8px', marginBotton: '0px', flex: 1, width: '100%' }} />
+          <TableContainer>
+            <Table size='small' aria-label="a dense table">
+              <TableHead>
+                <TableRow style={{ backgroundColor: '#f2f0f0' }}>
+                  <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
+                  <TableCell style={{ fontWeight: 'bold' }}>Value ($)</TableCell>
                 </TableRow>
-              ) : (
-                topCategoriesSalesToday.map((item, index) => (
-                  <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
-                    <TableCell>{item.category}</TableCell>
-                    <TableCell>${item.value}</TableCell>
+              </TableHead>
+              <TableBody>
+                {topCategoriesSalesToday.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={2} style={{ textAlign: 'center', color: '#666666' }}>No data</TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </TableGrid2>
+                ) : (
+                  topCategoriesSalesToday.map((item, index) => (
+                    <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
+                      <TableCell>{item.category}</TableCell>
+                      <TableCell>${item.value}</TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </TableGrid2>
 
-      <TableGrid2>
-        <TableHeader>
-          <Typography variant="h7" fontFamily='inherit' fontWeight='600' color='#121B28'>
-            Top Item - This Month
-          </Typography>
-        </TableHeader>
-        <Divider style={{ marginTop: '8px', marginBotton: '0px', flex: 1, width: '100%' }} />
-        <TableContainer>
-          <Table size='small' aria-label="a dense table">
-            <TableHead>
-              <TableRow style={{ backgroundColor: '#f2f0f0' }}>
-                <TableCell style={{ fontWeight: 'bold' }}>Item</TableCell>
-                <TableCell style={{ fontWeight: 'bold' }}>Value ($)</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {topItemsSalesMonth.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={2} style={{ textAlign: 'center', color: '#666666' }}>No data</TableCell>
+        <TableGrid2>
+          <TableHeader>
+            <Typography variant="h7" fontFamily='inherit' fontWeight='600' color='#121B28'>
+              Top Item - This Month
+            </Typography>
+          </TableHeader>
+          <Divider style={{ marginTop: '8px', marginBotton: '0px', flex: 1, width: '100%' }} />
+          <TableContainer>
+            <Table size='small' aria-label="a dense table">
+              <TableHead>
+                <TableRow style={{ backgroundColor: '#f2f0f0' }}>
+                  <TableCell style={{ fontWeight: 'bold' }}>Item</TableCell>
+                  <TableCell style={{ fontWeight: 'bold' }}>Value ($)</TableCell>
                 </TableRow>
-              ) : (
-                topItemsSalesMonth.map((item, index) => (
-                  <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
-                    <TableCell>{item.item}</TableCell>
-                    <TableCell>${item.value}</TableCell>
+              </TableHead>
+              <TableBody>
+                {topItemsSalesMonth.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={2} style={{ textAlign: 'center', color: '#666666' }}>No data</TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </TableGrid2>
+                ) : (
+                  topItemsSalesMonth.map((item, index) => (
+                    <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
+                      <TableCell>{item.item}</TableCell>
+                      <TableCell>${item.value}</TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </TableGrid2>
 
-      <TableGrid2>
-        <TableHeader>
-          <Typography variant="h7" fontFamily='inherit' fontWeight='600' color='#121B28'>
-            Top Item - Today
-          </Typography>
-        </TableHeader>
-        <Divider style={{ marginTop: '8px', marginBotton: '0px', flex: 1, width: '100%' }} />
-        <TableContainer>
-          <Table size='small' aria-label="a dense table">
-            <TableHead>
-              <TableRow style={{ backgroundColor: '#f2f0f0' }}>
-                <TableCell style={{ fontWeight: 'bold' }}>Item</TableCell>
-                <TableCell style={{ fontWeight: 'bold' }}>Value ($)</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {topItemsSalesToday.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={2} style={{ textAlign: 'center', color: '#666666' }}>No data</TableCell>
+        <TableGrid2>
+          <TableHeader>
+            <Typography variant="h7" fontFamily='inherit' fontWeight='600' color='#121B28'>
+              Top Item - Today
+            </Typography>
+          </TableHeader>
+          <Divider style={{ marginTop: '8px', marginBotton: '0px', flex: 1, width: '100%' }} />
+          <TableContainer>
+            <Table size='small' aria-label="a dense table">
+              <TableHead>
+                <TableRow style={{ backgroundColor: '#f2f0f0' }}>
+                  <TableCell style={{ fontWeight: 'bold' }}>Item</TableCell>
+                  <TableCell style={{ fontWeight: 'bold' }}>Value ($)</TableCell>
                 </TableRow>
-              ) : (
-                topItemsSalesToday.map((item, index) => (
-                  <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
-                    <TableCell>{item.item}</TableCell>
-                    <TableCell>${item.value}</TableCell>
+              </TableHead>
+              <TableBody>
+                {topItemsSalesToday.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={2} style={{ textAlign: 'center', color: '#666666' }}>No data</TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </TableGrid2>
+                ) : (
+                  topItemsSalesToday.map((item, index) => (
+                    <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
+                      <TableCell>{item.item}</TableCell>
+                      <TableCell>${item.value}</TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </TableGrid2>
 
-      <Divider style={{ marginTop: '8px', marginBotton: '0px', flex: 1, width: '100%' }} />
+        {/* <Divider style={{ marginTop: '8px', marginBotton: '0px', flex: 1, width: '100%' }} /> */}
 
-    </DashboardGrid>
+      </DashboardGrid>
+    </div >
   )
 }
 

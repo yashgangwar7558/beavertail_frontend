@@ -8,12 +8,12 @@ import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
 import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 
-export const StatBoxData = () => {
+export const StatBoxData = (typeToggle) => {
     const { userInfo } = useContext(AuthContext);
-    const [todaysData, setTodaysData] = useState({ totalSales: 0, totalExpense: 0, totalProfit: 0 });
-    const [yesterdaysData, setYesterdayData] = useState({ totalSales: 0, totalExpense: 0, totalProfit: 0 });
-    const [monthsData, setMonthsData] = useState({ totalSales: 0, totalExpense: 0, totalProfit: 0 });
-    const [prevMonthsData, setPrevMonthsData] = useState({ totalSales: 0, totalExpense: 0, totalProfit: 0 });
+    const [todaysData, setTodaysData] = useState({ totalSales: 0.00, totalExpense: 0.00, totalProfit: 0.00 });
+    const [yesterdaysData, setYesterdayData] = useState({ totalSales: 0.00, totalExpense: 0.00, totalProfit: 0.00 });
+    const [monthsData, setMonthsData] = useState({ totalSales: 0.00, totalExpense: 0.00, totalProfit: 0.00 });
+    const [prevMonthsData, setPrevMonthsData] = useState({ totalSales: 0.00, totalExpense: 0.00, totalProfit: 0.00 });
     const [ordersFulfilled, setOrdersFulfilled] = useState(0);
     const [yesterdayOrdersFulfilled, setYesterdayOrdersFulfilled] = useState(0);
     const [itemsSold, setItemsSold] = useState(0);
@@ -192,39 +192,39 @@ export const StatBoxData = () => {
 
     const data = [
         {
-            title: `$ ${todaysData.totalSales}`,
-            subtitle: 'Todays Sales',
+            title: todaysData.totalSales,
+            subtitle: "Today's Sales",
             percentIcon: todaysData.totalSales >= yesterdaysData.totalSales ? <NorthRounded sx={{ color: '#1da32b', fontSize: '12px', stroke: "#1da32b", strokeWidth: 2 }} /> : <SouthRounded sx={{ color: '#b0192a', fontSize: '12px', stroke: "#b0192a", strokeWidth: 2 }} />,
             percentChange: calculatePercentageChange(yesterdaysData.totalSales, todaysData.totalSales),
             color: todaysData.totalSales >= yesterdaysData.totalSales ? '#1da32b' : '#b0192a',
-            title1: `$ ${(monthsData.totalSales)}`,
-            subtitle1: 'Months Sales',
+            title1: monthsData.totalSales,
+            subtitle1: "Month's Sales",
             percentIcon1: monthsData.totalSales >= prevMonthsData.totalSales ? <NorthRounded sx={{ color: '#1da32b', fontSize: '12px', stroke: "#1da32b", strokeWidth: 2 }} /> : <SouthRounded sx={{ color: '#b0192a', fontSize: '12px', stroke: "#b0192a", strokeWidth: 2 }} />,
             percentChange1: calculatePercentageChange(prevMonthsData.totalSales, monthsData.totalSales),
             color1: monthsData.totalSales >= prevMonthsData.totalSales ? '#1da32b' : '#b0192a',
             icon: <PointOfSaleOutlinedIcon sx={{ color: '#047c44', fontSize: '50px' }} />,
         },
         {
-            title: `$ ${todaysData.totalExpense}`,
-            subtitle: 'Todays Food Cost',
+            title: todaysData.totalExpense,
+            subtitle: "Today's Food Cost",
             percentIcon: todaysData.totalExpense >= yesterdaysData.totalExpense ? <NorthRounded sx={{ color: '#b0192a', fontSize: '12px', stroke: "#b0192a", strokeWidth: 2 }} /> : <SouthRounded sx={{ color: '#1da32b', fontSize: '12px', stroke: "#1da32b", strokeWidth: 2 }} />,
             percentChange: calculatePercentageChange(yesterdaysData.totalExpense, todaysData.totalExpense),
             color: todaysData.totalExpense >= yesterdaysData.totalExpense ? '#b0192a' : '#1da32b',
-            title1: `$ ${monthsData.totalExpense}`,
-            subtitle1: 'Months Food Cost',
+            title1: monthsData.totalExpense,
+            subtitle1: "Month's Food Cost",
             percentIcon1: monthsData.totalExpense >= prevMonthsData.totalExpense ? <NorthRounded sx={{ color: '#b0192a', fontSize: '12px', stroke: "#b0192a", strokeWidth: 2 }} /> : <SouthRounded sx={{ color: '#1da32b', fontSize: '12px', stroke: "#1da32b", strokeWidth: 2 }} />,
             percentChange1: calculatePercentageChange(prevMonthsData.totalExpense, monthsData.totalExpense),
             color1: monthsData.totalExpense >= prevMonthsData.totalExpense ? '#b0192a' : '#1da32b',
             icon: <ReceiptOutlinedIcon sx={{ color: '#047c44', fontSize: '50px' }} />,
         },
         {
-            title: `$ ${todaysData.totalProfit}`,
-            subtitle: 'Todays Gross Profit',
+            title: todaysData.totalProfit,
+            subtitle: "Today's Gross Profit",
             percentIcon: todaysData.totalProfit >= yesterdaysData.totalProfit ? <NorthRounded sx={{ color: '#1da32b', fontSize: '12px', stroke: "#1da32b", strokeWidth: 2 }} /> : <SouthRounded sx={{ color: '#b0192a', fontSize: '12px', stroke: "#b0192a", strokeWidth: 2 }} />,
             percentChange: calculatePercentageChange(yesterdaysData.totalProfit, todaysData.totalProfit),
             color: todaysData.totalProfit >= yesterdaysData.totalProfit ? '#1da32b' : '#b0192a',
-            title1: `$ ${monthsData.totalProfit}`,
-            subtitle1: 'Months Gross Profit',
+            title1: monthsData.totalProfit,
+            subtitle1: "Month's Gross Profit",
             percentIcon1: monthsData.totalProfit >= prevMonthsData.totalProfit ? <NorthRounded sx={{ color: '#1da32b', fontSize: '12px', stroke: "#1da32b", strokeWidth: 2 }} /> : <SouthRounded sx={{ color: '#b0192a', fontSize: '12px', stroke: "#b0192a", strokeWidth: 2 }} />,
             percentChange1: calculatePercentageChange(prevMonthsData.totalProfit, monthsData.totalProfit),
             color1: monthsData.totalProfit >= prevMonthsData.totalProfit ? '#1da32b' : '#b0192a',

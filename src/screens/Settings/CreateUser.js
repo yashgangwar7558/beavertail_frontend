@@ -112,7 +112,7 @@ export const CreateUser = (props) => {
     return (
         <div>
             <SettingsTabs />
-            <div>
+            <div style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 115px)'}}>
                 <Paper elevation={3} style={{ padding: '10px', margin: '16px', borderRadius: '12px' }}>
                     <Typography variant="h5" gutterBottom>
                         Create New User

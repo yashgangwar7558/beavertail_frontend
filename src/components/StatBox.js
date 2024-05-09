@@ -15,16 +15,15 @@ const StatBox = (props) => {
             <Box display='flex' justifyContent='space-between' margin='5px'>
                 <Box display='flex' flexDirection='column' justifyContent='space-between'>
 
-                    <Typography variant="h7" fontWeight='bold' color='#121B28' fontFamily='inherit'>
+                    <Typography variant="body" fontWeight='bold' color='#121B28' fontFamily='inherit' style={{ fontSize: '14px' }}>
                         {props.subtitle}
                     </Typography>
-
                     <Box display='flex' flexDirection='row' justifyContent='flex-start' alignItems='center'>
                         <Typography variant='h6' fontWeight='bold' color='#047c44' fontFamily='inherit'>
-                            {props.title}
+                            ${(props.title).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                         </Typography>
                         {props.percentChange != 0 && (
-                            <Typography variant='h8' fontWeight='bold' color={props.color} fontFamily='inherit' style={{ marginLeft: '10px', fontSize: '12px' }}>
+                            <Typography variant='body' fontWeight='bold' color={props.color} fontFamily='inherit' style={{ marginLeft: '10px', fontSize: '12px' }}>
                                 {props.percentIcon}
                                 {props.percentChange}%
                             </Typography>
@@ -33,16 +32,15 @@ const StatBox = (props) => {
 
                     <Divider style={{ margin: '10px 0px', flex: 1, width: '100%' }} />
 
-                    <Typography variant="h7" fontWeight='bold' color='#121B28' fontFamily='inherit'>
+                    <Typography variant="body" fontWeight='bold' color='#121B28' fontFamily='inherit' style={{ fontSize: '14px' }}>
                         {props.subtitle1}
                     </Typography>
-
                     <Box display='flex' justifyContent='flex-start' alignItems='center'>
                         <Typography variant='h6' fontWeight='bold' color='#047c44' fontFamily='inherit'>
-                            {props.title1}
+                            ${(props.title1).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                         </Typography>
                         {props.percentChange1 != 0 && (
-                            <Typography variant='h8' fontWeight='bold' color={props.color1} fontFamily='inherit' style={{ marginLeft: '10px', fontSize: '12px' }}>
+                            <Typography variant='body' fontWeight='bold' color={props.color1} fontFamily='inherit' style={{ marginLeft: '10px', fontSize: '12px' }}>
                                 {props.percentIcon1}
                                 {props.percentChange1}%
                             </Typography>
@@ -52,7 +50,7 @@ const StatBox = (props) => {
                 </Box>
 
                 <Box display='flex' flexDirection='column' justifyContent='space-between'>
-                    {props.icon}
+                    {/* {props.icon} */}
                     {/* <ProgressCircle progress={props.progress} />
                     <Typography variant='body2' fontStyle='italic' color='#047c44' fontFamily='inherit'>
                         {props.percentIncrease}

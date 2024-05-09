@@ -32,15 +32,15 @@ export const LineChartHeaderData = () => {
   const data = [
     {
       title: 'Revenue',
-      subtitle: `$ ${(yearlyData.totalSales)}`,
+      subtitle: yearlyData.totalSales,
     },
     {
       title: 'Food Cost',
-      subtitle: `$ ${(yearlyData.totalExpense)}`,
+      subtitle: yearlyData.totalExpense,
     },
     {
       title: 'Gross Profit',
-      subtitle: `$ ${(yearlyData.totalProfit)}`,
+      subtitle: yearlyData.totalProfit,
     },
     // {
     //   title: 'Total Revenue',

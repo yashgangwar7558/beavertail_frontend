@@ -158,7 +158,7 @@ const Alerts = (props) => {
             </FormControl>
           </Grid>
           <Grid item xs={3}>
-            <FormControl fullWidth>
+            {/* <FormControl fullWidth>
               <Select
                 labelId="picker-label"
                 value={sortOption}
@@ -170,6 +170,18 @@ const Alerts = (props) => {
                 <MenuItem value='date_ascending'>Oldest First</MenuItem>
                 <MenuItem value='severity_descending'>Highest Severity</MenuItem>
                 <MenuItem value='severity_ascending'>Lowest Severity</MenuItem>
+              </Select>
+            </FormControl> */}
+            <FormControl fullWidth>
+              <Select
+                labelId="picker-label"
+                value={alertStatus}
+                onChange={(e) => setAlertStatus(e.target.value)}
+                style={{ borderRadius: '5px', height: '35px', color: 'gray' }}
+                MenuProps={{ PaperProps: { style: { maxHeight: '300px' } } }}
+              >
+                <MenuItem value={true}>Select Status: Active</MenuItem>
+                <MenuItem value={false}>Inactive</MenuItem>
               </Select>
             </FormControl>
           </Grid>

@@ -420,7 +420,7 @@ const MarginCalculator = (props) => {
                     <DataTable.Title style={styles.headerCellLast}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Margin (%)</span></DataTable.Title>
                 </DataTable.Header>
 
-                <ScrollView style={{ maxHeight: '75vh' }} scrollIndicatorInsets={{ right: -5 }} showsVerticalScrollIndicator={false}>
+                <ScrollView style={{ maxHeight: 'calc(100vh - 180px)' }} scrollIndicatorInsets={{ right: -5 }} showsVerticalScrollIndicator={false}>
                     {loading ? (
                         <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 10 }} />
                     ) : (

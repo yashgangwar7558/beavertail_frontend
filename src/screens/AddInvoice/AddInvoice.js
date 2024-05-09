@@ -266,6 +266,7 @@ const AddInvoice = (props) => {
         <View style={{ flex: 1 }}>
             <ScrollView
                 style={styles.formContainer}
+                scrollIndicatorInsets={{ right: -5 }} showsVerticalScrollIndicator={true}
             >
 
                 {!location.state &&
@@ -566,10 +567,12 @@ const AddInvoice = (props) => {
 
 const styles = {
     formContainer: {
-        marginTop: 20,
+        // marginTop: 20,
         paddingBottom: 30,
+        paddingTop: 20,
         paddingHorizontal: 15,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        maxHeight: 'calc(100vh - 65px)'
     },
     heading: {
         fontSize: 24,

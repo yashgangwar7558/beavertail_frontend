@@ -395,33 +395,35 @@ const InvoiceTable = (props) => {
                             </DataTable.Title>
                         </DataTable.Header>
 
-                        {loading ? (
-                            <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 10 }} />
-                        ) : (
-                            filteredInvoices.map((item, index) => (
-                                <TouchableOpacity key={index} onPress={(event) => {
-                                    if (event.target && event.target.tagName === 'SELECT') {
-                                        return;
-                                    }
-                                    handleInvoiceClick(item);
-                                }}>
-                                    <DataTable.Row
-                                        style={index % 2 === 0 ? styles.evenRow : styles.oddRow}
-                                    >
-                                        <DataTable.Cell style={styles.cellFirst}>{item.uploadDate}</DataTable.Cell>
-                                        <DataTable.Cell style={styles.cell}>{item.vendor}</DataTable.Cell>
-                                        <DataTable.Cell style={styles.cell}>{item.invoiceNumber}</DataTable.Cell>
-                                        <DataTable.Cell style={styles.cell}>{item.invoiceDate}</DataTable.Cell>
-                                        <DataTable.Cell style={styles.cell}>{item.payment}</DataTable.Cell>
-                                        <DataTable.Cell style={styles.cell}>{item.status.type}</DataTable.Cell>
-                                        <DataTable.Cell style={styles.cellRight}>
-                                            ${item.total}
-                                        </DataTable.Cell>
-                                    </DataTable.Row>
-                                </TouchableOpacity>
-                            ))
-                        )
-                        }
+                        <ScrollView style={{ maxHeight: 'calc(100vh - 230px)' }} scrollIndicatorInsets={{ right: -5 }} showsVerticalScrollIndicator={false}>
+                            {loading ? (
+                                <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 10 }} />
+                            ) : (
+                                filteredInvoices.map((item, index) => (
+                                    <TouchableOpacity key={index} onPress={(event) => {
+                                        if (event.target && event.target.tagName === 'SELECT') {
+                                            return;
+                                        }
+                                        handleInvoiceClick(item);
+                                    }}>
+                                        <DataTable.Row
+                                            style={index % 2 === 0 ? styles.evenRow : styles.oddRow}
+                                        >
+                                            <DataTable.Cell style={styles.cellFirst}>{item.uploadDate}</DataTable.Cell>
+                                            <DataTable.Cell style={styles.cell}>{item.vendor}</DataTable.Cell>
+                                            <DataTable.Cell style={styles.cell}>{item.invoiceNumber}</DataTable.Cell>
+                                            <DataTable.Cell style={styles.cell}>{item.invoiceDate}</DataTable.Cell>
+                                            <DataTable.Cell style={styles.cell}>{item.payment}</DataTable.Cell>
+                                            <DataTable.Cell style={styles.cell}>{item.status.type}</DataTable.Cell>
+                                            <DataTable.Cell style={styles.cellRight}>
+                                                ${item.total}
+                                            </DataTable.Cell>
+                                        </DataTable.Row>
+                                    </TouchableOpacity>
+                                ))
+                            )
+                            }
+                        </ScrollView>
                     </DataTable>
                 </View>
 
@@ -471,141 +473,141 @@ const InvoiceTable = (props) => {
                                         ))
                                     }
                                 </DataTable>
-                                <View style={styles.invoiceDetailsButtonsContainer}>
-                                    <View style={styles.invoiceDetailsButtonsLeft}>
-                                        <Icon.Button
-                                            style={styles.blueTransparentBtn}
-                                            name="external-link"
-                                            onPress={() => { openInvoiceFile(selectedInvoice.invoiceUrl) }}
-                                            backgroundColor="transparent"
-                                            underlayColor="transparent"
-                                            iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
-                                            color={"#47bf93"}>
-                                            <Text style={[{ color: '#47bf93', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Open</Text>
-                                        </Icon.Button>
-                                    </View>
-                                    {selectedInvoice.status.type === 'Pending Review' ? (
-                                        <View style={styles.invoiceDetailsButtonsRight}>
-                                            <Icon.Button
-                                                style={styles.blueBtn}
-                                                name="check-square-o"
-                                                onPress={() => { updateInvoiceStatus(selectedInvoice._id, 'Pending Approval', '') }}
-                                                backgroundColor="transparent"
-                                                underlayColor="transparent"
-                                                iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
-                                                color={"white"}>
-                                                <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Mark Reviewed</Text>
-                                            </Icon.Button>
-                                            <Icon.Button
-                                                style={styles.blueBtn}
-                                                name="edit"
-                                                onPress={() => { navigate('/add-invoice', { state: { editInvoiceData: selectedInvoice } }), closeInvoiceDetails() }}
-                                                backgroundColor="transparent"
-                                                underlayColor="transparent"
-                                                iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
-                                                color={"white"}>
-                                                <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Edit</Text>
-                                            </Icon.Button>
-                                            <Icon.Button
-                                                style={styles.blueTransparentBtn}
-                                                name="close"
-                                                onPress={() => setRejectionInputVisibility(selectedInvoice._id, true)}
-                                                backgroundColor="transparent"
-                                                underlayColor="transparent"
-                                                iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
-                                                color={"#47bf93"}>
-                                                <Text style={[{ color: '#47bf93', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Reject</Text>
-                                            </Icon.Button>
-                                        </View>
-                                    ) : selectedInvoice.status.type === 'Pending Approval' ? (
-                                        <View style={styles.invoiceDetailsButtonsRight}>
-                                            <Icon.Button
-                                                style={styles.blueBtn}
-                                                name="check-square-o"
-                                                onPress={() => { processInvoice(selectedInvoice._id) }}
-                                                backgroundColor="transparent"
-                                                underlayColor="transparent"
-                                                iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
-                                                color={"white"}>
-                                                <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Mark Approved</Text>
-                                            </Icon.Button>
-                                            <Icon.Button
-                                                style={styles.blueBtn}
-                                                name="refresh"
-                                                onPress={() => { updateInvoiceStatus(selectedInvoice._id, 'Pending Review', '') }}
-                                                backgroundColor="transparent"
-                                                underlayColor="transparent"
-                                                iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
-                                                color={"white"}>
-                                                <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Send for Review</Text>
-                                            </Icon.Button>
-                                            <Icon.Button
-                                                style={styles.blueTransparentBtn}
-                                                name="close"
-                                                onPress={() => setRejectionInputVisibility(selectedInvoice._id, true)}
-                                                backgroundColor="transparent"
-                                                underlayColor="transparent"
-                                                iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
-                                                color={"#47bf93"}>
-                                                <Text style={[{ color: '#47bf93', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Reject</Text>
-                                            </Icon.Button>
-                                        </View>
-                                    ) : selectedInvoice.status.type === 'Review-Rejected' || selectedInvoice.status.type === 'Approval-Rejected' ? (
-                                        <View style={styles.invoiceDetailsButtonsRight}>
-                                            <Text>Invoice rejected with reason:</Text>
-                                            <Text>{selectedInvoice.status.remark}</Text>
-                                        </View>
-                                    ) : selectedInvoice.status.type === 'Processed-PendingPayment' ? (
-                                        <View style={styles.invoiceDetailsButtonsRight}>
-                                            <Icon.Button
-                                                style={styles.blueBtn}
-                                                name="paypal"
-                                                onPress={() => { updateInvoiceStatus(selectedInvoice._id, 'Processed-Paid', '') }}
-                                                backgroundColor="transparent"
-                                                underlayColor="transparent"
-                                                iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
-                                                color={"white"}>
-                                                <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Pay Vendor</Text>
-                                            </Icon.Button>
-                                        </View>
-                                    ) : (
-                                        <View style={styles.invoiceDetailsButtonsRight}>
-                                            <Text>Invoice is processed and closed, changes can't be reverted back</Text>
-                                        </View>
-                                    )}
-                                </View>
-                                {showRejectionInputs[selectedInvoice._id] && (
-                                    <View style={styles.rejectionContainer}>
-                                        <TextInput
-                                            style={[styles.rejectionInputField]}
-                                            placeholder="Provide rejection reason"
-                                            value={invoiceRejectionReason[selectedInvoice._id]}
-                                            onChangeText={(text) => setRejectionReason(selectedInvoice._id, text)}
-                                        />
-                                        <Icon.Button
-                                            style={styles.blueTransparentBtn}
-                                            name="close"
-                                            onPress={() => { setRejectionInputVisibility(selectedInvoice._id, false), setRejectionReason(selectedInvoice._id, '') }}
-                                            backgroundColor="transparent"
-                                            underlayColor="transparent"
-                                            iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
-                                            color={"#47bf93"}>
-                                            <Text style={[{ color: '#47bf93', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Cancel</Text>
-                                        </Icon.Button>
-                                        <Icon.Button
-                                            style={styles.blueBtn}
-                                            name="check"
-                                            onPress={() => { updateInvoiceStatus(selectedInvoice._id, 'Approval-Rejected', invoiceRejectionReason[selectedInvoice._id]), setRejectionReason(selectedInvoice._id, '') }}
-                                            backgroundColor="transparent"
-                                            underlayColor="transparent"
-                                            iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
-                                            color={"white"}>
-                                            <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Submit</Text>
-                                        </Icon.Button>
-                                    </View>
-                                )}
                             </View>
                         </ScrollView>
+                        <View style={styles.invoiceDetailsButtonsContainer}>
+                            <View style={styles.invoiceDetailsButtonsLeft}>
+                                <Icon.Button
+                                    style={styles.blueTransparentBtn}
+                                    name="external-link"
+                                    onPress={() => { openInvoiceFile(selectedInvoice.invoiceUrl) }}
+                                    backgroundColor="transparent"
+                                    underlayColor="transparent"
+                                    iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
+                                    color={"#47bf93"}>
+                                    <Text style={[{ color: '#47bf93', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Open</Text>
+                                </Icon.Button>
+                            </View>
+                            {selectedInvoice.status.type === 'Pending Review' ? (
+                                <View style={styles.invoiceDetailsButtonsRight}>
+                                    <Icon.Button
+                                        style={styles.blueBtn}
+                                        name="check-square-o"
+                                        onPress={() => { updateInvoiceStatus(selectedInvoice._id, 'Pending Approval', '') }}
+                                        backgroundColor="transparent"
+                                        underlayColor="transparent"
+                                        iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
+                                        color={"white"}>
+                                        <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Mark Reviewed</Text>
+                                    </Icon.Button>
+                                    <Icon.Button
+                                        style={styles.blueBtn}
+                                        name="edit"
+                                        onPress={() => { navigate('/add-invoice', { state: { editInvoiceData: selectedInvoice } }), closeInvoiceDetails() }}
+                                        backgroundColor="transparent"
+                                        underlayColor="transparent"
+                                        iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
+                                        color={"white"}>
+                                        <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Edit</Text>
+                                    </Icon.Button>
+                                    <Icon.Button
+                                        style={styles.blueTransparentBtn}
+                                        name="close"
+                                        onPress={() => setRejectionInputVisibility(selectedInvoice._id, true)}
+                                        backgroundColor="transparent"
+                                        underlayColor="transparent"
+                                        iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
+                                        color={"#47bf93"}>
+                                        <Text style={[{ color: '#47bf93', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Reject</Text>
+                                    </Icon.Button>
+                                </View>
+                            ) : selectedInvoice.status.type === 'Pending Approval' ? (
+                                <View style={styles.invoiceDetailsButtonsRight}>
+                                    <Icon.Button
+                                        style={styles.blueBtn}
+                                        name="check-square-o"
+                                        onPress={() => { processInvoice(selectedInvoice._id) }}
+                                        backgroundColor="transparent"
+                                        underlayColor="transparent"
+                                        iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
+                                        color={"white"}>
+                                        <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Mark Approved</Text>
+                                    </Icon.Button>
+                                    <Icon.Button
+                                        style={styles.blueBtn}
+                                        name="refresh"
+                                        onPress={() => { updateInvoiceStatus(selectedInvoice._id, 'Pending Review', '') }}
+                                        backgroundColor="transparent"
+                                        underlayColor="transparent"
+                                        iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
+                                        color={"white"}>
+                                        <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Send for Review</Text>
+                                    </Icon.Button>
+                                    <Icon.Button
+                                        style={styles.blueTransparentBtn}
+                                        name="close"
+                                        onPress={() => setRejectionInputVisibility(selectedInvoice._id, true)}
+                                        backgroundColor="transparent"
+                                        underlayColor="transparent"
+                                        iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
+                                        color={"#47bf93"}>
+                                        <Text style={[{ color: '#47bf93', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Reject</Text>
+                                    </Icon.Button>
+                                </View>
+                            ) : selectedInvoice.status.type === 'Review-Rejected' || selectedInvoice.status.type === 'Approval-Rejected' ? (
+                                <View style={styles.invoiceDetailsButtonsRight}>
+                                    <Text>Invoice rejected with reason:</Text>
+                                    <Text>{selectedInvoice.status.remark}</Text>
+                                </View>
+                            ) : selectedInvoice.status.type === 'Processed-PendingPayment' ? (
+                                <View style={styles.invoiceDetailsButtonsRight}>
+                                    <Icon.Button
+                                        style={styles.blueBtn}
+                                        name="paypal"
+                                        onPress={() => { updateInvoiceStatus(selectedInvoice._id, 'Processed-Paid', '') }}
+                                        backgroundColor="transparent"
+                                        underlayColor="transparent"
+                                        iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
+                                        color={"white"}>
+                                        <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Pay Vendor</Text>
+                                    </Icon.Button>
+                                </View>
+                            ) : (
+                                <View style={styles.invoiceDetailsButtonsRight}>
+                                    <Text>Invoice is processed and closed, changes can't be reverted back</Text>
+                                </View>
+                            )}
+                        </View>
+                        {showRejectionInputs[selectedInvoice._id] && (
+                            <View style={styles.rejectionContainer}>
+                                <TextInput
+                                    style={[styles.rejectionInputField]}
+                                    placeholder="Provide rejection reason"
+                                    value={invoiceRejectionReason[selectedInvoice._id]}
+                                    onChangeText={(text) => setRejectionReason(selectedInvoice._id, text)}
+                                />
+                                <Icon.Button
+                                    style={styles.blueTransparentBtn}
+                                    name="close"
+                                    onPress={() => { setRejectionInputVisibility(selectedInvoice._id, false), setRejectionReason(selectedInvoice._id, '') }}
+                                    backgroundColor="transparent"
+                                    underlayColor="transparent"
+                                    iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
+                                    color={"#47bf93"}>
+                                    <Text style={[{ color: '#47bf93', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Cancel</Text>
+                                </Icon.Button>
+                                <Icon.Button
+                                    style={styles.blueBtn}
+                                    name="check"
+                                    onPress={() => { updateInvoiceStatus(selectedInvoice._id, 'Approval-Rejected', invoiceRejectionReason[selectedInvoice._id]), setRejectionReason(selectedInvoice._id, '') }}
+                                    backgroundColor="transparent"
+                                    underlayColor="transparent"
+                                    iconStyle={{ fontSize: 19, padding: 0, margin: 0 }}
+                                    color={"white"}>
+                                    <Text style={[{ color: 'white', fontSize: 14, marginLeft: '4px', fontFamily: 'inherit' }]}>Submit</Text>
+                                </Icon.Button>
+                            </View>
+                        )}
                     </View>
                 )}
             </View>
@@ -646,7 +648,7 @@ const styles = StyleSheet.create({
     tableNav: {
         width: '100%',
         flexDirection: 'column',
-        padding: 12,
+        padding: 10,
         backgroundColor: '#e8e8e8',
     },
     tableButtonContainer: {
@@ -702,7 +704,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginTop: 10,
-        marginBottom: 10
+        marginBottom: 5
     },
     tableSearchBar: {
         flex: 1,
@@ -769,9 +771,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     invoiceContainer: {
-        // width: '50%',
-        // height: '100%',
-        flex: 1,
+        width: '80vh',
+        height: 'calc(100vh - 190px)',
+        // flex: 1,
         backgroundColor: '#fff',
         border: '3.5px solid #47bf93',
         borderRadius: 5,

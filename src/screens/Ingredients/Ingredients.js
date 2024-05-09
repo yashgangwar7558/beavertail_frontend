@@ -15,6 +15,7 @@ import {
     FormControl, InputLabel, MenuItem, Select,
 } from '@mui/material'
 import io from 'socket.io-client'
+import zIndex from '@mui/material/styles/zIndex.js';
 
 const Ingredients = (props) => {
     const navigate = useNavigate({});
@@ -148,6 +149,7 @@ const Ingredients = (props) => {
                     <DataTable.Title style={styles.headerCellLast}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Last Purchase Price ($)</span></DataTable.Title>
                 </DataTable.Header>
 
+                <ScrollView style={{ maxHeight: 'calc(100vh - 235px)' }} scrollIndicatorInsets={{ right: -5 }} showsVerticalScrollIndicator={false}>
                 {loading ? (
                     <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 10 }} />
                 ) : (
@@ -183,6 +185,7 @@ const Ingredients = (props) => {
                         ))
                     )
                 )}
+                </ScrollView>
             </DataTable>
 
         </View>
@@ -195,12 +198,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'white',
+        // position: 'sticky',
+        // top: 62,
+        // zIndex: 10,
     },
     tableNav: {
         width: '100%',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        padding: 12,
+        padding: 10,
         backgroundColor: '#e8e8e8',
     },
     tableButtonContainer: {
@@ -252,7 +258,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginTop: 10,
-        marginBottom: 10
+        marginBottom: 5
     },
     tableSearchBar: {
         flex: 1,
@@ -274,6 +280,9 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: 'black',
         backgroundColor: 'white',
+        // position: 'sticky',
+        // top: 180,
+        // zIndex: 5
     },
     headerCellLeft: {
 

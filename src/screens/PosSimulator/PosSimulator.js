@@ -172,6 +172,7 @@ const PosSimulator = (props) => {
         <View style={{ flex: 1 }}>
             <ScrollView
                 style={styles.formContainer}
+                scrollIndicatorInsets={{ right: -5 }} showsVerticalScrollIndicator={true}
             >
                 <View style={styles.inputContainer}>
                     <Text style={styles.label}>Bill Number</Text>
@@ -346,10 +347,12 @@ const PosSimulator = (props) => {
 
 const styles = {
     formContainer: {
-        marginTop: 10,
+        // marginTop: 10,
         paddingBottom: 30,
+        paddingTop: 10,
         paddingHorizontal: 15,
         backgroundColor: 'white',
+        maxHeight: 'calc(100vh - 65px)'
     },
     heading: {
         fontSize: 24,

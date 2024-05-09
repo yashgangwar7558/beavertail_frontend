@@ -14,6 +14,8 @@ import debounce from 'lodash.debounce'
 const AnalyticsDashboardGrid = styled(Grid)`
     width: 100%;
     padding-left: 10px;
+    overflow-y: auto;
+    max-height: calc(100vh - 50px);
 `
 const ChartGrid = styled(Box)`
     display: flex;
