@@ -130,7 +130,7 @@
    ]
    ```
 
-   Types can be stored in database by directly importing the JSON in file in MongoDb Compass, or by calling the api endpoint `create-unitmap` through Postman.
+   Types can be stored in database by directly importing the JSON in file in MongoDb Compass, or by calling the api endpoint `create-recipe-type` through Postman.
 
 6. Create Recipes, that can be created directly from the platform's Menu Builder.
 
