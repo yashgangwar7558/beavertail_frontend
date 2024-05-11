@@ -21,6 +21,7 @@ const SignUp = ({ navigation }) => {
   const [email, setEmail] = useState(null);
   const [mobileNo, setMobileNo] = useState(null);
   const [address, setAddress] = useState(null);
+  const [rolesAssigned, setRolesAssigned] = useState([]);
   const [tenantId, setTenantId] = useState(null);
   const [status, setStatus] = useState('pending_admin_approval');
 
@@ -54,6 +55,11 @@ const SignUp = ({ navigation }) => {
   useEffect(() => {
     getTenantIds();
   }, []);
+
+
+  // useEffect(() => {
+  //   getTenantRoles();
+  // }, [tenantId]);
 
   return (
     <div className='signup-screen'>
