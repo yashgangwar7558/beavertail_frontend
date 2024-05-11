@@ -33,7 +33,6 @@ const AccountWrapper = styled(Box)`
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
-	padding-right: 10px;
 `
 
 const headerFontStyle = {

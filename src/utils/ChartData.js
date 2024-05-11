@@ -159,17 +159,17 @@ export const BarChartData = () => {
   //   {
   //     "month": "Apr-23",
   //     "Food": 92,
-  //     "Beverages": 50
+  //     "Beverage": 50
   //   },
   //   {
   //     "month": "May-23",
   //     "Food": 40,
-  //     "Beverages": 80
+  //     "Beverage": 80
   //   },
   //   {
   //     "month": "June-23",
   //     "Food": 65,
-  //     "Beverages": 50
+  //     "Beverage": 50
   //   },
   //   {
   //     "month": "July-23",
@@ -179,42 +179,42 @@ export const BarChartData = () => {
   //   {
   //     "month": "Aug-23",
   //     "Food": 50,
-  //     "Beverages": 68
+  //     "Beverage": 68
   //   },
   //   {
   //     "month": "Sept-23",
   //     "Food": 92,
-  //     "Beverages": 50
+  //     "Beverage": 50
   //   },
   //   {
   //     "month": "Oct-23",
   //     "Food": 92,
-  //     "Beverages": 70
+  //     "Beverage": 70
   //   },
   //   {
   //     "month": "Nov-23",
   //     "Food": 80,
-  //     "Beverages": 50
+  //     "Beverage": 50
   //   },
   //   {
   //     "month": "Dec-23",
   //     "Food": 45,
-  //     "Beverages": 58
+  //     "Beverage": 58
   //   },
   //   {
   //     "month": "Jan-23",
   //     "Food": 86,
-  //     "Beverages": 45
+  //     "Beverage": 45
   //   },
   //   {
   //     "month": "Feb-23",
   //     "Food": 78,
-  //     "Beverages": 65
+  //     "Beverage": 65
   //   },
   //   {
   //     "month": "Mar-23",
   //     "Food": 100,
-  //     "Beverages": 50
+  //     "Beverage": 50
   //   },
   // ]
 
