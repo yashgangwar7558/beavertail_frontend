@@ -22,7 +22,7 @@
         "tenantId": "65db4f834179970e65c7fc6f",
         "roleName": "Admin",
         "roleDescription": "Access to all pages",
-        "featureIds": ["65db5d3a4179970e65c7fd48"],
+        "featureIds": ["65db5d3a4179970e65c7fd48"], // array to featureIds
         "roleTag": "admin"
       }
       {
@@ -34,6 +34,8 @@
       }
     ]
     ```
+
+    Roles can be stored in database by directly importing the JSON in file in MongoDb Compass, or by calling the api endpoint `create-role` through Postman.
 
 3. Create a User with admin access for the Tenant.
 
