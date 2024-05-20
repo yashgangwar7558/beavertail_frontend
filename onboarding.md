@@ -22,7 +22,7 @@
         "tenantId": "65db4f834179970e65c7fc6f",
         "roleName": "Admin",
         "roleDescription": "Access to all pages",
-        "featureIds": ["65db5d3a4179970e65c7fd48"], // array to featureIds
+        "featureIds": ["65db5d3a4179970e65c7fd48"], 
         "roleTag": "admin"
       }
       {
