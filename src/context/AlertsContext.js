@@ -6,8 +6,8 @@ import io from 'socket.io-client'
 export const AlertsContext = createContext();
 
 export const AlertsProvider = ({ children }) => {
-    const { userInfo } = useContext(AuthContext);
-    const [alerts, setAlerts] = useState([]);
+    const { userInfo } = useContext(AuthContext)
+    const [alerts, setAlerts] = useState([])
     const [alertsLoading, setAlertsLoading] = useState(false);
     const [alertStatus, setAlertStatus] = useState(true)
 
@@ -25,26 +25,26 @@ export const AlertsProvider = ({ children }) => {
             setAlertsLoading(false)
         } catch (error) {
             setAlertsLoading(false)
-            console.log(`getting alerts error ${error}`);
+            console.log(`getting alerts error ${error}`)
         }
-    };
+    }
 
     useEffect(() => {
         fetchAlerts();
-    }, [userInfo, alertStatus]);
+    }, [userInfo, alertStatus])
 
     useEffect(() => {
         const socket = io('http://localhost:8080')
 
         socket.on('newAlert', (newAlert) => {
             setAlerts(prevAlerts => [newAlert, ...prevAlerts])
-            console.log(newAlert);
-        });
+            console.log(newAlert)
+        })
 
         return () => {
-            socket.disconnect();
-        };
-    }, []);
+            socket.disconnect()
+        }
+    }, [])
 
     const discardAlert = async (alertId) => {
         try {
@@ -53,7 +53,7 @@ export const AlertsProvider = ({ children }) => {
                 tenantId: userInfo.user.tenant,
                 alertId: alertId,
                 active: false
-            };
+            }
             const result = await client.post('/update-active-status', data, {
                 headers: { 'Content-Type': 'application/json' },
             })
@@ -63,7 +63,7 @@ export const AlertsProvider = ({ children }) => {
             }
         } catch (error) {
             setAlertsLoading(false)
-            console.log(`updating alert active status error ${error}`);
+            console.log(`updating alert active status error ${error}`)
         }
     }
 
@@ -71,5 +71,5 @@ export const AlertsProvider = ({ children }) => {
         <AlertsContext.Provider value={{ fetchAlerts, alerts, setAlerts, alertsLoading, setAlertsLoading, alertStatus, setAlertStatus, discardAlert }}>
             {children}
         </AlertsContext.Provider>
-    );
-};
+    )
+}

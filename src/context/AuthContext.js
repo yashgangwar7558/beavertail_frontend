@@ -113,12 +113,11 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const logout = (navigate) => {
+    const logout = async (navigate) => {
         setIsLoading(true);
-        client.post(
+        await client.post(
             '/sign-out',
             {},
-
             {
                 headers: {
                     headers: { Authorization: `Bearer ${userInfo.token}` },

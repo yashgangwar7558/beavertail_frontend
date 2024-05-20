@@ -43,15 +43,15 @@ export const LineChartHeaderData = () => {
       subtitle: yearlyData.totalProfit,
     },
     // {
-    //   title: 'Total Revenue',
+    //   title: 'Revenue',
     //   subtitle: `$ 4400`,
     // },
     // {
-    //   title: 'Total Expense',
+    //   title: 'Food Cost',
     //   subtitle: `$ 3800`,
     // },
     // {
-    //   title: 'Total Profit',
+    //   title: 'Gross Profit',
     //   subtitle: `$ 600`,
     // },
   ]
@@ -115,7 +115,7 @@ export const LineChartData = () => {
 
 
 export const BarChartData = () => {
-  const { userInfo } = useContext(AuthContext);
+  const { userInfo } = useContext(AuthContext)
   const [monthWiseData, setMonthWiseData] = useState([])
 
   const getMonthlyData = async () => {
@@ -130,10 +130,10 @@ export const BarChartData = () => {
       };
       const result = await client.post('/get-monthwise-type-sales', data, {
         headers: { 'Content-Type': 'application/json' },
-      });
+      })
       setMonthWiseData(result.data.monthWiseSalesData)
     } catch (err) {
-      console.log(`Getting live data error ${err}`);
+      console.log(`Getting live data error ${err}`)
     }
   }
 

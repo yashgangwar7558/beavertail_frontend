@@ -36,7 +36,7 @@ const SignUp = ({ navigation }) => {
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      register(username, password, confirmPassword, firstName, lastName, email, mobileNo, address, [], tenantId, status, navigate)
+      register(username, password, confirmPassword, firstName, lastName, email, mobileNo, address, rolesAssigned, tenantId, status, navigate)
     }
   }
 
@@ -56,10 +56,33 @@ const SignUp = ({ navigation }) => {
     getTenantIds();
   }, []);
 
+  const fetchAdminRole = async () => {
+    try {
+      const data = {
+        tenantId,
+        roleName: 'Admin'
+      }
+      const result = await client.post('/get-role', data, {
+        headers: { 'Content-Type': 'application/json' },
+      })
+      return result.data.role
+    } catch (error) {
+      console.log(`getting tenant admin role error ${error}`);
+    }
+  }
 
-  // useEffect(() => {
-  //   getTenantRoles();
-  // }, [tenantId]);
+  useEffect(() => {
+    const fetchAndSetAdminRole = async () => {
+      if (status === 'pending_superadmin_approval' && tenantId) {
+        const roles = await fetchAdminRole(tenantId);
+        setRolesAssigned(roles);
+      } else if (status === 'pending_admin_approval') {
+        setRolesAssigned([]);
+      }
+    };
+
+    fetchAndSetAdminRole();
+  }, [status, tenantId]);
 
   return (
     <div className='signup-screen'>
@@ -286,7 +309,7 @@ const SignUp = ({ navigation }) => {
                 autoFocus
                 focusRipple={false}
                 onKeyDown={handleKeyDown}
-                onClick={() => register(username, password, confirmPassword, firstName, lastName, email, mobileNo, address, [], tenantId, status, navigate)}>Register User</Button>
+                onClick={() => register(username, password, confirmPassword, firstName, lastName, email, mobileNo, address, rolesAssigned, tenantId, status, navigate)}>Register User</Button>
               <h4 className="line"><span>Or</span></h4>
               <Button type="submit" className='login-button' variant='contained' onClick={() => { navigate('/'), setError('') }}>Login</Button>
             </div>

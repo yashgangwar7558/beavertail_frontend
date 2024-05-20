@@ -14,7 +14,28 @@
    }
    ```
 
-2. Create a User with admin access for the Tenant.
+2. Create Roles for new Tenant in the database. Create multiple roles in below JSON objects format.
+
+    ```json
+    [
+      {
+        "tenantId": "65db4f834179970e65c7fc6f",
+        "roleName": "Admin",
+        "roleDescription": "Access to all pages",
+        "featureIds": ["65db5d3a4179970e65c7fd48"],
+        "roleTag": "admin"
+      }
+      {
+        "tenantId": "65db6adc4179970e65c7fd54",
+        "roleName": "Business User",
+        "roleDescription": "Access to just reports",
+        "featureIds": ["65db5d3a4179970e65c7fd48"],
+        "roleTag": "business-user"
+      }
+    ]
+    ```
+
+3. Create a User with admin access for the Tenant.
 
    Method 1:
    Fill the details in the below JSON format and call `/create-user` endpoint using Postman.
@@ -43,7 +64,7 @@
    Method 2:
    Directly from the registration page selecting Admin as user type. In this case the superadmin needs to manually mark new admin status as `approved` in the Database, to successfully able to login.
 
-3. Create all ingredients with the required details in the JSON format as an array of JSON Objects.
+4. Create all ingredients with the required details in the JSON format as an array of JSON Objects.
 
    ```json
    [
@@ -65,7 +86,7 @@
 
    Ingredients can be stored in database by directly importing the JSON in file in MongoDb Compass, or by calling the api endpoint `create-ingredient` through Postman.
 
-4. Create Unitmappings for all ingredients with the required details in the JSON format as an array of JSON Objects.
+5. Create Unitmappings for all ingredients with the required details in the JSON format as an array of JSON Objects.
 
    ```json
    [
@@ -107,7 +128,7 @@
 
    Unitmaps can be stored in database by directly importing the JSON in file in MongoDb Compass, or by calling the api endpoint `create-unitmap` through Postman.
 
-5. Create Recipe categories like Food and Beverage, and also there sub-categories in the below JSON format.
+6. Create Recipe categories like Food and Beverage, and also there sub-categories in the below JSON format.
 
    ```json
    [
@@ -132,6 +153,6 @@
 
    Types can be stored in database by directly importing the JSON in file in MongoDb Compass, or by calling the api endpoint `create-recipe-type` through Postman.
 
-6. Create Recipes, that can be created directly from the platform's Menu Builder.
+7. Create Recipes, that can be created directly from the platform's Menu Builder.
 
-7. Rest all the processes can be done directly on the platform.
+8. Rest all the processes can be done directly on the platform.

@@ -113,11 +113,11 @@ export const UserManagement = (props) => {
         }
     };
 
-    const getUserRoles = async () => {
+    const getTenantRoles = async () => {
         try {
             setLoading(true);
             const tenantId = { tenantId: userInfo.user.tenant };
-            const result = await client.post('/get-all-roles', tenantId, {
+            const result = await client.post('/get-tenant-roles', tenantId, {
                 headers: { 'Content-Type': 'application/json' },
             });
             setRoles(result.data.roles);
@@ -130,7 +130,7 @@ export const UserManagement = (props) => {
     useEffect(() => {
         getApprovedUsers();
         getNonApprovedUsers();
-        getUserRoles();
+        getTenantRoles();
     }, []);
 
     const handleRoleChange = (userId, selectedUserRoles) => {
@@ -247,7 +247,7 @@ export const UserManagement = (props) => {
                                                     <MenuItem disabled value="">
                                                         <em>Choose atleast one...</em>
                                                     </MenuItem>
-                                                    {roles.map((role) => (
+                                                    {roles && roles.map((role) => (
                                                         <MenuItem key={role._id} value={role}>
                                                             <Checkbox
                                                                 checked={Boolean(selectedRoles[user._id] && selectedRoles[user._id].find(

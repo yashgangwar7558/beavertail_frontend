@@ -34,6 +34,7 @@ import { CreateUser } from '../../screens/Settings/CreateUser.js';
 import PermissionDeniedPage from '../../screens/PermissionDeniedPage';
 import NotFoundPage from '../../screens/NotFoundPage';
 import { AuthContext } from '../../context/AuthContext.js';
+import { AlertsProvider } from '../../context/AlertsContext';
 import styled, { ThemeProvider } from 'styled-components';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
@@ -105,30 +106,32 @@ const Navigation = () => {
       ) : userInfo.token ? (
         <>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Sidebar setHeaderTitle={setHeaderTitle} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
-            <Content isSidebarCollapsed={isSidebarCollapsed}>
-              <Header title={headerTitle} setHeaderTitle={setHeaderTitle} username={userInfo.user.firstName} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
-              <Routes>
-                {allowedRoutes.map(route => (
-                  <Route
-                    key={route.path}
-                    path={route.path}
-                    element={
-                      hasPermissionForRoute(route.path) ? (
-                        <>
-                          <route.component setHeaderTitle={setHeaderTitle}/>
-                        </>
-                      ) : (
-                        <Navigate to="/permission-denied" replace />
-                      )
-                    }
-                  />
-                ))}
-                <Route path="/permission-denied" element={<PermissionDeniedPage setHeaderTitle={setHeaderTitle}/>} />
-                <Route path="*" element={<Navigate to="/page-not-found" setHeaderTitle={setHeaderTitle}/>} />
-                <Route path="/page-not-found" element={<NotFoundPage setHeaderTitle={setHeaderTitle}/>} />
-              </Routes>
-            </Content>
+            <AlertsProvider>
+              <Sidebar setHeaderTitle={setHeaderTitle} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
+              <Content isSidebarCollapsed={isSidebarCollapsed}>
+                <Header title={headerTitle} setHeaderTitle={setHeaderTitle} username={userInfo.user.firstName} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
+                <Routes>
+                  {allowedRoutes.map(route => (
+                    <Route
+                      key={route.path}
+                      path={route.path}
+                      element={
+                        hasPermissionForRoute(route.path) ? (
+                          <>
+                            <route.component setHeaderTitle={setHeaderTitle} />
+                          </>
+                        ) : (
+                          <Navigate to="/permission-denied" replace />
+                        )
+                      }
+                    />
+                  ))}
+                  <Route path="/permission-denied" element={<PermissionDeniedPage setHeaderTitle={setHeaderTitle} />} />
+                  <Route path="*" element={<Navigate to="/page-not-found" setHeaderTitle={setHeaderTitle} />} />
+                  <Route path="/page-not-found" element={<NotFoundPage setHeaderTitle={setHeaderTitle} />} />
+                </Routes>
+              </Content>
+            </AlertsProvider>
           </LocalizationProvider>
         </>
       ) : (

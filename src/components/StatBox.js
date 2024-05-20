@@ -20,7 +20,8 @@ const StatBox = (props) => {
                     </Typography>
                     <Box display='flex' flexDirection='row' justifyContent='flex-start' alignItems='center'>
                         <Typography variant='h6' fontWeight='bold' color='#047c44' fontFamily='inherit'>
-                            ${(props.title).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            {props.subtitle === "Orders Fulfilled" ? "" : "$"}
+                            {(props.title).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                         </Typography>
                         {props.percentChange != 0 && (
                             <Typography variant='body' fontWeight='bold' color={props.color} fontFamily='inherit' style={{ marginLeft: '10px', fontSize: '12px' }}>
@@ -37,7 +38,8 @@ const StatBox = (props) => {
                     </Typography>
                     <Box display='flex' justifyContent='flex-start' alignItems='center'>
                         <Typography variant='h6' fontWeight='bold' color='#047c44' fontFamily='inherit'>
-                            ${(props.title1).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            {props.subtitle1 === "Items Sold" ? "" : "$"}
+                            {(props.title1).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                         </Typography>
                         {props.percentChange1 != 0 && (
                             <Typography variant='body' fontWeight='bold' color={props.color1} fontFamily='inherit' style={{ marginLeft: '10px', fontSize: '12px' }}>

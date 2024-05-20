@@ -9,10 +9,8 @@ const App = () => {
   return (
     <SafeAreaView style={styles.container}>
       <AuthProvider>
-        <AlertsProvider>
           <StatusBar backgroundColor="#06bcee" />
           <Navigation />
-        </AlertsProvider>
       </AuthProvider>
     </SafeAreaView>
   );
