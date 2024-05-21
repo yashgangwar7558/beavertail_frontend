@@ -1,6 +1,6 @@
 import axios from 'axios'
 // import { EXPO_PUBLIC_BACKEND_URL } from 'react-native-dotenv'
-const api = axios.create({ baseURL: 'http://localhost:8080' }); // https://beavertail-backend.onrender.com http://localhost:8080
+const api = axios.create({ baseURL: 'https://34.134.183.167:9090' }); // http://localhost:8080 https://34.134.183.167:9090
 
 api.interceptors.response.use(
   (response) => response,

@@ -34,7 +34,10 @@ export const AlertsProvider = ({ children }) => {
     }, [userInfo, alertStatus])
 
     useEffect(() => {
-        const socket = io('http://localhost:8080')
+        const socket = io('https://34.134.183.167:9090', {  // https://34.134.183.167:9090 http://localhost:8080
+            path: '/socket.io/',
+            transports: ['websocket'],
+        });
 
         socket.on('newAlert', (newAlert) => {
             setAlerts(prevAlerts => [newAlert, ...prevAlerts])

@@ -3,12 +3,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import client from '../utils/ApiConfig'
 import { PasswordOutlined } from '@mui/icons-material';
 export const AuthContext = createContext();
-// import { useNavigate } from 'react-router'
 
 export const AuthProvider = ({ children }) => {
-
-    // const navigate = useNavigate({});
-
+    
     const [userInfo, setUserInfo] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [splashLoading, setSplashLoading] = useState(false);
