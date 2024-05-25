@@ -12,8 +12,8 @@ import { AccountCircleRounded, LockRounded, VisibilityOffRounded, VisibilityRoun
 
 const SignIn = ({ navigation }) => {
     const navigate = useNavigate({});
-    const [username, setUsername] = useState(null);
-    const [password, setPassword] = useState(null);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const { isLoading, login, error, setError } = useContext(AuthContext);
 
     const [showPassword, setShowPassword] = React.useState(false);

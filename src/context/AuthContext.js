@@ -215,7 +215,6 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
-
     useEffect(() => {
         isLoggedIn()
         window.addEventListener('storage', handleStorageChange);

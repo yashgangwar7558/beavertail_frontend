@@ -13,16 +13,16 @@ import { AccountCircleRounded, LockRounded, VisibilityOffRounded, VisibilityRoun
 const SignUp = ({ navigation }) => {
   const navigate = useNavigate({});
   const [tenants, setTenants] = useState([])
-  const [username, setUsername] = useState(null);
-  const [password, setPassword] = useState(null);
-  const [confirmPassword, setConfirmPassword] = useState(null);
-  const [firstName, setFirstName] = useState(null);
-  const [lastName, setLastName] = useState(null);
-  const [email, setEmail] = useState(null);
-  const [mobileNo, setMobileNo] = useState(null);
-  const [address, setAddress] = useState(null);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [mobileNo, setMobileNo] = useState('');
+  const [address, setAddress] = useState('');
   const [rolesAssigned, setRolesAssigned] = useState([]);
-  const [tenantId, setTenantId] = useState(null);
+  const [tenantId, setTenantId] = useState('');
   const [status, setStatus] = useState('pending_admin_approval');
 
   const { isLoading, register, error, setError } = useContext(AuthContext);
