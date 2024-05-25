@@ -1,10 +1,7 @@
 import axios from 'axios'
+import Constants from 'expo-constants'
 
-// import { EXPO_PUBLIC_BACKEND_URL } from 'react-native-dotenv'
-
-console.log(process.env.EXPO_PUBLIC_BACKEND_URL)
-
-const api = axios.create({ baseURL: 'http://localhost:8080' }); // http://localhost:8080 https://34.134.183.167:9090
+const api = axios.create({ baseURL: Constants.expoConfig.extra.backendUrl }); // http://localhost:8080 https://35.209.240.116:9091
 
 let controller = new AbortController();
 
@@ -36,7 +33,7 @@ const cancelAllRequests = () => {
 
 const createLogoutApi = () => {
   return axios.create({
-    baseURL: 'http://localhost:8080',
+    baseURL: Constants.expoConfig.extra.backendUrl,
   });
 };
 

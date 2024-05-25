@@ -2,6 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import { AuthContext } from './AuthContext'
 import client from '../utils/ApiConfig'
 import io from 'socket.io-client'
+import Constants from 'expo-constants'
 
 export const AlertsContext = createContext();
 
@@ -36,7 +37,7 @@ export const AlertsProvider = ({ children }) => {
     }, [userInfo, alertStatus])
 
     useEffect(() => {
-        const socket = io('http://localhost:8080', {  // https://34.134.183.167:9090 http://localhost:8080
+        const socket = io(Constants.expoConfig.extra.backendUrl, {  // https://35.209.240.116:9091 http://localhost:8080
             path: '/socket.io/',
             transports: ['websocket'],
         });
