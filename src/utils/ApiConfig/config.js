@@ -2,6 +2,8 @@ import axios from 'axios'
 
 // import { EXPO_PUBLIC_BACKEND_URL } from 'react-native-dotenv'
 
+console.log(process.env.EXPO_PUBLIC_BACKEND_URL)
+
 const api = axios.create({ baseURL: 'http://localhost:8080' }); // http://localhost:8080 https://34.134.183.167:9090
 
 let controller = new AbortController();
