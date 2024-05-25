@@ -1,1 +1,1 @@
-export{default} from './config'
+export{default, cancelAllRequests, createLogoutApi} from './config'

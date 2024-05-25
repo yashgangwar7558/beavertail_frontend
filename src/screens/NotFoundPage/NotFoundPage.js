@@ -22,7 +22,9 @@ const NotFoundSubtitle = styled.p`
 
 const NotFoundPage = (props) => {
   useEffect(() => {
-    props.setHeaderTitle('')
+    if (props.setHeaderTitle != '') {
+      props.setHeaderTitle('')
+    }
   }, [])
   return (
     <NotFoundContainer>

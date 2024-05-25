@@ -30,11 +30,13 @@ export const AlertsProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        fetchAlerts();
+        if (userInfo && Object.keys(userInfo).length !== 0) {
+            fetchAlerts();
+        }
     }, [userInfo, alertStatus])
 
     useEffect(() => {
-        const socket = io('https://34.134.183.167:9090', {  // https://34.134.183.167:9090 http://localhost:8080
+        const socket = io('http://localhost:8080', {  // https://34.134.183.167:9090 http://localhost:8080
             path: '/socket.io/',
             transports: ['websocket'],
         });

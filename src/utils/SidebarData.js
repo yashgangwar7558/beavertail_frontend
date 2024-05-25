@@ -36,7 +36,7 @@ const iconSize = '25px';
 export const SidebarData = [
     {
         title: 'Home',
-        path: '/',
+        path: '/home',
         icon: <HomeOutlinedIcon sx={{ fontSize: iconSize }} />,
     },
     {

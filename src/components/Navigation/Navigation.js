@@ -71,7 +71,7 @@ const Navigation = () => {
   }, [headerTitle]);
 
   const allowedRoutes = [
-    { path: '/', component: Dashboard },
+    { path: '/home', component: Dashboard },
     { path: '/analytics-sales', component: AnalyticsSales },
     { path: '/analytics-purchases', component: AnalyticsPurchases },
     { path: '/menubuilder', component: MenuBuilder },
@@ -111,6 +111,8 @@ const Navigation = () => {
               <Content isSidebarCollapsed={isSidebarCollapsed}>
                 <Header title={headerTitle} setHeaderTitle={setHeaderTitle} username={userInfo.user.firstName} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
                 <Routes>
+                  <Route path="/" element={<Navigate to="/home" setHeaderTitle={setHeaderTitle} />} />
+                  <Route path="/signin" element={<Navigate to="/home" setHeaderTitle={setHeaderTitle} />} />
                   {allowedRoutes.map(route => (
                     <Route
                       key={route.path}
@@ -137,8 +139,15 @@ const Navigation = () => {
       ) : (
         <>
           <Routes>
-            <Route path="/" element={<SignIn />} />
+            <Route path="/" element={<Navigate to="/signin" />} />
+            {allowedRoutes.map(route => (
+              <Route key={route.path} path={route.path} element={<Navigate to="/signin" />} />
+            ))}
+            <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
+            {/* Reroute rest routes to /signin */}
+            {/* <Route path="*" element={<Navigate to="/page-not-found" setHeaderTitle=""/>} />
+            <Route path="/page-not-found" element={<NotFoundPage setHeaderTitle=""/>} /> */}
           </Routes>
         </>
       )}

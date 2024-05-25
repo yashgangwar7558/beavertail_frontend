@@ -311,7 +311,7 @@ const SignUp = ({ navigation }) => {
                 onKeyDown={handleKeyDown}
                 onClick={() => register(username, password, confirmPassword, firstName, lastName, email, mobileNo, address, rolesAssigned, tenantId, status, navigate)}>Register User</Button>
               <h4 className="line"><span>Or</span></h4>
-              <Button type="submit" className='login-button' variant='contained' onClick={() => { navigate('/'), setError('') }}>Login</Button>
+              <Button type="submit" className='login-button' variant='contained' onClick={() => { navigate('/signin'), setError('') }}>Login</Button>
             </div>
           </StyledEngineProvider>
         </Box>
