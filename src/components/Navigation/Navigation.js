@@ -39,6 +39,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { useNavigate } from 'react-router'
+import LoadingScreen from '../LoadingScreen/LoadingScreen.js';
 
 const Content = styled.main`
     margin: 0;
@@ -54,7 +55,7 @@ const Content = styled.main`
 `
 
 const Navigation = () => {
-  const { userInfo, splashLoading } = useContext(AuthContext);
+  const { userInfo, splashLoading, isLoading } = useContext(AuthContext);
   const [headerTitle, setHeaderTitle] = useState(() => {
     const storedTitle = localStorage.getItem('headerTitle');
     return storedTitle || 'Dashboard';
@@ -94,6 +95,10 @@ const Navigation = () => {
   const hasPermissionForRoute = (routePath) => {
     return userInfo.user.userAllowedRoutes.some(route => route === routePath);
   }
+
+  // if (isLoading) {
+  //   return <LoadingScreen />;
+  // }
 
   const renderWebNavigation = () => (
     <Router>

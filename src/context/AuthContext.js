@@ -161,7 +161,7 @@ export const AuthProvider = ({ children }) => {
             if (data.success) {
                 let userInfo = data;
                 await setUserInfo(userInfo);
-                await AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
+                await AsyncStorage.setItem('userInfo', JSON.stringify(userInfo))
                 const decodedToken = jwtDecode(userInfo.token);
                 const expirationTime = decodedToken.exp * 1000 - Date.now() - 60000;
                 if (expirationTime > 0) {
@@ -186,7 +186,7 @@ export const AuthProvider = ({ children }) => {
 
     const isLoggedIn = async () => {
         try {
-            setSplashLoading(true);
+            setIsLoading(true);
 
             let userInfo = await AsyncStorage.getItem('userInfo');
             userInfo = JSON.parse(userInfo);
@@ -208,9 +208,9 @@ export const AuthProvider = ({ children }) => {
                 }
             }
 
-            setSplashLoading(false);
+            setIsLoading(false);
         } catch (e) {
-            setSplashLoading(false);
+            setIsLoading(false);
             console.log(`is logged in error ${e}`);
         }
     }

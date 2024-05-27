@@ -216,7 +216,7 @@ const AddInvoice = (props) => {
             data.append('tenantId', invoiceData.tenantId);
             data.append('invoiceNumber', invoiceData.invoiceNumber);
             data.append('vendor', invoiceData.vendor);
-            data.append('invoiceDate', invoiceData.invoiceDate.format('YYYY-MM-DD'));
+            data.append('invoiceDate', invoiceData.invoiceDate);
             data.append('invoiceFile', invoiceData.invoiceFile);
             data.append('ingredients', JSON.stringify(invoiceData.ingredients));
             data.append('payment', invoiceData.payment);
@@ -255,6 +255,7 @@ const AddInvoice = (props) => {
             } else {
                 setLoading(false)
                 alert(result.data.message)
+                return
             }
         } catch (error) {
             console.log(`error adding invoice: ${error}`);
@@ -347,7 +348,7 @@ const AddInvoice = (props) => {
                         defaultValue={today}
                         disableFuture
                         value={invoiceData.invoiceDate}
-                        onChange={(date) => setInvoiceData({ ...invoiceData, invoiceDate: date })}
+                        onChange={(date) => setInvoiceData({ ...invoiceData, invoiceDate: date.format('YYYY-MM-DD')})}
                         formatDensity="spacious"
                         // format="DD-MM-YYYY"
                         slotProps={{ textField: { size: 'small' } }}

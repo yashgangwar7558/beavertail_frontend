@@ -270,7 +270,7 @@ const PosSimulator = (props) => {
                                 style={styles.smallInputNonEditable}
                                 placeholder="Price"
                                 placeholderTextColor="gray"
-                                value={(item.menuPrice).toFixed(2)}
+                                value={item.menuPrice != '' ? (item.menuPrice).toFixed(2) : ''}
                                 editable={false}
                                 onChangeText={(text) => handleItemChange(index, 'menuPrice', text)}
                             />
