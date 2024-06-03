@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { ScrollView, View, Text, TextInput, Button, StyleSheet, FlatList, TouchableOpacity, Picker } from 'react-native';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router'
@@ -23,6 +23,7 @@ const MenuBuilder = (props) => {
     const [currentCost, setCurrentCost] = useState();
     const [unitMaps, setUnitMaps] = useState([]);
     const [editMode, setEditMode] = useState(location.state ? true : false);
+    const fileInputRef = useRef(null)
     const [recipeData, setRecipeData] = useState({
         tenantId: userInfo.user.tenant,
         name: '',
@@ -203,13 +204,20 @@ const MenuBuilder = (props) => {
         setRecipeData({ ...recipeData, yields: updatedYields });
     };
 
+    const handleAddMedia = () => {
+        fileInputRef.current.click();
+    };
+
     const onDrop = (acceptedFiles) => {
         setRecipeData({ ...recipeData, photo: acceptedFiles[0] });
     };
 
     const { getRootProps, getInputProps } = useDropzone({
         onDrop,
-        accept: 'image/*',
+        accept: {
+            'image/png': ['.png'],
+            'image/jpeg': ['.jpeg'],
+        }
     });
 
     const handleSubmit = async () => {
@@ -368,12 +376,13 @@ const MenuBuilder = (props) => {
                             backgroundColor="transparent"
                             underlayColor="transparent"
                             iconStyle={{ fontSize: 18 }}
-                            color={"#47bf93"}>
+                            color={"#47bf93"}
+                            onPress={handleAddMedia}>
                             <Text style={{ color: '#47bf93', fontSize: 15, fontFamily: 'inherit' }}>Add Media</Text>
                         </Icon.Button>
                     </Text>
                     <div {...getRootProps()} style={styles.dropzone}>
-                        <input {...getInputProps()} />
+                        <input {...getInputProps()} ref={fileInputRef} />
                         <p style={{ fontFamily: 'inherit' }}>Drag 'n' drop your media here, or click to select one</p>
                     </div>
                     {recipeData.photo && (

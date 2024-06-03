@@ -230,7 +230,7 @@ const MenuItems = (props) => {
                                     recipes.map((item, index) => (
                                         <TouchableOpacity key={index} onPress={() => handleRecipeClick(item)}>
                                             <DataTable.Row
-                                                style={index % 2 === 0 ? styles.evenRow : styles.oddRow}
+                                                style={[index % 2 === 0 ? styles.evenRow : styles.oddRow, selectedRecipe?._id === item._id && styles.selectedRow]}
                                             >
                                                 <DataTable.Cell style={styles.cellLeft}>{item.name}</DataTable.Cell>
                                                 <DataTable.Cell style={[styles.cellLeft, { flex: 0.8 }]}>{item.subCategory}</DataTable.Cell>
@@ -522,7 +522,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     cellLeft: {
-
+    
     },
     cellRight: {
         justifyContent: 'flex-end',
@@ -538,6 +538,9 @@ const styles = StyleSheet.create({
     },
     oddRow: {
         backgroundColor: '#fff',
+    },
+    selectedRow: {
+        backgroundColor: '#cfe8de',
     },
     modalContainer: {
         flex: 1,

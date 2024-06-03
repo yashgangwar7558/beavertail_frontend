@@ -33,7 +33,6 @@ const LogoLabelMain = styled(Typography)`
 	font-size: 1.5rem;
 	color: #9CFCD8;
 `
-// #9CFCD8;
 
 const SidebarWrapper = styled.div`
     background: #121B28;
@@ -72,6 +71,19 @@ const MenuWrapper = styled(Box)`
 	align-items: center;
 	flex-direction: column;
 	margin-top: 10px;
+	max-height: 100vh;
+  	overflow-y: auto;
+
+	  /* Hide scrollbar for WebKit-based browsers */
+	  &::-webkit-scrollbar {
+		display: none;
+	  }
+	
+	  /* Hide scrollbar for Firefox */
+	  scrollbar-width: none;
+	
+	  /* For IE, Edge and others */
+	  -ms-overflow-style: none;
 `
 const LogoutButton = styled(Button)`
 	&.MuiButton-root {

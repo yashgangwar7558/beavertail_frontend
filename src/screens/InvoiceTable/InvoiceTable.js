@@ -44,7 +44,7 @@ const InvoiceTable = (props) => {
     const [showRejectionInputs, setShowRejectionInputs] = useState([]);
     const [invoiceRejectionReason, setInvoiceRejectionReason] = useState([]);
     const today = dayjs();
-    const statusTypes = ['Pending Review', 'Pending Approval', 'Proccessed-PendingPayment', 'Processed-Paid', 'Review-Rejected', 'Approval-Rejected']
+    const statusTypes = ['Pending Review', 'Pending Approval', 'Processed-PendingPayment', 'Processed-Paid', 'Review-Rejected', 'Approval-Rejected']
 
     useEffect(() => {
         props.setHeaderTitle('Invoices')
@@ -93,11 +93,19 @@ const InvoiceTable = (props) => {
     };
 
     const handleStartDateChange = (date) => {
-        setStartDate(date.format('YYYY-MM-DD'));
+        setStartDate(date);
+        if (date.isAfter(endDate)) {
+            setStartDate(date.format('YYYY-MM-DD'))
+        }
+        // setStartDate(date.format('YYYY-MM-DD'));
     };
 
     const handleEndDateChange = (date) => {
-        setEndDate(date.format('YYYY-MM-DD'));
+        setEndDate(date);
+        if (date.isBefore(startDate)) {
+            setEndDate(date.format('YYYY-MM-DD'))
+        }
+        // setEndDate(date.format('YYYY-MM-DD'));
     };
 
     const onDrop = (acceptedFiles) => {
@@ -241,6 +249,7 @@ const InvoiceTable = (props) => {
                                 defaultValue={today}
                                 disableFuture
                                 value={startDate}
+                                maxDate={endDate}
                                 onChange={handleStartDateChange}
                                 formatDensity="spacious"
                                 slotProps={{ textField: { size: 'small' } }}
@@ -258,6 +267,7 @@ const InvoiceTable = (props) => {
                                 defaultValue={today}
                                 disableFuture
                                 value={endDate}
+                                minDate={startDate}
                                 onChange={handleEndDateChange}
                                 formatDensity="spacious"
                                 slotProps={{ textField: { size: 'small' } }}
@@ -370,7 +380,7 @@ const InvoiceTable = (props) => {
                                 </span>
                             </DataTable.Title>
                             <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Payment</span></DataTable.Title>
-                            <DataTable.Title style={styles.headerCell}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Status</span></DataTable.Title>
+                            <DataTable.Title style={[styles.headerCell, { flex: 1.2 }]}><span style={{ fontWeight: 'bold', fontSize: '14px', color: 'black' }}>Status</span></DataTable.Title>
                             <DataTable.Title style={styles.headerCellRight}>
                                 <span
                                     style={{
@@ -407,14 +417,14 @@ const InvoiceTable = (props) => {
                                         handleInvoiceClick(item);
                                     }}>
                                         <DataTable.Row
-                                            style={index % 2 === 0 ? styles.evenRow : styles.oddRow}
+                                            style={[index % 2 === 0 ? styles.evenRow : styles.oddRow, selectedInvoice?._id === item._id && styles.selectedRow]}
                                         >
                                             <DataTable.Cell style={styles.cellFirst}>{item.uploadDate}</DataTable.Cell>
                                             <DataTable.Cell style={styles.cell}>{item.vendor}</DataTable.Cell>
                                             <DataTable.Cell style={styles.cell}>{item.invoiceNumber}</DataTable.Cell>
                                             <DataTable.Cell style={styles.cell}>{item.invoiceDate}</DataTable.Cell>
                                             <DataTable.Cell style={styles.cell}>{item.payment}</DataTable.Cell>
-                                            <DataTable.Cell style={styles.cell}>{item.status.type}</DataTable.Cell>
+                                            <DataTable.Cell style={[styles.cell, { flex: 1.2 }]}>{item.status.type}</DataTable.Cell>
                                             <DataTable.Cell style={styles.cellRight}>
                                                 ${item.total}
                                             </DataTable.Cell>
@@ -761,6 +771,16 @@ const styles = StyleSheet.create({
     },
     oddRow: {
         backgroundColor: '#fff',
+    },
+    selectedRow: {
+        backgroundColor: '#cfe8de',
+    },
+    cellText: {
+        flex: 1,
+        justifyContent: 'center',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
     },
     smallInput: {
         // flex: 1,

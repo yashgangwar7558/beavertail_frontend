@@ -145,7 +145,11 @@ const AddInvoice = (props) => {
 
     const { getRootProps, getInputProps } = useDropzone({
         onDrop,
-        accept: 'image/jpeg, image/png, application/pdf',
+        accept: {
+            'image/png': ['.png'],
+            'image/jpeg': ['.jpeg'],
+            'application/pdf': ['.pdf'],
+        },
         // maxFiles: 1,
     });
 

@@ -240,13 +240,19 @@ const FoodCostCalculator = (props) => {
 
 
     const handleStartDateChange = (date) => {
-        setStartDate(date.format('YYYY-MM-DD'));
-        console.log(date.format('YYYY-MM-DD'));
+        setStartDate(date);
+        if (date.isAfter(endDate)) {
+            setStartDate(date.format('YYYY-MM-DD'))
+        }
+        // setStartDate(date.format('YYYY-MM-DD'));
     };
 
     const handleEndDateChange = (date) => {
-        setEndDate(date.format('YYYY-MM-DD'));
-        console.log(date.format('YYYY-MM-DD'));
+        setEndDate(date);
+        if (date.isBefore(startDate)) {
+            setEndDate(date.format('YYYY-MM-DD'))
+        }
+        // setEndDate(date.format('YYYY-MM-DD'));
     };
 
     const handleTypesToggle = (subTypeName) => {
@@ -292,6 +298,7 @@ const FoodCostCalculator = (props) => {
                             defaultValue={today}
                             disableFuture
                             value={startDate}
+                            maxDate={endDate}
                             onChange={handleStartDateChange}
                             formatDensity="spacious"
                             slotProps={{
@@ -313,6 +320,7 @@ const FoodCostCalculator = (props) => {
                             defaultValue={today}
                             disableFuture
                             value={endDate}
+                            minDate={startDate}
                             onChange={handleEndDateChange}
                             formatDensity="spacious"
                             slotProps={{
