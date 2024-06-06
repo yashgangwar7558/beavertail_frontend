@@ -97,7 +97,7 @@ const SignUp = ({ navigation }) => {
             <StyledEngineProvider injectFirst>
               <div className="form-container">
                 <div className='left-container'>
-                  <div className='input-container' id='firstname'>
+                  <div className='name-container' id='firstname'>
                     <TextField type="text" fullWidth placeholder='Firstname'
                       name='firstname' value={firstName}
                       onChange={(event) => setFirstName(event.target.value)}
@@ -112,8 +112,6 @@ const SignUp = ({ navigation }) => {
                         disableUnderline: true,
                       }}
                     />
-                  </div>
-                  <div className='input-container' id='lastname'>
                     <TextField type="text" fullWidth placeholder='Lastname'
                       name='lastname' value={lastName}
                       onChange={(event) => setLastName(event.target.value)}
@@ -246,7 +244,7 @@ const SignUp = ({ navigation }) => {
                       }}
                     />
                   </div>
-                  <div className="input-container" id='password'>
+                  <div className="password-container" id='password'>
                     <TextField type={showPassword ? 'text' : 'password'} fullWidth placeholder='Password'
                       name='password' value={password}
                       onChange={(event) => setPassword(event.target.value)}
@@ -271,8 +269,6 @@ const SignUp = ({ navigation }) => {
                         )
                       }}
                     />
-                  </div>
-                  <div className="input-container" id='password'>
                     <TextField type={showPassword ? 'text' : 'password'} fullWidth placeholder='Confirm Password'
                       name='confirmPassword' value={confirmPassword}
                       onChange={(event) => setConfirmPassword(event.target.value)}
