@@ -7,7 +7,7 @@ import React, { useState, useContext, useRef } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import client from '../../utils/ApiConfig'
 import Spinner from 'react-native-loading-spinner-overlay';
-import { Box, Button, IconButton, TextField, InputAdornment, StyledEngineProvider } from '@mui/material'
+import { Box, Button, IconButton, TextField, InputAdornment, StyledEngineProvider, Paper } from '@mui/material'
 import { AccountCircleRounded, LockRounded, VisibilityOffRounded, VisibilityRounded } from '@mui/icons-material';
 
 const SignIn = ({ navigation }) => {
@@ -37,81 +37,83 @@ const SignIn = ({ navigation }) => {
                         <img src={Logo} alt="logo" className='logo-image-l' />
                         <h1 className='logo-label-l'>cactus.ai</h1>
                     </div>
-                    <Box>
-                        <Spinner visible={isLoading} />
-                        <StyledEngineProvider injectFirst>
-                            <div className='input-container-l' id='username'>
-                                <TextField type="text" fullWidth placeholder='Username'
-                                    name='username' value={username}
-                                    onChange={(event) => setUsername(event.target.value)}
-                                    variant='standard'
-                                    onKeyDown={handleKeyDown}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position='start'>
-                                                <AccountCircleRounded />
-                                            </InputAdornment>
-                                        ),
-                                        disableUnderline: true,
-                                    }}
-                                />
-                            </div>
-                            <div className="input-container-l" id='password'>
-                                <TextField type={showPassword ? 'text' : 'password'} fullWidth placeholder='Password'
-                                    name='password' value={password}
-                                    onChange={(event) => setPassword(event.target.value)}
-                                    variant='standard'
-                                    onKeyDown={handleKeyDown}
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position='start'>
-                                                <LockRounded />
-                                            </InputAdornment>
-                                        ),
-                                        disableUnderline: true,
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-                                                <IconButton aria-label="toggle password visibility"
-                                                    onClick={handleClickShowPassword}
-                                                    onMouseDown={handleMouseDownPassword}
-                                                    edge="end">
-                                                    {showPassword ? <VisibilityOffRounded /> : <VisibilityRounded />}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        )
-                                    }}
-                                />
-                            </div>
+                    <Paper elevation={3} sx={{ padding: 4, borderRadius: 5, maxWidth: 500, margin: '0 auto' }}>
+                        <Box>
+                            <Spinner visible={isLoading} />
+                            <StyledEngineProvider injectFirst>
+                                <div className='input-container-user' id='username'>
+                                    <TextField type="text" fullWidth placeholder='Username'
+                                        name='username' value={username}
+                                        onChange={(event) => setUsername(event.target.value)}
+                                        variant='standard'
+                                        onKeyDown={handleKeyDown}
+                                        InputProps={{
+                                            startAdornment: (
+                                                <InputAdornment position='start'>
+                                                    <AccountCircleRounded />
+                                                </InputAdornment>
+                                            ),
+                                            disableUnderline: true,
+                                        }}
+                                    />
+                                </div>
+                                <div className="input-container-pass" id='password'>
+                                    <TextField type={showPassword ? 'text' : 'password'} fullWidth placeholder='Password'
+                                        name='password' value={password}
+                                        onChange={(event) => setPassword(event.target.value)}
+                                        variant='standard'
+                                        onKeyDown={handleKeyDown}
+                                        InputProps={{
+                                            startAdornment: (
+                                                <InputAdornment position='start'>
+                                                    <LockRounded />
+                                                </InputAdornment>
+                                            ),
+                                            disableUnderline: true,
+                                            endAdornment: (
+                                                <InputAdornment position="end">
+                                                    <IconButton aria-label="toggle password visibility"
+                                                        onClick={handleClickShowPassword}
+                                                        onMouseDown={handleMouseDownPassword}
+                                                        edge="end">
+                                                        {showPassword ? <VisibilityOffRounded /> : <VisibilityRounded />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            )
+                                        }}
+                                    />
+                                </div>
 
-                            <div className='forgot-link'>
-                                <p>Forgot password?</p>
-                            </div>
+                                <div className='forgot-link'>
+                                    <p>Forgot password?</p>
+                                </div>
 
-                            {error ? (
-                                <p className='error-msg'>{error}</p>
-                            ) : null}
+                                {error ? (
+                                    <p className='error-msg'>{error}</p>
+                                ) : null}
 
-                            <div className="loginbutton-container-l">
-                                <Button
-                                    type="submit"
-                                    className="login-button-l"
-                                    autoFocus
-                                    variant="contained"
-                                    focusRipple={false}
-                                    onKeyDown={handleKeyDown}
-                                    onClick={() => login(username, password, navigate)}
-                                >
-                                    Login
-                                </Button>
-                            </div>
+                                <div className="loginbutton-container-l">
+                                    <Button
+                                        type="submit"
+                                        className="login-button-l"
+                                        autoFocus
+                                        variant="contained"
+                                        focusRipple={false}
+                                        onKeyDown={handleKeyDown}
+                                        onClick={() => login(username, password, navigate)}
+                                    >
+                                        Login
+                                    </Button>
+                                </div>
 
-                            <h4 className="loginline"><span>Or</span></h4>
+                                <h4 className="loginline"><span>Or</span></h4>
 
-                            <div className="registerbutton-container-l">
-                                <Button type="submit" className='register-button-l' variant='contained' onClick={() => { navigate('/signup'), setError('') }}>Register User</Button>
-                            </div>
-                        </StyledEngineProvider>
-                    </Box>
+                                <div className="registerbutton-container-l">
+                                    <Button type="submit" className='register-button-l' variant='contained' onClick={() => { navigate('/signup'), setError('') }}>Register User</Button>
+                                </div>
+                            </StyledEngineProvider>
+                        </Box>
+                    </Paper>
                 </div>
             </div>
         </div>

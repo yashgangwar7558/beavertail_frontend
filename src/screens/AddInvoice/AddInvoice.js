@@ -456,6 +456,7 @@ const AddInvoice = (props) => {
                                 keyboardType='numeric'
                                 placeholder="Total"
                                 placeholderTextColor="gray"
+                                editable={false}
                                 value={ingredient.total}
                                 onChangeText={(text) => { handleIngredientsChange(index, 'total', text), calculateTotalAmount() }}
                             />
@@ -476,6 +477,7 @@ const AddInvoice = (props) => {
                     <TextInput
                         style={[styles.input]}
                         keyboardType='numeric'
+                        editable={false}
                         value={invoiceData.total}
                         onChangeText={(text) => setInvoiceData({ ...invoiceData, total: text })}
                     />

@@ -114,7 +114,7 @@ const Navigation = () => {
             <AlertsProvider>
               <Sidebar setHeaderTitle={setHeaderTitle} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
               <Content isSidebarCollapsed={isSidebarCollapsed}>
-                <Header title={headerTitle} setHeaderTitle={setHeaderTitle} username={userInfo.user.firstName} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
+                <Header title={headerTitle} setHeaderTitle={setHeaderTitle} username={userInfo.user.username} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
                 <Routes>
                   <Route path="/" element={<Navigate to="/home" setHeaderTitle={setHeaderTitle} />} />
                   <Route path="/signin" element={<Navigate to="/home" setHeaderTitle={setHeaderTitle} />} />

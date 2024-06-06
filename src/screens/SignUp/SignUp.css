@@ -8,7 +8,7 @@
   left: 0;
   right: 0;
   margin: auto;
-  background-color: rgb(52, 49, 49);
+  background-color: rgb(228, 228, 228);
 }
 
 .signup-card {
@@ -20,7 +20,7 @@
   width: 80%;
   padding-left: 10px;
   padding-right: 10px;
-  background-color: rgb(52, 49, 49);
+  background-color: rgb(228, 228, 228);
   font-family: Helvetica;
 }
 
@@ -28,7 +28,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between; 
-  background-color: rgb(52, 49, 49);
+  background-color: rgb(228, 228, 228);
   /* width: 100%;  */
 }
 
@@ -38,8 +38,8 @@
 }
 
 .logo-label-s {
-  margin-right: 20px; 
-  color: #9CFCD8;
+  margin-right: 40px; 
+  color: #161717;
   font-size: 50px;
 }
 
@@ -47,7 +47,7 @@
   display: flex;
   justify-content: space-between;
   padding: 10px;
-  width: 800px;
+  width: 750px;
 }
 
 .left-container,
@@ -57,7 +57,7 @@
 
 .input-container {
   width: 100%;
-  padding-top: 20px;
+  padding-top: 15px;
   font-family: inherit;
   color: #121b28;
 }
@@ -67,7 +67,7 @@
 }
 
 #radio .MuiSvgIcon-root {
-  fill: #ececee;
+  fill: #070708;
 }
 
 /* .MuiInputBase-input {
@@ -83,8 +83,8 @@
 #address .MuiInputBase-root,
 #tenant .MuiInputBase-root, 
 #radio .MuiInputBase-root {
-  border-radius: 25px;
-  background-color: #e8e2e2;
+  border-radius: 12px;
+  background-color: #e4e4e4;
   height: 50px;
   padding-left: 10px;
   padding-right: 10px;
@@ -110,14 +110,14 @@ input:-webkit-autofill:active {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 .register-button {
   width: 50%;
   height: 50px;
-  border-radius: 25px;
-  background-color: #16181a;
+  border-radius: 12px;
+  background-color: #2b2b2b;
   color: #d3cccc;
   font-weight: 500;
   border: none;
@@ -127,7 +127,7 @@ input:-webkit-autofill:active {
   font-size: 22px;
   cursor: pointer;
   &:hover {
-    background-color: #131212;
+    background-color: #080809;
     color: #d3cccc;
   }
 }
@@ -135,8 +135,8 @@ input:-webkit-autofill:active {
 .login-button {
   width: 50%;
   height: 50px;
-  border-radius: 25px;
-  background-color: #69e1bd;
+  border-radius: 12px;
+  background-color: #65d3b2;
   color: #121b28;
   font-weight: 500;
   border: none;
@@ -146,7 +146,7 @@ input:-webkit-autofill:active {
   font-size: 22px;
   cursor: pointer;
   &:hover {
-    background-color: #47bf93;
+    background-color: #69cea9;
     color: #121b28;
   }
 }
@@ -154,13 +154,13 @@ input:-webkit-autofill:active {
 .line {
   width: 45%;
   text-align: center;
-  border-bottom: 1px solid #f8f4f4;
+  border-bottom: 1px solid #111111;
   line-height: 0.1em;
   padding: 0;
 }
 
 .line span {
-  background-color: rgb(52, 49, 49);
+  background-color: rgb(255, 255, 255);
   padding: 0 10px;
-  color: white
+  color: rgb(14, 13, 13)
 }
