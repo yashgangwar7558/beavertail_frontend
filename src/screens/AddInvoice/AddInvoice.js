@@ -28,7 +28,7 @@ const AddInvoice = (props) => {
         tenantId: userInfo.user.tenant,
         invoiceNumber: '',
         vendor: '',
-        invoiceDate: '',
+        invoiceDate: null,
         invoiceFile: null,
         ingredients: [],
         payment: '',
@@ -127,7 +127,7 @@ const AddInvoice = (props) => {
             tenantId: userInfo.user.tenant,
             invoiceNumber: '',
             vendor: '',
-            invoiceDate: '',
+            invoiceDate: null,
             invoiceFile: null,
             ingredients: [{ name: '', quantity: '', unit: '', unitPrice: '', total: '' }],
             payment: '',
@@ -220,7 +220,7 @@ const AddInvoice = (props) => {
             data.append('tenantId', invoiceData.tenantId);
             data.append('invoiceNumber', invoiceData.invoiceNumber);
             data.append('vendor', invoiceData.vendor);
-            data.append('invoiceDate', invoiceData.invoiceDate);
+            data.append('invoiceDate', invoiceData.invoiceDate || '');
             data.append('invoiceFile', invoiceData.invoiceFile);
             data.append('ingredients', JSON.stringify(invoiceData.ingredients));
             data.append('payment', invoiceData.payment);
@@ -248,7 +248,7 @@ const AddInvoice = (props) => {
                     tenantId: userInfo.user.tenant,
                     invoiceNumber: '',
                     vendor: '',
-                    invoiceDate: '',
+                    invoiceDate: null,
                     invoiceFile: null,
                     ingredients: [{ name: '', quantity: '', unit: '', unitPrice: '', total: '' }],
                     payment: '',
@@ -355,7 +355,7 @@ const AddInvoice = (props) => {
                         onChange={(date) => setInvoiceData({ ...invoiceData, invoiceDate: date.format('YYYY-MM-DD')})}
                         formatDensity="spacious"
                         // format="DD-MM-YYYY"
-                        slotProps={{ textField: { size: 'small' } }}
+                        slotProps={{ textField: { size: 'small' }, field: { clearable: true, onClear: () => setInvoiceData({ ...invoiceData, invoiceDate: null}) } }}
                     />
                 </View>
 

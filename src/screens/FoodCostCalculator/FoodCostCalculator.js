@@ -9,9 +9,10 @@ import client from '../../utils/ApiConfig'
 import { sortSalesReport } from '../../helpers/sort.js'
 import { DatePicker } from '@mui/x-date-pickers';
 import { ExpandMore, ExpandLess, KeyboardArrowDown } from '@mui/icons-material'
+import { Clear, CalendarToday  } from '@mui/icons-material'
 import dayjs from 'dayjs';
 import {
-    FormControl, InputLabel, MenuItem, Select, ToggleButton, Switch, Typography, withStyles
+    FormControl, InputLabel, MenuItem, Select, ToggleButton, Switch, Typography, withStyles, InputAdornment, IconButton
 } from '@mui/material'
 import { styled } from '@mui/system'
 import ToggleButtonGroup, {
@@ -304,7 +305,8 @@ const FoodCostCalculator = (props) => {
                             slotProps={{
                                 textField: {
                                     size: 'small',
-                                }
+                                },
+                                field: { clearable: true, onClear: () => setStartDate(null) }
                             }}
                             sx={{
                                 "& .MuiOutlinedInput-root": {
@@ -326,7 +328,8 @@ const FoodCostCalculator = (props) => {
                             slotProps={{
                                 textField: {
                                     size: 'small',
-                                }
+                                },
+                                field: { clearable: true, onClear: () => setEndDate(null) }
                             }}
                             sx={{
                                 "& .MuiOutlinedInput-root": {

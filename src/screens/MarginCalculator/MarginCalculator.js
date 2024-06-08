@@ -302,7 +302,7 @@ const MarginCalculator = (props) => {
                             maxDate={endDate}
                             onChange={handleStartDateChange}
                             formatDensity="spacious"
-                            slotProps={{ textField: { size: 'small' } }}
+                            slotProps={{ textField: { size: 'small' }, field: { clearable: true, onClear: () => setStartDate(null) } }}
                             sx={{
                                 "& .MuiOutlinedInput-root": {
                                     // "&:hover > fieldset": { borderColor: "#47bf93" },
@@ -320,7 +320,7 @@ const MarginCalculator = (props) => {
                             minDate={startDate}
                             onChange={handleEndDateChange}
                             formatDensity="spacious"
-                            slotProps={{ textField: { size: 'small' } }}
+                            slotProps={{ textField: { size: 'small' }, field: { clearable: true, onClear: () => setEndDate(null) } }}
                             sx={{
                                 "& .MuiOutlinedInput-root": {
                                     // "&:hover > fieldset": { borderColor: "#47bf93" },

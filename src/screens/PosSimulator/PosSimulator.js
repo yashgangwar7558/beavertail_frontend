@@ -26,11 +26,11 @@ const PosSimulator = (props) => {
         tenantId: userInfo.user.tenant,
         billNumber: '',
         customerName: '',
-        billingDate: '',
+        billingDate: null,
         itemsOrdered: [],
-        subTotal: '',
-        tax: 10,
-        total: ''
+        total: '',
+        taxPercent: 10,
+        totalPayable: ''
     });
 
     useEffect(() => {
@@ -113,16 +113,16 @@ const PosSimulator = (props) => {
 
         setBillData((prevBillData) => ({
             ...prevBillData,
-            subTotal: totalAmount.toFixed(2),
+            total: totalAmount.toFixed(2),
         }))
     };
 
     useEffect(() => {
         calculateTotalPayableAmount();
-    }, [billData.tax]);
+    }, [billData.taxPercent]);
 
     const handleTaxChange = (text) => {
-        setBillData({ ...billData, tax: text });
+        setBillData({ ...billData, taxPercent: text });
     };
 
     const calculateTotalPayableAmount = () => {
@@ -130,11 +130,11 @@ const PosSimulator = (props) => {
             const itemTotal = parseFloat(item.total) || 0;
             return sum + itemTotal;
         }, 0)
-        const payableAmount = totalAmount + ((totalAmount * billData.tax) / 100)
+        const payableAmount = totalAmount + ((totalAmount * billData.taxPercent) / 100)
 
         setBillData((prevBillData) => ({
             ...prevBillData,
-            total: payableAmount.toFixed(2),
+            totalPayable: payableAmount.toFixed(2),
         }))
     };
 
@@ -149,11 +149,11 @@ const PosSimulator = (props) => {
                     tenantId: userInfo.user.tenant,
                     billNumber: 'BILL-' + Math.floor(100000 + Math.random() * 900000),
                     customerName: '',
-                    billingDate: '',
-                    itemsOrdered: [{ name: '', quantity: '', menuPrice: '', total: '' }],
-                    subTotal: '',
-                    tax: 10,
-                    total: ''
+                    billingDate: null,
+                    itemsOrdered: [],
+                    total: '',
+                    taxPercent: 10,
+                    totalPayable: ''
                 });
                 // navigate('/foodcost')
                 await setLoading(false)
@@ -199,7 +199,7 @@ const PosSimulator = (props) => {
                         onChange={(date) => setBillData({ ...billData, billingDate: date })}
                         formatDensity="spacious"
                         // format="DD-MM-YYYY"
-                        slotProps={{ textField: { size: 'small' } }}
+                        slotProps={{ textField: { size: 'small' }, field: { clearable: true, onClear: () => setBillData({ ...billData, billingDate: null }) } }}
                     />
                 </View>
 
@@ -299,9 +299,9 @@ const PosSimulator = (props) => {
                     <TextInput
                         style={[styles.input]}
                         keyboardType='numeric'
-                        value={billData.subTotal}
+                        value={billData.total}
                         editable={false}
-                        onChangeText={(text) => { setBillData({ ...billData, subTotal: text }), calculateTotalPayableAmount() }}
+                        onChangeText={(text) => { setBillData({ ...billData, total: text }), calculateTotalPayableAmount() }}
                     />
                 </View>
 
@@ -311,7 +311,7 @@ const PosSimulator = (props) => {
                         style={[styles.input]}
                         keyboardType='numeric'
                         maxLength={5}
-                        value={billData.tax}
+                        value={billData.taxPercent}
                         onChangeText={handleTaxChange}
                     />
                 </View>
@@ -321,8 +321,8 @@ const PosSimulator = (props) => {
                     <TextInput
                         style={[styles.input]}
                         keyboardType='numeric'
-                        value={billData.total}
-                        onChangeText={(text) => setBillData({ ...billData, total: text })}
+                        value={billData.totalPayable}
+                        onChangeText={(text) => setBillData({ ...billData, totalPayable: text })}
                     />
                 </View>
 
