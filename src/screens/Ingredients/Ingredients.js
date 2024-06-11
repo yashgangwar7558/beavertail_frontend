@@ -70,6 +70,10 @@ const Ingredients = (props) => {
 
     const handleThresholdUpdate = async (ingredientId, newThreshold) => {
         try {
+            if(newThreshold < 0) {
+                alert("Threshold cannot be negative")
+                return
+            }
             setLoading(true)
             const data = {
                 ingredientId: ingredientId,
@@ -80,7 +84,7 @@ const Ingredients = (props) => {
             })
             if (result.data.success) {
                 getAllIngredients()
-            }
+            } 
             setLoading(false)
         } catch (error) {
             console.log(`updating threshold error ${error}`);

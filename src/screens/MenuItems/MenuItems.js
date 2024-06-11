@@ -120,6 +120,8 @@ const MenuItems = (props) => {
     ]
     );
     const [selectedRecipe, setSelectedRecipe] = useState(null);
+    const [searchResults, setSearchResults] = useState([])
+    const [searchTerm, setSearchTerm] = useState('')
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -134,6 +136,7 @@ const MenuItems = (props) => {
                 headers: { 'Content-Type': 'application/json' },
             })
             setRecipes(result.data.recipes)
+            setSearchResults(result.data.recipes)
             setLoading(false)
         } catch (error) {
             console.log(`getting recipes error ${error}`);
@@ -143,6 +146,21 @@ const MenuItems = (props) => {
     useEffect(() => {
         getRecipes();
     }, []);
+
+    const clearSearch = () => {
+        setSearchTerm('')
+        setSearchResults(recipes)
+    };
+
+    const handleRecipesSearch = (text) => {
+        const results = recipes.filter(recipe =>
+            recipe.name.toLowerCase().includes(text.toLowerCase())
+        );
+        setSearchResults(results);
+        if (text.length == 0) {
+            setSearchResults(recipes)
+        }
+    }
 
     const handleRecipeClick = (recipe) => {
         setSelectedRecipe(recipe);
@@ -205,7 +223,18 @@ const MenuItems = (props) => {
                             style={styles.tableSearchBar}
                             placeholder='Search'
                             placeholderTextColor="gray"
+                            selectTextOnFocus={false}
+                            value={searchTerm}
+                            onChangeText={(text) => {
+                                setSearchTerm(text);
+                                handleRecipesSearch(text);
+                            }}
                         />
+                        {searchTerm !== '' && (
+                            <TouchableOpacity onPress={clearSearch} style={styles.clearSearchButton}>
+                                <Icon name="times-circle" size={20} color="gray" />
+                            </TouchableOpacity>
+                        )}
                     </View>
                 </View>
 
@@ -227,23 +256,26 @@ const MenuItems = (props) => {
                                 {loading ? (
                                     <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 10 }} />
                                 ) : (
-                                    recipes.map((item, index) => (
-                                        <TouchableOpacity key={index} onPress={() => handleRecipeClick(item)}>
-                                            <DataTable.Row
-                                                style={[index % 2 === 0 ? styles.evenRow : styles.oddRow, selectedRecipe?._id === item._id && styles.selectedRow]}
-                                            >
-                                                <DataTable.Cell style={styles.cellLeft}>{item.name}</DataTable.Cell>
-                                                <DataTable.Cell style={[styles.cellLeft, { flex: 0.8 }]}>{item.subCategory}</DataTable.Cell>
-                                                <DataTable.Cell style={styles.cellRight}>{item.inventory ? 'Yes' : 'No'}</DataTable.Cell>
-                                                <DataTable.Cell style={styles.cellRight}>${(item.cost).toFixed(2)}</DataTable.Cell>
-                                                <DataTable.Cell style={styles.cellRight}>${(item.menuPrice).toFixed(2)}</DataTable.Cell>
-                                                <DataTable.Cell style={styles.cellRight}><span style={{ color: item.menuPrice - item.cost < 0 ? 'red' : '#1c1b1f', fontWeight: '400', fontSize: '14px', fontFamily: 'roboto' }}>${(Math.abs(item.menuPrice - item.cost)).toFixed(2)}</span></DataTable.Cell>
-                                                <DataTable.Cell style={styles.cellLast}><span style={{ color: item.menuPrice - item.cost < 0 ? 'red' : '#1c1b1f', fontWeight: '400', fontSize: '14px', fontFamily: 'roboto' }}>{((item.cost / item.menuPrice) * 100).toFixed(2)}%</span></DataTable.Cell>
-                                            </DataTable.Row>
-                                        </TouchableOpacity>
-                                    ))
-                                )
-                                }
+                                    searchResults.length === 0 ? (
+                                        <Text style={{ textAlign: 'center', marginTop: 30 }}>No such recipe found</Text>
+                                    ) : (
+                                        searchResults.map((item, index) => (
+                                            <TouchableOpacity key={index} onPress={() => handleRecipeClick(item)}>
+                                                <DataTable.Row
+                                                    style={[index % 2 === 0 ? styles.evenRow : styles.oddRow, selectedRecipe?._id === item._id && styles.selectedRow]}
+                                                >
+                                                    <DataTable.Cell style={styles.cellLeft}>{item.name}</DataTable.Cell>
+                                                    <DataTable.Cell style={[styles.cellLeft, { flex: 0.8 }]}>{item.subCategory}</DataTable.Cell>
+                                                    <DataTable.Cell style={styles.cellRight}>{item.inventory ? 'Yes' : 'No'}</DataTable.Cell>
+                                                    <DataTable.Cell style={styles.cellRight}>${(item.cost).toFixed(2)}</DataTable.Cell>
+                                                    <DataTable.Cell style={styles.cellRight}>${(item.menuPrice).toFixed(2)}</DataTable.Cell>
+                                                    <DataTable.Cell style={styles.cellRight}><span style={{ color: item.menuPrice - item.cost < 0 ? 'red' : '#1c1b1f', fontWeight: '400', fontSize: '14px', fontFamily: 'roboto' }}>${(Math.abs(item.menuPrice - item.cost)).toFixed(2)}</span></DataTable.Cell>
+                                                    <DataTable.Cell style={styles.cellLast}><span style={{ color: item.menuPrice - item.cost < 0 ? 'red' : '#1c1b1f', fontWeight: '400', fontSize: '14px', fontFamily: 'roboto' }}>{((item.cost / item.menuPrice) * 100).toFixed(2)}%</span></DataTable.Cell>
+                                                </DataTable.Row>
+                                            </TouchableOpacity>
+                                        ))
+                                    )
+                                )}
                             </ScrollView>
                         </DataTable>
                     </View>
@@ -491,8 +523,10 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         paddingHorizontal: 10,
     },
-    searchIcon: {
-        marginLeft: 10,
+    clearSearchButton: {
+        position: 'absolute',
+        right: 0,
+        padding: 10,
     },
     splitScreenContainer: {
         flex: 1,
@@ -522,7 +556,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     cellLeft: {
-    
+
     },
     cellRight: {
         justifyContent: 'flex-end',

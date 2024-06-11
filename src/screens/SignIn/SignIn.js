@@ -1,5 +1,5 @@
 // import Logo from '../../assets/logo/logo.png';
-import Logo from '../../assets/logo/blackCactusAi.jpg';
+import Logo from '../../assets/logo/blackCactusAi.png';
 import Background from '../../assets/background1.jpg';
 import './SignIn.css'
 import { useNavigate } from 'react-router'

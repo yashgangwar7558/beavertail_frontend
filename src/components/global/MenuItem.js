@@ -1,6 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+import Tooltip, {tooltipClasses } from '@mui/material/Tooltip';
+import Zoom from '@mui/material/Zoom'
 
 const MenuItemWrapper = styled.div`
     position: relative;
@@ -10,11 +12,6 @@ const MenuItemWrapper = styled.div`
     padding: ${(props) => props.isCollapsed ? '5px' : '0px 15px'};
     list-style: none;
     cursor: pointer;
-
-    &:hover .tooltip {
-        visibility: visible;
-        opacity: 1;
-    }
 `;
 
 const MenuItemLink = styled(NavLink)`
@@ -42,24 +39,6 @@ const MenuItemLabel = styled.span`
     padding-left: 5px;
 `;
 
-const Tooltip = styled.div`
-    visibility: hidden;
-    width: 120px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    border-radius: 5px;
-    padding: 5px;
-    position: absolute;
-    z-index: 10;
-    top: 50%;
-    left: 100%;
-    margin-left: 10px;
-    transform: translateY(-50%);
-    opacity: 0;
-    transition: opacity 0.3s, visibility 0.3s;
-`;
-
 const MenuItem = (props) => {
     const handleMenuItemClick = () => {
         props.setSelected(props.item.title);
@@ -68,16 +47,35 @@ const MenuItem = (props) => {
 
     return (
         <MenuItemWrapper isCollapsed={props.isCollapsed} onClick={handleMenuItemClick}>
-            <MenuItemLink isCollapsed={props.isCollapsed} to={props.item.path}>
-                {props.item.icon}
-                {!props.isCollapsed ? (
+            {props.isCollapsed ? (
+                <Tooltip title={props.item.title}
+                    arrow
+                    placement="right"
+                    TransitionComponent={Zoom}
+                    TransitionProps={{ timeout: 300 }}
+                    slotProps={{
+                        popper: {
+                          sx: {
+                            [`& .${tooltipClasses.tooltip}`]:
+                              {
+                                fontSize: '0.8rem',
+                              },
+                          },
+                        },
+                      }}
+                >
+                    <MenuItemLink isCollapsed={props.isCollapsed} to={props.item.path}>
+                        {props.item.icon}
+                    </MenuItemLink>
+                </Tooltip>
+            ) : (
+                <MenuItemLink isCollapsed={props.isCollapsed} to={props.item.path}>
+                    {props.item.icon}
                     <MenuItemLabel>
                         {props.item.title}
                     </MenuItemLabel>
-                ) : (
-                    <Tooltip className="tooltip">{props.item.title}</Tooltip>
-                )}
-            </MenuItemLink>
+                </MenuItemLink>
+            )}
         </MenuItemWrapper>
     );
 };

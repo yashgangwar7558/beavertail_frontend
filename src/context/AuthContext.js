@@ -17,17 +17,17 @@ export const AuthProvider = ({ children }) => {
         setIsLoading(true)
         try {
             if (username.includes(' ')) {
-                setError('Invalid Username!')
+                setError('Username cannot contain spaces!')
                 setIsLoading(false)
                 return
             }
             if (password.includes(' ')) {
-                setError('Invalid Password!')
+                setError('Password cannot contain spaces!')
                 setIsLoading(false)
                 return
             }
             if (confirmPassword.includes(' ')) {
-                setError('Invalid Confirm Password!')
+                setError('Confirm Password cannot contain spaces!')
                 setIsLoading(false)
                 return
             }

@@ -24,6 +24,7 @@ const AddInvoice = (props) => {
     const [searchResults, setSearchResults] = useState([]);
     const [selectedIngredient, setSelectedIngredient] = useState({});
     const [editMode, setEditMode] = useState(location.state ? true : false);
+    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [invoiceData, setInvoiceData] = useState({
         tenantId: userInfo.user.tenant,
         invoiceNumber: '',
@@ -43,11 +44,13 @@ const AddInvoice = (props) => {
 
     const getIngredients = async () => {
         try {
+            setLoading(true)
             const tenant = { tenantId: userInfo.user.tenant };
             const result = await client.post('/get-ingredients', tenant, {
                 headers: { 'Content-Type': 'application/json' },
             })
             setIngredients(result.data.ingredients)
+            setLoading(false)
         } catch (error) {
             console.log(`getting ingredients error ${error}`);
         }
@@ -55,11 +58,13 @@ const AddInvoice = (props) => {
 
     const getUnitMaps = async () => {
         try {
+            setLoading(true)
             const tenant = { tenantId: userInfo.user.tenant };
             const result = await client.post('/get-unitmaps', tenant, {
                 headers: { 'Content-Type': 'application/json' },
             })
             setUnitMaps(result.data.unitMaps)
+            setLoading(false)
         } catch (error) {
             console.log(`getting unitmaps error ${error}`);
         }
@@ -95,7 +100,11 @@ const AddInvoice = (props) => {
             });
             setEditMode(false)
         }
-    }, [invoiceData])
+    }, [])
+
+    useEffect(() => {
+        calculateTotalAmount();
+    }, [invoiceData.ingredients])
 
     const handleInvoiceExtraction = async () => {
         try {
@@ -153,13 +162,23 @@ const AddInvoice = (props) => {
         // maxFiles: 1,
     });
 
+    const toggleSearchDropdown = () => {
+        if (isDropdownVisible) {
+            setIsDropdownVisible(false);
+            setSearchResults([]);
+        } else {
+            setIsDropdownVisible(true);
+            setSearchResults(ingredients);
+        }
+    };
+
     const handleIngredientSearch = (text) => {
         const results = ingredients.filter(ingredient =>
             ingredient.name.toLowerCase().includes(text.toLowerCase())
         );
         setSearchResults(results);
         if (text.length == 0) {
-            setSearchResults([])
+            setSearchResults(ingredients)
         }
     };
 
@@ -190,6 +209,7 @@ const AddInvoice = (props) => {
         });
         setSearchTerm('');
         setSearchResults([]);
+        setIsDropdownVisible(false)
     };
 
     const handleIngredientsChange = (index, field, value) => {
@@ -207,7 +227,7 @@ const AddInvoice = (props) => {
         const updatedIngredients = [...invoiceData.ingredients];
         updatedIngredients.splice(index, 1);
 
-        setInvoiceData((prevInvoiceData) => ({
+        await setInvoiceData((prevInvoiceData) => ({
             ...prevInvoiceData,
             ingredients: updatedIngredients,
         }));
@@ -352,10 +372,10 @@ const AddInvoice = (props) => {
                         defaultValue={today}
                         disableFuture
                         value={invoiceData.invoiceDate}
-                        onChange={(date) => setInvoiceData({ ...invoiceData, invoiceDate: date.format('YYYY-MM-DD')})}
+                        onChange={(date) => setInvoiceData({ ...invoiceData, invoiceDate: date.format('YYYY-MM-DD') })}
                         formatDensity="spacious"
                         // format="DD-MM-YYYY"
-                        slotProps={{ textField: { size: 'small' }, field: { clearable: true, onClear: () => setInvoiceData({ ...invoiceData, invoiceDate: null}) } }}
+                        slotProps={{ textField: { size: 'small' }, field: { clearable: true, onClear: () => setInvoiceData({ ...invoiceData, invoiceDate: null }) } }}
                     />
                 </View>
 
@@ -384,11 +404,12 @@ const AddInvoice = (props) => {
                                 setSearchTerm(text);
                                 handleIngredientSearch(text);
                             }}
-                            onFocus={() => setSearchResults(ingredients)}
+                            onFocus={() => { setSearchResults(ingredients), setIsDropdownVisible(true) }}
                         />
+                        <Icon name={isDropdownVisible ? "angle-up" : "angle-down"} size={20} color="gray" style={styles.dropdownIcon} onPress={toggleSearchDropdown} />
                     </View>
                     {/* Search Results */}
-                    {searchResults.length > 0 && (
+                    {isDropdownVisible && searchResults.length > 0 && (
                         <View style={{ maxHeight: 200 }}>
                             <FlatList
                                 style={styles.dropdownMenu}
@@ -424,7 +445,7 @@ const AddInvoice = (props) => {
                                 placeholder="Enter Quantity"
                                 placeholderTextColor="gray"
                                 value={ingredient.quantity ? (ingredient.quantity) : ''}
-                                onChangeText={(text) => { handleIngredientsChange(index, 'quantity', text), calculateTotalAmount() }}
+                                onChangeText={(text) => { handleIngredientsChange(index, 'quantity', text)}}
                             />
                             <Picker
                                 style={styles.smallInput}
@@ -449,7 +470,7 @@ const AddInvoice = (props) => {
                                 placeholder="Unit Price"
                                 placeholderTextColor="gray"
                                 value={ingredient.unitPrice ? ingredient.unitPrice : ''}
-                                onChangeText={(text) => { handleIngredientsChange(index, 'unitPrice', text), calculateTotalAmount() }}
+                                onChangeText={(text) => { handleIngredientsChange(index, 'unitPrice', text)}}
                             />
                             <TextInput
                                 style={styles.smallInput}
@@ -458,11 +479,11 @@ const AddInvoice = (props) => {
                                 placeholderTextColor="gray"
                                 editable={false}
                                 value={ingredient.total}
-                                onChangeText={(text) => { handleIngredientsChange(index, 'total', text), calculateTotalAmount() }}
+                                onChangeText={(text) => { handleIngredientsChange(index, 'total', text)}}
                             />
                             <Icon.Button style={styles.crossBtn}
                                 name="times-circle-o"
-                                onPress={() => { handleDeleteIngredient(index) }}
+                                onPress={() => { handleDeleteIngredient(index)}}
                                 backgroundColor="transparent"
                                 underlayColor="transparent"
                                 iconStyle={{ margin: 0, padding: 0, fontSize: 25 }}
@@ -566,9 +587,9 @@ const AddInvoice = (props) => {
                 }
 
 
-            </ScrollView>
+            </ScrollView >
             {loading && <LoadingScreen />}
-        </View>
+        </View >
     )
 }
 
@@ -703,7 +724,8 @@ const styles = {
         height: 40,
         color: 'black',
         paddingHorizontal: 5,
-        border: 'none'
+        border: 'none',
+        outlineWidth: 0,
     },
     dropdownMenu: {
         zIndex: 1,

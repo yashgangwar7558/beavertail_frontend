@@ -41,6 +41,9 @@ const InvoiceTable = (props) => {
     const [filterByVendor, setFilterByVendor] = useState('All');
     const [filterByStatus, setFilterByStatus] = useState('All');
     const [filteredInvoices, setFilteredInvoices] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('')
+    const [searchResults, setSearchResults] = useState([])
+    const [preSearchFilteredInvoices, setPreSearchFilteredInvoices] = useState([])
     const [showRejectionInputs, setShowRejectionInputs] = useState([]);
     const [invoiceRejectionReason, setInvoiceRejectionReason] = useState([]);
     const today = dayjs();
@@ -75,11 +78,13 @@ const InvoiceTable = (props) => {
     }, [startDate, endDate]);
 
     useEffect(() => {
+        setSearchTerm('')
         const [sortBy, sortOrder] = sortOption.split('_');
         const sorted = sortInvoices(invoices, sortBy, sortOrder);
         const vendorFiltered = filterInvoices(sorted, 'vendor', filterByVendor);
         const statusFiltered = filterInvoices(vendorFiltered, 'status', filterByStatus);
         setFilteredInvoices(statusFiltered)
+        setPreSearchFilteredInvoices(statusFiltered)
     }, [invoices, sortOption, filterByVendor, filterByStatus]);
 
     const toggleInvoiceSort = () => {
@@ -91,6 +96,23 @@ const InvoiceTable = (props) => {
         const newSortOption = sortOption === 'total_ascending' ? 'total_descending' : 'total_ascending';
         setSortOption(newSortOption);
     };
+
+    const clearSearch = () => {
+        setSearchTerm('');
+        setFilteredInvoices(preSearchFilteredInvoices);
+    };
+
+    const handleInvoicesSearch = (text) => {
+        const results = preSearchFilteredInvoices.filter(invoice =>
+            invoice.invoiceNumber.toLowerCase().includes(text.toLowerCase()) ||
+            invoice.payment.toLowerCase().includes(text.toLowerCase()) ||
+            invoice.status.type.toLowerCase().includes(text.toLowerCase())
+        )
+        setFilteredInvoices(results)
+        if (text.length == 0) {
+            setFilteredInvoices(preSearchFilteredInvoices)
+        }
+    }
 
     const handleStartDateChange = (date) => {
         setStartDate(date);
@@ -342,10 +364,18 @@ const InvoiceTable = (props) => {
                             style={styles.tableSearchBar}
                             placeholder='Search'
                             placeholderTextColor="gray"
+                            selectTextOnFocus={false}
+                            value={searchTerm}
+                            onChangeText={(text) => {
+                                setSearchTerm(text);
+                                handleInvoicesSearch(text);
+                            }}
                         />
-                        {/* <View style={styles.searchIcon}>
-                            <Icon name="search" size={20} color="gray" />
-                        </View> */}
+                        {searchTerm !== '' && (
+                            <TouchableOpacity onPress={clearSearch} style={styles.clearSearchButton}>
+                                <Icon name="times-circle" size={20} color="gray" />
+                            </TouchableOpacity>
+                        )}
                     </View>
                 </View>
             </View>
@@ -409,30 +439,33 @@ const InvoiceTable = (props) => {
                             {loading ? (
                                 <ActivityIndicator size="large" color="#0000ff" style={{ marginTop: 10 }} />
                             ) : (
-                                filteredInvoices.map((item, index) => (
-                                    <TouchableOpacity key={index} onPress={(event) => {
-                                        if (event.target && event.target.tagName === 'SELECT') {
-                                            return;
-                                        }
-                                        handleInvoiceClick(item);
-                                    }}>
-                                        <DataTable.Row
-                                            style={[index % 2 === 0 ? styles.evenRow : styles.oddRow, selectedInvoice?._id === item._id && styles.selectedRow]}
-                                        >
-                                            <DataTable.Cell style={styles.cellFirst}>{item.uploadDate}</DataTable.Cell>
-                                            <DataTable.Cell style={styles.cell}>{item.vendor}</DataTable.Cell>
-                                            <DataTable.Cell style={styles.cell}>{item.invoiceNumber}</DataTable.Cell>
-                                            <DataTable.Cell style={styles.cell}>{item.invoiceDate}</DataTable.Cell>
-                                            <DataTable.Cell style={styles.cell}>{item.payment}</DataTable.Cell>
-                                            <DataTable.Cell style={[styles.cell, { flex: 1.2 }]}>{item.status.type}</DataTable.Cell>
-                                            <DataTable.Cell style={styles.cellRight}>
-                                                ${item.total}
-                                            </DataTable.Cell>
-                                        </DataTable.Row>
-                                    </TouchableOpacity>
-                                ))
-                            )
-                            }
+                                filteredInvoices.length === 0 ? (
+                                    <Text style={{ textAlign: 'center', marginTop: 30 }}>No such invoice found</Text>
+                                ) : (
+                                    filteredInvoices.map((item, index) => (
+                                        <TouchableOpacity key={index} onPress={(event) => {
+                                            if (event.target && event.target.tagName === 'SELECT') {
+                                                return;
+                                            }
+                                            handleInvoiceClick(item);
+                                        }}>
+                                            <DataTable.Row
+                                                style={[index % 2 === 0 ? styles.evenRow : styles.oddRow, selectedInvoice?._id === item._id && styles.selectedRow]}
+                                            >
+                                                <DataTable.Cell style={styles.cellFirst}>{item.uploadDate}</DataTable.Cell>
+                                                <DataTable.Cell style={styles.cell}>{item.vendor}</DataTable.Cell>
+                                                <DataTable.Cell style={styles.cell}>{item.invoiceNumber}</DataTable.Cell>
+                                                <DataTable.Cell style={styles.cell}>{item.invoiceDate}</DataTable.Cell>
+                                                <DataTable.Cell style={styles.cell}>{item.payment}</DataTable.Cell>
+                                                <DataTable.Cell style={[styles.cell, { flex: 1.2 }]}>{item.status.type}</DataTable.Cell>
+                                                <DataTable.Cell style={styles.cellRight}>
+                                                    ${item.total}
+                                                </DataTable.Cell>
+                                            </DataTable.Row>
+                                        </TouchableOpacity>
+                                    ))
+                                )
+                            )}
                         </ScrollView>
                     </DataTable>
                 </View>
@@ -724,8 +757,10 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         paddingHorizontal: 10,
     },
-    searchIcon: {
-        marginLeft: 10,
+    clearSearchButton: {
+        position: 'absolute',
+        right: 0,
+        padding: 10,
     },
     splitScreenContainer: {
         flex: 1,

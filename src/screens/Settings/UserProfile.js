@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/system';
 import { AuthContext } from '../../context/AuthContext';
+import LoadingScreen from '../../components/LoadingScreen';
 
 const StyledButtonTrans = styled(Button)({
     color: '#47bf93',
@@ -46,10 +47,11 @@ export const UserProfile = (props) => {
     const [loading, setLoading] = useState(false);
     const [userDetails, setUserDetails] = useState(null);
     const [originalUserDetails, setOriginalUserDetails] = useState(null);
-    const [oldPassword, setOldPassword] = useState('');
+    const [prevPassword, setPrevPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confNewPassword, setConfNewPassword] = useState('');
     const [error, setError] = useState(null);
+    const [updateError, setUpdateError] = useState(null);
 
     useEffect(() => {
         props.setHeaderTitle('Settings')
@@ -80,13 +82,25 @@ export const UserProfile = (props) => {
 
     const handleSaveChanges = async () => {
         try {
-            setLoading(true);
-            await client.post('/update-user', userDetails, {
+            setLoading(true)
+            if (userDetails.username.includes(' ')) {
+                setUpdateError('Username cannot contain spaces!')
+                setIsLoading(false)
+                return
+            }
+            const result = await client.post('/update-user', userDetails, {
                 headers: { 'Content-Type': 'application/json' },
-            });
-            getUserDetails();
-            setIsEditing(false);
-            setLoading(false);
+            })
+            console.log(result.data);
+            if (result.data.success) {
+                getUserDetails()
+                setUpdateError(null)
+                setIsEditing(false)
+                setLoading(false)
+            } else {
+                setUpdateError(result.data.message)
+                setLoading(false)
+            }
         } catch (error) {
             console.log(`updating user details error ${error}`);
             setLoading(false);
@@ -94,8 +108,9 @@ export const UserProfile = (props) => {
     };
 
     const handleCancelEdit = () => {
-        setUserDetails({ ...originalUserDetails });
-        setIsEditing(false);
+        setUserDetails({ ...originalUserDetails })
+        setIsEditing(false)
+        setUpdateError(null)
     };
 
     const handleEditField = (fieldName, value) => {
@@ -108,12 +123,27 @@ export const UserProfile = (props) => {
     const handleChangePassword = async () => {
         try {
             setLoading(true);
-            const data = { userId: userInfo.user.userId, oldPassword, newPassword, confNewPassword };
+            if (prevPassword.includes(' ')) {
+                setError('Invalid previous password!')
+                setIsLoading(false)
+                return
+            }
+            if (newPassword.includes(' ')) {
+                setError('New Password cannot contain spaces!')
+                setIsLoading(false)
+                return
+            }
+            if (confNewPassword.includes(' ')) {
+                setError('Confirm Password cannot contain spaces!')
+                setIsLoading(false)
+                return
+            }
+            const data = { userId: userInfo.user.userId, prevPassword, newPassword, confNewPassword };
             const result = await client.post('/change-password', data, {
                 headers: { 'Content-Type': 'application/json' },
             });
             if (result.data.success) {
-                setOldPassword('')
+                setPrevPassword('')
                 setNewPassword('')
                 setConfNewPassword('')
                 setError(null)
@@ -132,7 +162,7 @@ export const UserProfile = (props) => {
     return (
         <div>
             <SettingsTabs />
-            <div style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 115px)'}}>
+            <div style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 115px)' }}>
                 {
                     userDetails != null && (
                         <Paper elevation={3} style={{ padding: '10px', margin: '16px', borderRadius: '12px' }}>
@@ -248,6 +278,11 @@ export const UserProfile = (props) => {
                                     </Typography>
                                 </Grid>
                             </Grid>
+                            {updateError && (
+                                <Typography variant="body2" color="error" style={{ marginTop: '16px' }}>
+                                    {updateError}
+                                </Typography>
+                            )}
                             {isEditing ? (
                                 <div style={{ marginTop: '16px' }}>
                                     <StyledButtonFill
@@ -281,10 +316,10 @@ export const UserProfile = (props) => {
                         <Grid item xs={12} sm={6}>
                             <EditableTextField
                                 fullWidth
-                                label="Old Password"
+                                label="Previous Password"
                                 type="password"
-                                value={oldPassword}
-                                onChange={(e) => setOldPassword(e.target.value)}
+                                value={prevPassword}
+                                onChange={(e) => setPrevPassword(e.target.value)}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -299,7 +334,7 @@ export const UserProfile = (props) => {
                         <Grid item xs={12} sm={6}>
                             <EditableTextField
                                 fullWidth
-                                label="Confirm New Password"
+                                label="Confirm Password"
                                 type="password"
                                 value={confNewPassword}
                                 onChange={(e) => setConfNewPassword(e.target.value)}

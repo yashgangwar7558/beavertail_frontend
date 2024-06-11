@@ -22,6 +22,7 @@ const PosSimulator = (props) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [selectedRecipe, setSelectedRecipe] = useState({});
+    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [billData, setBillData] = useState({
         tenantId: userInfo.user.tenant,
         billNumber: '',
@@ -60,13 +61,23 @@ const PosSimulator = (props) => {
         setBillData({ ...billData, billNumber: randomBillNumber });
     }, []);
 
+    const toggleSearchDropdown = () => {
+        if (isDropdownVisible) {
+            setIsDropdownVisible(false);
+            setSearchResults([]);
+        } else {
+            setIsDropdownVisible(true);
+            setSearchResults(recipes);
+        }
+    };
+
     const handleRecipeSearch = (text) => {
         const results = recipes.filter(recipe =>
             recipe.name.toLowerCase().includes(text.toLowerCase())
         );
         setSearchResults(results);
         if (text.length == 0) {
-            setSearchResults([])
+            setSearchResults(recipes)
         }
     };
 
@@ -83,6 +94,7 @@ const PosSimulator = (props) => {
         });
         setSearchTerm('');
         setSearchResults([]);
+        setIsDropdownVisible(false)
     };
 
     const handleItemChange = (index, field, value) => {
@@ -117,9 +129,6 @@ const PosSimulator = (props) => {
         }))
     };
 
-    useEffect(() => {
-        calculateTotalPayableAmount();
-    }, [billData.taxPercent]);
 
     const handleTaxChange = (text) => {
         setBillData({ ...billData, taxPercent: text });
@@ -136,7 +145,16 @@ const PosSimulator = (props) => {
             ...prevBillData,
             totalPayable: payableAmount.toFixed(2),
         }))
-    };
+    }
+
+    useEffect(() => {
+        calculateTotalPayableAmount();
+    }, [billData.taxPercent])
+
+    useEffect(() => {
+        calculateSubTotalAmount()
+        calculateTotalPayableAmount()
+    }, [billData.itemsOrdered])
 
     const handleSubmit = async () => {
         try {
@@ -218,11 +236,12 @@ const PosSimulator = (props) => {
                                 setSearchTerm(text);
                                 handleRecipeSearch(text);
                             }}
-                            onFocus={() => setSearchResults(recipes)}
+                            onFocus={() => { setSearchResults(recipes), setIsDropdownVisible(true) }}
                         />
+                        <Icon name={isDropdownVisible ? "angle-up" : "angle-down"} size={20} color="gray" style={styles.dropdownIcon} onPress={toggleSearchDropdown} />
                     </View>
                     {/* Search Results */}
-                    {searchResults.length > 0 && (
+                    {isDropdownVisible && searchResults.length > 0 && (
                         <View style={{ maxHeight: 200 }}>
                             <FlatList
                                 style={styles.dropdownMenu}
@@ -264,7 +283,7 @@ const PosSimulator = (props) => {
                                 placeholderTextColor="gray"
                                 maxLength={3}
                                 value={item.quantity ? item.quantity : ''}
-                                onChangeText={(text) => { handleItemChange(index, 'quantity', parseFloat(text)), calculateSubTotalAmount(), calculateTotalPayableAmount() }}
+                                onChangeText={(text) => { handleItemChange(index, 'quantity', parseFloat(text))}}
                             />
                             <TextInput
                                 style={styles.smallInputNonEditable}
@@ -280,7 +299,7 @@ const PosSimulator = (props) => {
                                 placeholderTextColor="gray"
                                 value={item.total}
                                 editable={false}
-                                onChangeText={(text) => { handleItemChange(index, 'total', text), calculateSubTotalAmount(), calculateTotalPayableAmount() }}
+                                onChangeText={(text) => { handleItemChange(index, 'total', text)}}
                             />
                             <Icon.Button style={styles.crossBtn}
                                 name="times-circle-o"
@@ -301,7 +320,7 @@ const PosSimulator = (props) => {
                         keyboardType='numeric'
                         value={billData.total}
                         editable={false}
-                        onChangeText={(text) => { setBillData({ ...billData, total: text }), calculateTotalPayableAmount() }}
+                        onChangeText={(text) => { setBillData({ ...billData, total: text })}}
                     />
                 </View>
 
@@ -443,7 +462,8 @@ const styles = {
         height: 40,
         color: 'black',
         paddingHorizontal: 5,
-        border: 'none'
+        border: 'none',
+        outlineWidth: 0
     },
     dropdownMenu: {
         zIndex: 10,

@@ -24,6 +24,7 @@ const MenuBuilder = (props) => {
     const [unitMaps, setUnitMaps] = useState([]);
     const [editMode, setEditMode] = useState(location.state ? true : false);
     const fileInputRef = useRef(null)
+    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [recipeData, setRecipeData] = useState({
         tenantId: userInfo.user.tenant,
         name: '',
@@ -47,12 +48,14 @@ const MenuBuilder = (props) => {
 
     const getCategories = async () => {
         try {
+            setLoading(true)
             const tenant = { tenantId: userInfo.user.tenant };
             const result = await client.post('/get-types', tenant, {
                 headers: { 'Content-Type': 'application/json' },
             })
             const extractedCategories = Array.from(new Set(result.data.types.map(item => item.type)));
             setCategories(extractedCategories)
+            setLoading(false)
         } catch (error) {
             console.log(`getting categories error ${error}`);
         }
@@ -60,12 +63,14 @@ const MenuBuilder = (props) => {
 
     const getSubCategories = async () => {
         try {
+            setLoading(true)
             const data = { tenantId: userInfo.user.tenant, type: recipeData.category };
             const result = await client.post('/get-subtypes', data, {
                 headers: { 'Content-Type': 'application/json' },
             })
             const extractedSubCategories = result.data.subTypes.map((item) => item.subType)
             setSubCategories(extractedSubCategories)
+            setLoading(false)
         } catch (error) {
             console.log(`getting categories error ${error}`);
         }
@@ -73,22 +78,26 @@ const MenuBuilder = (props) => {
 
     const getIngredients = async () => {
         try {
+            setLoading(true)
             const tenant = { tenantId: userInfo.user.tenant };
             const result = await client.post('/get-ingredients', tenant, {
                 headers: { 'Content-Type': 'application/json' },
             })
             setIngredient(result.data.ingredients)
+            setLoading(false)
         } catch (error) {
             console.log(`getting ingredients error ${error}`);
         }
     }
     const getUnitMaps = async () => {
         try {
+            setLoading(true)
             const tenant = { tenantId: userInfo.user.tenant };
             const result = await client.post('/get-unitmaps', tenant, {
                 headers: { 'Content-Type': 'application/json' },
             })
             setUnitMaps(result.data.unitMaps)
+            setLoading(false)
         } catch (error) {
             console.log(`getting unitmaps error ${error}`);
         }
@@ -143,13 +152,32 @@ const MenuBuilder = (props) => {
             setCurrentCost(editRecipeData.cost)
             setEditMode(false)
         }
-    }, [recipeData]);
+    }, [])
+
+
+    useEffect(() => {
+        getSubCategories();
+    }, [recipeData.category])
+
+    useEffect(() => {
+        costEstimation();
+    }, [recipeData.ingredients])
 
 
     const handleYieldsChange = (index, field, value) => {
         const updatedYields = [...recipeData.yields];
         updatedYields[index][field] = value;
         setRecipeData({ ...recipeData, yields: updatedYields });
+    }
+
+    const toggleSearchDropdown = () => {
+        if (isDropdownVisible) {
+            setIsDropdownVisible(false);
+            setSearchResults([]);
+        } else {
+            setIsDropdownVisible(true);
+            setSearchResults(ingredients);
+        }
     };
 
     const handleIngredientSearch = (text) => {
@@ -158,7 +186,7 @@ const MenuBuilder = (props) => {
         );
         setSearchResults(results);
         if (text.length == 0) {
-            setSearchResults([])
+            setSearchResults(ingredients)
         }
     }
 
@@ -177,6 +205,7 @@ const MenuBuilder = (props) => {
         });
         setSearchTerm('');
         setSearchResults([]);
+        setIsDropdownVisible(false)
     };
 
     const handleIngredientsChange = (index, field, value) => {
@@ -454,11 +483,12 @@ const MenuBuilder = (props) => {
                                 setSearchTerm(text);
                                 handleIngredientSearch(text);
                             }}
-                            onFocus={() => setSearchResults(ingredients)}
+                            onFocus={() => { setSearchResults(ingredients), setIsDropdownVisible(true) }}
                         />
+                        <Icon name={isDropdownVisible ? "angle-up" : "angle-down"} size={20} color="gray" style={styles.dropdownIcon} onPress={toggleSearchDropdown} />
                     </View>
                     {/* Search Results */}
-                    {searchResults.length > 0 && (
+                    {isDropdownVisible && searchResults.length > 0 && (
                         <View style={{ maxHeight: 200 }}>
                             <FlatList
                                 style={styles.dropdownMenu}
@@ -684,7 +714,8 @@ const styles = {
         height: 40,
         color: 'black',
         paddingHorizontal: 5,
-        border: 'none'
+        border: 'none',
+        outlineWidth: 0
     },
     dropdownMenu: {
         zIndex: 1,

@@ -261,8 +261,8 @@ const FoodCostCalculator = (props) => {
             prevExpanded.includes(subTypeName)
                 ? prevExpanded.filter((subType) => subType !== subTypeName)
                 : [...prevExpanded, subTypeName]
-        );
-    };
+        )
+    }
 
     const renderAccordionContent = (subTypeName, typeRowIndex) => {
         const typeWiseRecipes = sortedRecipeSales.filter((item) => item.subType === subTypeName);
