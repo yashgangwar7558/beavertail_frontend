@@ -22,8 +22,8 @@ const StyledButtonTrans = styled(Button)({
   '&:hover': {
     backgroundColor: '#f2faf7',
     borderColor: '#47bf93',
-    color: '#47bf93', 
-},
+    color: '#47bf93',
+  },
 });
 
 const StyledButtonFill = styled(Button)({
@@ -50,6 +50,7 @@ export const TenantInfo = (props) => {
   const { userInfo } = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [originalTenantInfo, setOriginalTenantInfo] = useState({
     tenantName: '',
     tenantDescription: '',
@@ -76,7 +77,7 @@ export const TenantInfo = (props) => {
       });
       setTenantInfo(result.data.tenant);
       setOriginalTenantInfo(result.data.tenant);
-      setLoading(false);
+      setLoading(false)
     } catch (error) {
       console.log(`getting tenant details error ${error}`);
     }
@@ -93,13 +94,19 @@ export const TenantInfo = (props) => {
   const handleSaveChanges = async () => {
     try {
       setLoading(true);
-      await client.post('/update-tenant', tenantInfo, {
+      const result = await client.post('/update-tenant', tenantInfo, {
         headers: { 'Content-Type': 'application/json' },
       });
       // setOriginalTenantInfo({ ...tenantInfo });
-      getTenantDetails();
-      setIsEditing(false);
-      setLoading(false);
+      if (result.data.success) {
+        getTenantDetails();
+        setError(null)
+        setIsEditing(false);
+        setLoading(false)
+      } else {
+        setError(result.data.message)
+        setLoading(false)
+      }
     } catch (error) {
       console.log(`updating tenant details error ${error}`);
       setLoading(false);
@@ -150,7 +157,7 @@ export const TenantInfo = (props) => {
   return (
     <div>
       <SettingsTabs />
-      <div style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 115px)'}}>
+      <div style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 115px)' }}>
         <Paper elevation={3} style={{ padding: '10px', margin: '16px', borderRadius: '12px' }}>
           <Typography variant="h5" gutterBottom>
             Restaurant Info
@@ -262,6 +269,11 @@ export const TenantInfo = (props) => {
               </Typography>
             </Grid>
           </Grid>
+          {error && (
+            <Typography variant="body2" color="error" style={{ marginTop: '16px' }}>
+              {error}
+            </Typography>
+          )}
           {isEditing ? (
             <div style={{ marginTop: '16px' }}>
               <StyledButtonFill

@@ -10,7 +10,6 @@
      "invoiceEmails": ["invoice1@example.com", "invoice2@example.com"],
      "billEmails": ["bill1@example.com", "bill2@example.com"],
      "userIds": [],
-     "adminId": []
    }
    ```
 

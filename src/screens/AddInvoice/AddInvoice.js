@@ -108,13 +108,13 @@ const AddInvoice = (props) => {
 
     const handleInvoiceExtraction = async () => {
         try {
+            setLoading(true)
             const file = new FormData()
             file.append('invoiceFile', invoiceData.invoiceFile)
             const result = await client.post('/extract-invoice-data', file, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             })
             const extractedData = result.data.extractedData
-            console.log(result.data);
             if (result.data.success) {
                 setInvoiceData({
                     ...invoiceData,
@@ -124,7 +124,11 @@ const AddInvoice = (props) => {
                     ingredients: extractedData.ingredients || [],
                     payment: extractedData.payment,
                     total: extractedData.total,
-                });
+                })
+                setLoading(false)
+            } else {
+                setLoading(false)
+                alert(result.data.message)
             }
         } catch (err) {
             console.log(`error invoice data extraction`);

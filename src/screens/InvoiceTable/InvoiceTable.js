@@ -215,13 +215,14 @@ const InvoiceTable = (props) => {
                 headers: { 'Content-Type': 'application/json' },
             })
             if (result.data.success) {
+                setStatusLoading(false)
                 closeInvoiceDetails()
                 await getInvoices()
             }
             setRejectionInputVisibility(invoiceId, false)
-            setStatusLoading(false)
         } catch (error) {
             console.log(`updating invoice status error ${error}`)
+            setStatusLoading(false)
         }
     }
 
@@ -236,12 +237,13 @@ const InvoiceTable = (props) => {
                 headers: { 'Content-Type': 'application/json' },
             })
             if (result.data.success) {
+                setStatusLoading(false)
                 closeInvoiceDetails()
                 await getInvoices()
             }
-            setStatusLoading(false)
         } catch (error) {
             console.log(`processing invoice error ${error}`)
+            setStatusLoading(false)
         }
     }
 
@@ -654,29 +656,7 @@ const InvoiceTable = (props) => {
                     </View>
                 )}
             </View>
-
-            <Modal isVisible={openModal} onBackdropPress={() => closeModal()} style={styles.modal}>
-                <View style={styles.modalContainer}>
-                    <View style={{ margin: 50 }}>
-                        <Text>Upload files...</Text>
-                        <div {...getRootProps()} style={styles.dropzone}>
-                            <input {...getInputProps()} />
-                            <p>Drag 'n' drop your files here, or click to select</p>
-                        </div>
-                        {invoiceFiles && (
-                            <Text style={{ color: '#2bb378' }}>Files Added Successfully!</Text>
-                        )}
-                        <Button onPress={() => closeModal()}>Cancel</Button>
-                        <Button onPress={() => handleAddInvoice()}>Submit</Button>
-                    </View>
-                    {
-                        loadingScreen &&
-                        <Box sx={{ width: '100%' }}>
-                            <LinearProgress />
-                        </Box>
-                    }
-                </View>
-            </Modal>
+            {statusLoading && <LoadingScreen />}
         </View>
     )
 }

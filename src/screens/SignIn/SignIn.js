@@ -34,7 +34,9 @@ const SignIn = ({ navigation }) => {
             <div className='login-card'>
                 <div>
                     <div className='logo-container-l'>
-                        <img src={Logo} alt="logo" className='logo-image-l' />
+                        <div className='logo-placeholder'>
+                            <img src={Logo} alt="logo" className='logo-image-l' style={{ display: Logo ? 'block' : 'none' }} />
+                        </div>
                         <h1 className='logo-label-l'>cactus.ai</h1>
                     </div>
                     <Paper elevation={3} sx={{ padding: 4, borderRadius: 5, maxWidth: 500, margin: '0 auto' }}>

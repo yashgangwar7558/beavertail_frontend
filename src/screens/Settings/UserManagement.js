@@ -143,13 +143,13 @@ export const UserManagement = (props) => {
     const updateUserStatus = async (userId, newStatus) => {
         try {
             setLoading(true);
-            let data = { userId, rolesAssigned: [], newStatus };
+            let data = { tenantId: userInfo.user.tenant, userId, rolesAssigned: [], newStatus };
             if (newStatus === 'approved' && (!selectedRoles[userId] || selectedRoles[userId].length === 0)) {
                 alert('No roles selected! Choose atleast one.');
                 setLoading(false);
                 return;
             }
-            if (newStatus === 'approved') data = { userId, rolesAssigned: selectedRoles[userId], newStatus };
+            if (newStatus === 'approved') data = { tenantId: userInfo.user.tenant, userId, rolesAssigned: selectedRoles[userId], newStatus };
             const result = await client.post('/update-user-status', data, {
                 headers: { 'Content-Type': 'application/json' },
             });
