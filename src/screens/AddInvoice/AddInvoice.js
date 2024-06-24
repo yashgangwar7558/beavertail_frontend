@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { ScrollView, View, Text, TextInput, Button, StyleSheet, FlatList, TouchableOpacity, Picker } from 'react-native';
+import stringSimilarity from 'string-similarity'
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -10,7 +11,11 @@ import LoadingScreen from '../../components/LoadingScreen';
 import { DatePicker } from '@mui/x-date-pickers';
 import Divider from '@mui/material/Divider';
 import Chip from '@mui/material/Chip';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 import dayjs from 'dayjs';
+import { matchSorter } from 'match-sorter'
+import { createFilterOptions } from '@mui/material/Autocomplete';
 
 const AddInvoice = (props) => {
     const navigate = useNavigate({});
@@ -21,7 +26,8 @@ const AddInvoice = (props) => {
     const [unitMaps, setUnitMaps] = useState([]);
     const [ingredients, setIngredients] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
+    const [searchResults, setSearchResults] = useState([])
+    const [similarSearchResults, setSimilarSearchResults] = useState({})
     const [selectedIngredient, setSelectedIngredient] = useState({});
     const [editMode, setEditMode] = useState(location.state ? true : false);
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -34,6 +40,7 @@ const AddInvoice = (props) => {
         ingredients: [],
         payment: '',
         total: '',
+        totalPayable: '',
     });
 
     const editInvoiceData = location.state?.editInvoiceData || null;
@@ -97,6 +104,7 @@ const AddInvoice = (props) => {
                 ingredients: editInvoiceData.ingredients || [],
                 payment: editInvoiceData.payment,
                 total: editInvoiceData.total,
+                totalPayable: editInvoiceData.total
             });
             setEditMode(false)
         }
@@ -124,6 +132,7 @@ const AddInvoice = (props) => {
                     ingredients: extractedData.ingredients || [],
                     payment: extractedData.payment,
                     total: extractedData.total,
+                    totalPayable: extractedData.totalPayable,
                 })
                 setLoading(false)
             } else {
@@ -145,6 +154,7 @@ const AddInvoice = (props) => {
             ingredients: [{ name: '', quantity: '', unit: '', unitPrice: '', total: '' }],
             payment: '',
             total: '',
+            totalPayable: '',
         });
     }
 
@@ -166,16 +176,6 @@ const AddInvoice = (props) => {
         // maxFiles: 1,
     });
 
-    const toggleSearchDropdown = () => {
-        if (isDropdownVisible) {
-            setIsDropdownVisible(false);
-            setSearchResults([]);
-        } else {
-            setIsDropdownVisible(true);
-            setSearchResults(ingredients);
-        }
-    };
-
     const handleIngredientSearch = (text) => {
         const results = ingredients.filter(ingredient =>
             ingredient.name.toLowerCase().includes(text.toLowerCase())
@@ -184,7 +184,67 @@ const AddInvoice = (props) => {
         if (text.length == 0) {
             setSearchResults(ingredients)
         }
-    };
+    }
+
+    const [isIngDropdownVisible, setIsIngDropdownVisible] = useState(new Array(100).fill(false))
+    const [inputValue, setInputValue] = useState(new Array(100).fill(''))
+    const handleSimilarIngredientSearch = (text, index) => {
+        if (text.length === 0) {
+            setSimilarSearchResults(prevState => ({
+                ...prevState,
+                [index]: []
+            }));
+            return [];
+        }
+
+        const ingredientNames = ingredients.map(ingredient => ingredient.name);
+        const matches = stringSimilarity.findBestMatch(text, ingredientNames).ratings;
+        const sortedMatches = matches.sort((a, b) => b.rating - a.rating);
+        const results = sortedMatches.map(match => ingredients.find(ingredient => ingredient.name === match.target));
+
+        setSimilarSearchResults(prevState => ({
+            ...prevState,
+            [index]: results
+        }))
+        setIsIngDropdownVisible(prevState => ({
+            ...prevState,
+            [index]: true,
+        }))
+
+        return results
+    }
+
+    const filterOptions = (index, options) => {
+        if (!inputValue[index]) {
+            return [];
+        }
+
+        const matches = stringSimilarity.findBestMatch(inputValue[index], options)
+        const sortedMatches = matches.ratings.sort((a, b) => b.rating - a.rating)
+
+        return sortedMatches.map(match => match.target);
+    }
+
+    const toggleSearchDropdown = () => {
+        if (isDropdownVisible) {
+            setIsDropdownVisible(false);
+            setSearchResults([]);
+        } else {
+            setIsDropdownVisible(true);
+            setSearchResults(ingredients);
+        }
+    }
+
+    const toggleIngSearchDropdown = (index) => {
+        if (isIngDropdownVisible[index]) {
+            setIsIngDropdownVisible(prevState => ({
+                ...prevState,
+                [index]: false,
+            }))
+        } else {
+            handleSimilarIngredientSearch(invoiceData.ingredients[index].name, index)
+        }
+    }
 
     const handleAddNewIngredient = () => {
         setInvoiceData({
@@ -196,7 +256,7 @@ const AddInvoice = (props) => {
                 unitPrice: '',
                 total: '',
             }],
-        });
+        })
     }
 
     const handleAddIngredient = (ingredient) => {
@@ -210,11 +270,11 @@ const AddInvoice = (props) => {
                 unitPrice: '',
                 total: '',
             }],
-        });
+        })
         setSearchTerm('');
-        setSearchResults([]);
+        setSimilarSearchResults([])
         setIsDropdownVisible(false)
-    };
+    }
 
     const handleIngredientsChange = (index, field, value) => {
         const updatedIngredients = [...invoiceData.ingredients]
@@ -235,6 +295,15 @@ const AddInvoice = (props) => {
             ...prevInvoiceData,
             ingredients: updatedIngredients,
         }));
+
+        setSimilarSearchResults(prevState => ({
+            ...prevState,
+            [index]: []
+        }))
+        setIsIngDropdownVisible(prevState => ({
+            ...prevState,
+            [index]: false,
+        }))
     };
 
     const handleSubmit = async (statusType) => {
@@ -277,6 +346,7 @@ const AddInvoice = (props) => {
                     ingredients: [{ name: '', quantity: '', unit: '', unitPrice: '', total: '' }],
                     payment: '',
                     total: '',
+                    totalPayable: '',
                 });
                 navigate('/invoices');
                 setLoading(false)
@@ -394,9 +464,9 @@ const AddInvoice = (props) => {
                             <Text style={{ color: '#47bf93', fontSize: 15, fontFamily: 'inherit' }}>Add new</Text>
                         </Icon.Button>
                     </Text>
-                    <Text style={{ color: 'gray', fontSize: '15px', marginBottom: '10px' }}>*Click on Add new, if ingredient not found or purchasing it for the first time.</Text>
+                    {/* <Text style={{ color: 'gray', fontSize: '15px', marginBottom: '10px' }}>*Click on Add new, if ingredient not found or purchasing it for the first time.</Text> */}
                     {/* Search Input */}
-                    <View style={styles.searchBarContainer}>
+                    {/* <View style={styles.searchBarContainer}>
                         <Icon name="search" size={20} color="gray" style={styles.searchIcon} />
                         <TextInput
                             style={styles.searchBar}
@@ -411,9 +481,9 @@ const AddInvoice = (props) => {
                             onFocus={() => { setSearchResults(ingredients), setIsDropdownVisible(true) }}
                         />
                         <Icon name={isDropdownVisible ? "angle-up" : "angle-down"} size={20} color="gray" style={styles.dropdownIcon} onPress={toggleSearchDropdown} />
-                    </View>
+                    </View> */}
                     {/* Search Results */}
-                    {isDropdownVisible && searchResults.length > 0 && (
+                    {/* {isDropdownVisible && searchResults.length > 0 && (
                         <View style={{ maxHeight: 200 }}>
                             <FlatList
                                 style={styles.dropdownMenu}
@@ -430,71 +500,162 @@ const AddInvoice = (props) => {
                                 contentContainerStyle={{ flexGrow: 1 }}
                             />
                         </View>
-                    )}
+                    )} */}
+                    <View style={styles.headerContainer}>
+                        <View style={{ flex: 1 }}><Text style={{ fontWeight: 'bold', fontFamily: 'inherit' }}>Ingredient</Text></View>
+                        <View style={{ flex: 1 }}><Text style={{ fontWeight: 'bold', fontFamily: 'inherit' }}>Quantity</Text></View>
+                        <View style={{ flex: 1 }}><Text style={{ fontWeight: 'bold', fontFamily: 'inherit' }}>Unit</Text></View>
+                        <View style={{ flex: 1 }}><Text style={{ fontWeight: 'bold', fontFamily: 'inherit' }}>Unit Price ($)</Text></View>
+                        <View style={{ flex: 1 }}><Text style={{ fontWeight: 'bold', fontFamily: 'inherit' }}>Total ($)</Text></View>
+                    </View>
                     {/* Ingredient Inputs */}
-                    {invoiceData.ingredients.map((ingredient, index) => (
-                        <View key={index} style={styles.rowContainer}>
-                            <TextInput
-                                style={ingredients.find(item => item.name === ingredient.name) ? styles.smallInputNonEditable : styles.smallInput}
-                                placeholder="Name"
-                                placeholderTextColor="gray"
-                                value={ingredient.name}
-                                editable={ingredients.find(item => item.name === ingredient.name) ? false : true}
-                                onChangeText={(text) => handleIngredientsChange(index, 'name', text)}
-                            />
-                            <TextInput
-                                style={styles.smallInput}
-                                maxLength={5}
-                                keyboardType='numeric'
-                                placeholder="Enter Quantity"
-                                placeholderTextColor="gray"
-                                value={ingredient.quantity ? (ingredient.quantity) : ''}
-                                onChangeText={(text) => { handleIngredientsChange(index, 'quantity', text)}}
-                            />
-                            <Picker
-                                style={styles.smallInput}
-                                selectedValue={ingredient.unit}
-                                onValueChange={(itemValue) => handleIngredientsChange(index, 'unit', itemValue)}
-                            >
-                                <Picker.Item label="Select Unit..." value="" />
-                                {
-                                    (unitMaps.find(map => map.name === ingredient.name)?.fromUnit)
-                                        ? unitMaps.find(map => map.name === ingredient.name)?.fromUnit.map((unit, index) => (
-                                            <Picker.Item key={index} label={unit.unit} value={unit.unit} />
-                                        ))
-                                        : allUnits.map((unit, index) => (
-                                            <Picker.Item key={index} label={unit} value={unit} />
-                                        ))
-                                }
-                            </Picker>
-                            <TextInput
-                                style={styles.smallInput}
-                                maxLength={8}
-                                keyboardType='numeric'
-                                placeholder="Unit Price"
-                                placeholderTextColor="gray"
-                                value={ingredient.unitPrice ? ingredient.unitPrice : ''}
-                                onChangeText={(text) => { handleIngredientsChange(index, 'unitPrice', text)}}
-                            />
-                            <TextInput
-                                style={styles.smallInput}
-                                keyboardType='numeric'
-                                placeholder="Total"
-                                placeholderTextColor="gray"
-                                editable={false}
-                                value={ingredient.total}
-                                onChangeText={(text) => { handleIngredientsChange(index, 'total', text)}}
-                            />
-                            <Icon.Button style={styles.crossBtn}
-                                name="times-circle-o"
-                                onPress={() => { handleDeleteIngredient(index)}}
-                                backgroundColor="transparent"
-                                underlayColor="transparent"
-                                iconStyle={{ margin: 0, padding: 0, fontSize: 25 }}
-                                color={"gray"}>
-                            </Icon.Button>
-                        </View>
-                    ))}
+                    {invoiceData.ingredients.map((ingredient, index) => {
+                        const isExistingIngredient = ingredient.name === '' || ingredients.some(item => item.name === ingredient.name);
+                        return (
+                            <View key={index} style={styles.rowContainer}>
+                                <Autocomplete
+                                    style={styles.smallInput}
+                                    value={ingredient.name}
+                                    onChange={(event, newValue) => {
+                                        handleIngredientsChange(index, 'name', newValue)
+                                        setInputValue(prevState => ({
+                                            ...prevState,
+                                            [index]: newValue
+                                        }))
+                                    }}
+                                    inputValue={inputValue[index]}
+                                    onInputChange={(event, newInputValue) => {
+                                        handleIngredientsChange(index, 'name', newInputValue)
+                                        setInputValue(prevState => ({
+                                            ...prevState,
+                                            [index]: newInputValue
+                                        }))
+                                    }}
+                                    filterOptions={(options) => filterOptions(index, ingredients.map(ingredient => ingredient.name))}
+                                    options={ingredients.map(ingredient => ingredient.name)}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            hiddenLabel
+                                            size='small'
+                                            placeholder="Name"
+                                            style={{ flex: 1, borderColor: !isExistingIngredient ? 'red' : 'default'}}
+                                            error={!isExistingIngredient}
+                                        // disabled={ingredients.some(item => item.name === ingredient.name)}
+                                        />
+                                    )}
+                                />
+
+                                {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <TextInput
+                                    style={ingredients.find(item => item.name === ingredient.name) ? styles.smallInputNonEditable : styles.smallInput}
+                                    placeholder="Name"
+                                    placeholderTextColor="gray"
+                                    value={ingredient.name}
+                                    editable={ingredients.find(item => item.name === ingredient.name) ? false : true}
+                                    onChangeText={(text) => {
+                                        handleIngredientsChange(index, 'name', text)
+                                        handleSimilarIngredientSearch(text, index)
+                                    }}
+                                    onFocus={() => { handleSimilarIngredientSearch(ingredient.name, index) }}
+                                />
+                                <Icon name={isIngDropdownVisible[index] ? "angle-up" : "angle-down"} size={20} color="gray" style={styles.dropdownIcon} onPress={() => toggleIngSearchDropdown(index)} />
+                            </View> */}
+                                {/* Search Results */}
+                                {/* {isIngDropdownVisible[index] && similarSearchResults[index] && similarSearchResults[index].length > 0 && (
+                                <View style={{ maxHeight: 200 }}>
+                                    <FlatList
+                                        style={styles.dropdownMenu}
+                                        data={similarSearchResults[index]}
+                                        keyExtractor={(item) => item._id}
+                                        renderItem={({ item }) => (
+                                            <TouchableOpacity
+                                                style={styles.dropdownItem}
+                                                onPress={() => {
+                                                    handleIngredientsChange(index, 'name', item.name)
+                                                    setSimilarSearchResults(prevState => ({
+                                                        ...prevState,
+                                                        [index]: []
+                                                    }))
+                                                    setIsIngDropdownVisible(prevState => ({
+                                                        ...prevState,
+                                                        [index]: false,
+                                                    }))
+                                                }}
+                                            >
+                                                <Text>{item.name}</Text>
+                                            </TouchableOpacity>
+                                        )}
+                                        contentContainerStyle={{ flexGrow: 1 }}
+                                    />
+                                </View>
+                            )} */}
+                                <TextInput
+                                    style={styles.smallInput}
+                                    maxLength={5}
+                                    keyboardType='numeric'
+                                    placeholder="Enter Quantity"
+                                    placeholderTextColor="gray"
+                                    value={ingredient.quantity ? (ingredient.quantity) : ''}
+                                    onChangeText={(text) => {
+                                        if (/^\d*\.?\d*$/.test(text)) {
+                                            handleIngredientsChange(index, 'quantity', text);
+                                        }
+                                    }}
+                                />
+                                <Picker
+                                    style={styles.smallInput}
+                                    selectedValue={ingredient.unit}
+                                    onValueChange={(itemValue) => handleIngredientsChange(index, 'unit', itemValue)}
+                                >
+                                    <Picker.Item label="Select Unit..." value="" />
+                                    {
+                                        (unitMaps.find(map => map.name === ingredient.name)?.fromUnit)
+                                            ? unitMaps.find(map => map.name === ingredient.name)?.fromUnit.map((unit, index) => (
+                                                <Picker.Item key={index} label={unit.unit} value={unit.unit} />
+                                            ))
+                                            : allUnits.map((unit, index) => (
+                                                <Picker.Item key={index} label={unit} value={unit} />
+                                            ))
+                                    }
+                                </Picker>
+                                <TextInput
+                                    style={styles.smallInput}
+                                    maxLength={8}
+                                    keyboardType='numeric'
+                                    placeholder="Unit Price"
+                                    placeholderTextColor="gray"
+                                    value={ingredient.unitPrice ? ingredient.unitPrice : ''}
+                                    onChangeText={(text) => {
+                                        if (/^\d*\.?\d*$/.test(text)) {
+                                            handleIngredientsChange(index, 'unitPrice', text);
+                                        }
+                                    }}
+                                />
+                                <TextInput
+                                    style={styles.smallInput}
+                                    keyboardType='numeric'
+                                    placeholder="Total"
+                                    placeholderTextColor="gray"
+                                    editable={false}
+                                    value={ingredient.total}
+                                    onChangeText={(text) => {
+                                        if (/^\d*\.?\d*$/.test(text)) {
+                                            handleIngredientsChange(index, 'total', text);
+                                        }
+                                    }}
+                                />
+                                <Icon.Button style={styles.crossBtn}
+                                    name="times-circle-o"
+                                    onPress={() => { handleDeleteIngredient(index) }}
+                                    backgroundColor="transparent"
+                                    underlayColor="transparent"
+                                    iconStyle={{ margin: 0, padding: 0, fontSize: 25 }}
+                                    color={"gray"}>
+                                </Icon.Button>
+                            </View>
+                        )
+                    })}
                 </View>
 
                 <View style={styles.inputContainer}>
@@ -504,7 +665,26 @@ const AddInvoice = (props) => {
                         keyboardType='numeric'
                         editable={false}
                         value={invoiceData.total}
-                        onChangeText={(text) => setInvoiceData({ ...invoiceData, total: text })}
+                        onChangeText={(text) => {
+                            if (/^\d*\.?\d*$/.test(text)) {
+                                setInvoiceData({ ...invoiceData, total: text })
+                            }
+                        }}
+                    />
+                </View>
+
+                <View style={styles.inputContainer}>
+                    <Text style={styles.label}>Total Payable Amount ($)</Text>
+                    <TextInput
+                        style={[styles.input]}
+                        keyboardType='numeric'
+                        editable={false}
+                        value={invoiceData.totalPayable}
+                        onChangeText={(text) => {
+                            if (/^\d*\.?\d*$/.test(text)) {
+                                setInvoiceData({ ...invoiceData, totalPayable: text })
+                            }
+                        }}
                     />
                 </View>
 
@@ -679,6 +859,18 @@ const styles = {
         paddingHorizontal: 10,
         marginBottom: 12,
         borderRadius: 3,
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        marginBottom: 5,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 3,
+        paddingRight: 30,
+        paddingLeft: 10,
+        paddingVertical: 8,
+        backgroundColor: '#f2f2f2'
     },
     rowContainer: {
         flexDirection: 'row',

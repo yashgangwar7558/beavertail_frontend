@@ -487,6 +487,13 @@ const MenuBuilder = (props) => {
                         />
                         <Icon name={isDropdownVisible ? "angle-up" : "angle-down"} size={20} color="gray" style={styles.dropdownIcon} onPress={toggleSearchDropdown} />
                     </View>
+                    <View style={styles.headerContainer}>
+                        <View style={{ flex: 1 }}><Text style={{ fontWeight: 'bold', fontFamily: 'inherit' }}>Ingredient</Text></View>
+                        <View style={{ flex: 1 }}><Text style={{ fontWeight: 'bold', fontFamily: 'inherit' }}>Category</Text></View>
+                        <View style={{ flex: 1 }}><Text style={{ fontWeight: 'bold', fontFamily: 'inherit' }}>Quantity</Text></View>
+                        <View style={{ flex: 1 }}><Text style={{ fontWeight: 'bold', fontFamily: 'inherit' }}>Unit</Text></View>
+                        <View style={{ flex: 1 }}><Text style={{ fontWeight: 'bold', fontFamily: 'inherit' }}>Note</Text></View>
+                    </View>
                     {/* Search Results */}
                     {isDropdownVisible && searchResults.length > 0 && (
                         <View style={{ maxHeight: 200 }}>
@@ -532,7 +539,11 @@ const MenuBuilder = (props) => {
                                 placeholder="Enter a Quantity"
                                 placeholderTextColor="gray"
                                 value={ingredient.quantity ? ingredient.quantity : ''}
-                                onChangeText={(text) => handleIngredientsChange(index, 'quantity', text)}
+                                onChangeText={(text) => {
+                                    if (/^\d*\.?\d*$/.test(text)) {
+                                        handleIngredientsChange(index, 'quantity', text)
+                                    }
+                                }}
                             />
                             <Picker
                                 style={styles.smallInput}
@@ -573,7 +584,11 @@ const MenuBuilder = (props) => {
                         maxLength={6}
                         keyboardType='numeric'
                         value={recipeData.modifierCost ? recipeData.modifierCost : ''}
-                        onChangeText={(text) => setRecipeData({ ...recipeData, modifierCost: text })}
+                        onChangeText={(text) => {
+                            if (/^\d*\.?\d*$/.test(text)) {
+                                setRecipeData({ ...recipeData, modifierCost: text })
+                            }
+                        }}
                     />
                 </View>
 
@@ -584,7 +599,11 @@ const MenuBuilder = (props) => {
                         maxLength={6}
                         keyboardType='numeric'
                         value={recipeData.menuPrice ? recipeData.menuPrice : ''}
-                        onChangeText={(text) => setRecipeData({ ...recipeData, menuPrice: text })}
+                        onChangeText={(text) => {
+                            if (/^\d*\.?\d*$/.test(text)) {
+                                setRecipeData({ ...recipeData, menuPrice: text })
+                            }
+                        }}
                     />
                 </View>
 
@@ -665,6 +684,18 @@ const styles = {
         borderRadius: 3,
         backgroundColor: '#fff',
         padding: 10,
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        marginBottom: 5,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 3,
+        paddingRight: 30,
+        paddingLeft: 10,
+        paddingVertical: 8,
+        backgroundColor: '#f2f2f2'
     },
     rowContainer: {
         flexDirection: 'row',

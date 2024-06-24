@@ -36,7 +36,7 @@ const PosSimulator = (props) => {
 
     useEffect(() => {
         props.setHeaderTitle('Billing')
-      }, [])
+    }, [])
 
     const getRecipes = async () => {
         try {
@@ -278,12 +278,15 @@ const PosSimulator = (props) => {
                             />
                             <TextInput
                                 style={styles.smallInput}
-                                keyboardType='numeric'
                                 placeholder="Quantity"
                                 placeholderTextColor="gray"
                                 maxLength={3}
                                 value={item.quantity ? item.quantity : ''}
-                                onChangeText={(text) => { handleItemChange(index, 'quantity', parseFloat(text))}}
+                                onChangeText={(text) => {
+                                    if (/^\d*\.?\d*$/.test(text)) {
+                                        handleItemChange(index, 'quantity', parseFloat(text));
+                                    }
+                                }}
                             />
                             <TextInput
                                 style={styles.smallInputNonEditable}
@@ -299,7 +302,11 @@ const PosSimulator = (props) => {
                                 placeholderTextColor="gray"
                                 value={item.total}
                                 editable={false}
-                                onChangeText={(text) => { handleItemChange(index, 'total', text)}}
+                                onChangeText={(text) => {
+                                    if (/^\d*\.?\d*$/.test(text)) {
+                                        handleItemChange(index, 'total', text)
+                                    }
+                                }}
                             />
                             <Icon.Button style={styles.crossBtn}
                                 name="times-circle-o"
@@ -320,7 +327,11 @@ const PosSimulator = (props) => {
                         keyboardType='numeric'
                         value={billData.total}
                         editable={false}
-                        onChangeText={(text) => { setBillData({ ...billData, total: text })}}
+                        onChangeText={(text) => {
+                            if (/^\d*\.?\d*$/.test(text)) {
+                                setBillData({ ...billData, total: text })
+                            }
+                        }}
                     />
                 </View>
 
@@ -331,7 +342,11 @@ const PosSimulator = (props) => {
                         keyboardType='numeric'
                         maxLength={5}
                         value={billData.taxPercent}
-                        onChangeText={handleTaxChange}
+                        onChangeText={(text) => {
+                            if (/^\d*\.?\d*$/.test(text)) {
+                                handleTaxChange(text)
+                            }
+                        }}
                     />
                 </View>
 
@@ -341,7 +356,11 @@ const PosSimulator = (props) => {
                         style={[styles.input]}
                         keyboardType='numeric'
                         value={billData.totalPayable}
-                        onChangeText={(text) => setBillData({ ...billData, totalPayable: text })}
+                        onChangeText={(text) => {
+                            if (/^\d*\.?\d*$/.test(text)) {
+                                setBillData({ ...billData, totalPayable: text })
+                            }
+                        }}
                     />
                 </View>
 
