@@ -497,7 +497,8 @@ const InvoiceTable = (props) => {
                                 <View style={styles.invoiceDetails}>
                                     <Text style={{ margin: '4px' }}><span style={{ fontWeight: 'bold' }}>Vendor:</span> {selectedInvoice.vendor}</Text>
                                     <Text style={{ margin: '4px' }}><span style={{ fontWeight: 'bold' }}>Date:</span> {selectedInvoice.invoiceDate}</Text>
-                                    <Text style={{ margin: '4px' }}><span style={{ fontWeight: 'bold' }}>Amt. Payable:</span> ${selectedInvoice.total}</Text>
+                                    <Text style={{ margin: '4px' }}><span style={{ fontWeight: 'bold' }}>Total Amount:</span> ${selectedInvoice.total}</Text>
+                                    <Text style={{ margin: '4px' }}><span style={{ fontWeight: 'bold' }}>{selectedInvoice.totalPayable < 0 ? 'Total Receivable Amount:' : 'Total Payable Amount:'}</span> ${Math.abs(selectedInvoice.totalPayable)}</Text>
                                     <Text style={{ margin: '4px' }}><span style={{ fontWeight: 'bold' }}>Status:</span> {selectedInvoice.status.type}</Text>
                                 </View>
                                 <DataTable>

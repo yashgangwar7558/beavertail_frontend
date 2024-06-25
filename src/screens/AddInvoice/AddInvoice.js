@@ -104,14 +104,14 @@ const AddInvoice = (props) => {
                 ingredients: editInvoiceData.ingredients || [],
                 payment: editInvoiceData.payment,
                 total: editInvoiceData.total,
-                totalPayable: editInvoiceData.total
+                totalPayable: editInvoiceData.totalPayable
             });
             setEditMode(false)
         }
     }, [])
 
     useEffect(() => {
-        calculateTotalAmount();
+        calculateTotalAmount()
     }, [invoiceData.ingredients])
 
     const handleInvoiceExtraction = async () => {
@@ -123,6 +123,7 @@ const AddInvoice = (props) => {
                 headers: { 'Content-Type': 'multipart/form-data' },
             })
             const extractedData = result.data.extractedData
+            console.log(result);
             if (result.data.success) {
                 setInvoiceData({
                     ...invoiceData,
@@ -137,10 +138,11 @@ const AddInvoice = (props) => {
                 setLoading(false)
             } else {
                 setLoading(false)
-                alert(result.data.message)
+                alert("Extraction failed. Please try again!")
             }
         } catch (err) {
             console.log(`error invoice data extraction`);
+            setLoading(false)
         }
     }
 
@@ -319,6 +321,7 @@ const AddInvoice = (props) => {
             data.append('payment', invoiceData.payment);
             data.append('statusType', statusType);
             data.append('total', invoiceData.total);
+            data.append('totalPayable', invoiceData.totalPayable);
 
             let result
             if (editInvoiceData && editInvoiceData._id) {
@@ -674,15 +677,15 @@ const AddInvoice = (props) => {
                 </View>
 
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Total Payable Amount ($)</Text>
+                    <Text style={styles.label}>{invoiceData.totalPayable < 0 ? 'Total Receivable Amount ($)' : 'Total Payable Amount ($)'}</Text>
                     <TextInput
                         style={[styles.input]}
                         keyboardType='numeric'
-                        editable={false}
-                        value={invoiceData.totalPayable}
+                        editable={true}
+                        value={invoiceData.totalPayable.toString().replace('-', '')}
                         onChangeText={(text) => {
-                            if (/^\d*\.?\d*$/.test(text)) {
-                                setInvoiceData({ ...invoiceData, totalPayable: text })
+                            if (/^-?\d*\.?\d*$/.test(text)) {
+                                setInvoiceData({ ...invoiceData, totalPayable: text });
                             }
                         }}
                     />
