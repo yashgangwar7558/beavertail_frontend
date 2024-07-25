@@ -15,7 +15,6 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import Logo from '../../../assets/logo/cactusAI.png';
-import Background from '../../../assets/background1.jpg';
 import client from '../../utils/ApiConfig'
 
 const SignUp = ({ navigation }) => {

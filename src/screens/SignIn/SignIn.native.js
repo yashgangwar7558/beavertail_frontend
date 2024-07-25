@@ -1,5 +1,4 @@
 import Logo from '../../../assets/logo/cactusAI.png';
-import Background from '../../../assets/background1.jpg';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, useContext } from 'react';
 import {

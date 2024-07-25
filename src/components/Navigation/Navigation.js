@@ -31,6 +31,9 @@ import { UserProfile } from '../../screens/Settings/UserProfile.js';
 import { TenantInfo } from '../../screens/Settings/TenantInfo.js';
 import { UserManagement } from '../../screens/Settings/UserManagement.js';
 import { CreateUser } from '../../screens/Settings/CreateUser.js';
+import OnboardRestaurant from '../../screens/OnboardRestaurant';
+import ManageRestaurants from '../../screens/ManageRestaurants';
+import ManageUsers from '../../screens/ManageUsers';
 import PermissionDeniedPage from '../../screens/PermissionDeniedPage';
 import NotFoundPage from '../../screens/NotFoundPage';
 import { AuthContext } from '../../context/AuthContext.js';
@@ -90,6 +93,9 @@ const Navigation = () => {
     { path: '/settings/tenant-info', component: TenantInfo },
     { path: '/settings/user-management', component: UserManagement },
     { path: '/settings/create-user', component: CreateUser },
+    { path: '/superadmin/onboarding', component: OnboardRestaurant },
+    { path: '/superadmin/restaurants', component: ManageRestaurants },
+    { path: '/superadmin/users', component: ManageUsers },
   ];
 
   const hasPermissionForRoute = (routePath) => {
@@ -108,7 +114,40 @@ const Navigation = () => {
             <Route path="/loading" element={<SplashScreen />} />
           </Routes>
         </>
-      ) : userInfo.token ? (
+      ) : userInfo.token ? (userInfo.user.username == 'Superadmin1' ? (
+        <>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <AlertsProvider>
+              <Sidebar setHeaderTitle={setHeaderTitle} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
+              <Content isSidebarCollapsed={isSidebarCollapsed}>
+                <Header title={headerTitle} setHeaderTitle={setHeaderTitle} username={userInfo.user.username} isSidebarCollapsed={isSidebarCollapsed} setIsSidebarCollapsed={setIsSidebarCollapsed} />
+                <Routes>
+                  <Route path="/" element={<Navigate to="/superadmin/onboarding" setHeaderTitle={setHeaderTitle} />} />
+                  <Route path="/signin" element={<Navigate to="/superadmin/onboarding" setHeaderTitle={setHeaderTitle} />} />
+                  {allowedRoutes.map(route => (
+                    <Route
+                      key={route.path}
+                      path={route.path}
+                      element={
+                        hasPermissionForRoute(route.path) ? (
+                          <>
+                            <route.component setHeaderTitle={setHeaderTitle} />
+                          </>
+                        ) : (
+                          <Navigate to="/permission-denied" replace />
+                        )
+                      }
+                    />
+                  ))}
+                  <Route path="/permission-denied" element={<PermissionDeniedPage setHeaderTitle={setHeaderTitle} />} />
+                  <Route path="*" element={<Navigate to="/page-not-found" setHeaderTitle={setHeaderTitle} />} />
+                  <Route path="/page-not-found" element={<NotFoundPage setHeaderTitle={setHeaderTitle} />} />
+                </Routes>
+              </Content>
+            </AlertsProvider>
+          </LocalizationProvider>
+        </>
+      ) : (
         <>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <AlertsProvider>
@@ -141,7 +180,7 @@ const Navigation = () => {
             </AlertsProvider>
           </LocalizationProvider>
         </>
-      ) : (
+      )) : (
         <>
           <Routes>
             <Route path="/" element={<Navigate to="/signin" />} />

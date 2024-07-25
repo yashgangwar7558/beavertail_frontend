@@ -1,5 +1,4 @@
 import Logo from '../../assets/logo/greenCactusAi.png';
-import Background from '../../assets/background1.jpg';
 import { useNavigate } from 'react-router'
 import React, { useState, useContext } from 'react';
 import {

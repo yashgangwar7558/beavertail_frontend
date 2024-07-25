@@ -27,8 +27,8 @@ const StyledButtonFill = styled(Button)({
     backgroundColor: '#47bf93',
     borderRadius: '12px',
     '&:hover': {
-        backgroundColor: '#47bf93', // Prevent background color change on hover
-        color: '#ffffff', // Ensure color remains the same on hover
+        backgroundColor: '#47bf93', 
+        color: '#ffffff',
     },
 });
 
@@ -101,7 +101,7 @@ export const CreateUser = (props) => {
                 setLoading(false)
             } else {
                 setError(result.data.message)
-                setLoading(false);
+                setLoading(false)
             }
         } catch (error) {
             console.log(`creating user error ${error}`);

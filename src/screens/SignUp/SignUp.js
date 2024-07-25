@@ -1,5 +1,4 @@
 import Logo from '../../assets/logo/blackCactusAi.png';
-import Background from '../../assets/background1.jpg';
 import './SignUp.css'
 import { useNavigate } from 'react-router'
 import React, { useState, useContext, useEffect } from 'react';
