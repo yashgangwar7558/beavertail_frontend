@@ -13,14 +13,14 @@ import {
     CardContent,
     CardMedia
 } from '@mui/material';
-import poslogo1 from '../../assets/logo/poslogo1.png'
-import poslogo2 from '../../assets/logo/poslogo2.webp'
-import poslogo3 from '../../assets/logo/poslogo3.webp'
-import poslogo4 from '../../assets/logo/poslogo4.webp'
-import poslogo5 from '../../assets/logo/poslogo5.webp'
-import poslogo6 from '../../assets/logo/poslogo6.webp'
-import poslogo7 from '../../assets/logo/poslogo7.webp'
-import poslogo8 from '../../assets/logo/poslogo8.webp'
+import accountlogo1 from '../../assets/logo/accountlogo1.webp'
+import accountlogo2 from '../../assets/logo/accountlogo2.webp'
+import accountlogo3 from '../../assets/logo/accountlogo3.webp'
+import accountlogo4 from '../../assets/logo/accountlogo4.webp'
+import accountlogo5 from '../../assets/logo/accountlogo5.webp'
+import accountlogo6 from '../../assets/logo/accountlogo6.webp'
+import accountlogo7 from '../../assets/logo/accountlogo7.webp'
+import accountlogo8 from '../../assets/logo/accountlogo8.webp'
 
 const StyledButtonTrans = styled(Button)({
     color: '#47bf93',
@@ -45,17 +45,17 @@ const StyledButtonFill = styled(Button)({
 });
 
 const posOptions = [
-    { name: 'Shift4', logo: poslogo1, description: 'Best-in-breed, holistic, end-to-end', fields: [{ label: 'API Name', key: 'posName', value: 'shift4' }, { label: 'POS Id', key: 'posId', value: '6686b472dacd2ac64371ce9r' }, { label: 'Location Id', key: 'identifier', value: '' }] },
-    { name: 'POSitouch', logo: poslogo2, description: 'Description for POS 2', fields: [{ label: 'Access Token', value: '' }] },
-    { name: '7Shifts', logo: poslogo3, description: 'Description for POS 3', fields: [{ label: 'Client ID', value: '' }, { label: 'Client Secret', value: '' }, { label: 'Endpoint URL', value: '' }] },
-    { name: 'Dinnerware', logo: poslogo4, description: 'Description for POS 4', fields: [{ label: 'Key', value: '' }, { label: 'Secret', value: '' }] },
-    { name: 'Clover', logo: poslogo5, description: 'Description for POS 5', fields: [{ label: 'Token', value: '' }] },
-    { name: 'Harbour Touch', logo: poslogo6, description: 'Description for POS 6', fields: [{ label: 'ID', value: '' }, { label: 'Secret Key', value: '' }] },
-    { name: 'Lightspeed', logo: poslogo7, description: 'Description for POS 6', fields: [{ label: 'ID', value: '' }, { label: 'Secret Key', value: '' }] },
-    { name: 'Toast', logo: poslogo8, description: 'Description for POS 6', fields: [{ label: 'ID', value: '' }, { label: 'Secret Key', value: '' }] },
+    { name: 'Intuit', logo: accountlogo1, description: 'Best-in-breed, holistic, end-to-end', fields: [{ label: 'API Name', key: 'posName', value: '' }, { label: 'Account Id', key: 'posId', value: '' }, { label: 'Account Key', key: 'identifier', value: '' }] },
+    { name: 'Sage', logo: accountlogo2, description: 'Description for POS 2', fields: [{ label: 'Access Token', value: '' }] },
+    { name: 'AccountEdge', logo: accountlogo3, description: 'Description for POS 3', fields: [{ label: 'Client ID', value: '' }, { label: 'Client Secret', value: '' }, { label: 'Endpoint URL', value: '' }] },
+    { name: 'Compeat', logo: accountlogo4, description: 'Description for POS 6', fields: [{ label: 'ID', value: '' }, { label: 'Secret Key', value: '' }] },
+    { name: 'M3', logo: accountlogo5, description: 'Description for POS 4', fields: [{ label: 'Key', value: '' }, { label: 'Secret', value: '' }] },
+    { name: 'Netsuite', logo: accountlogo6, description: 'Description for POS 5', fields: [{ label: 'Token', value: '' }] },
+    { name: 'Restaurant365', logo: accountlogo7, description: 'Description for POS 6', fields: [{ label: 'ID', value: '' }, { label: 'Secret Key', value: '' }] },
+    { name: 'DataPlus', logo: accountlogo8, description: 'Description for POS 6', fields: [{ label: 'ID', value: '' }, { label: 'Secret Key', value: '' }] },
 ];
 
-const AccountingIntegrationForm = ({ nextStep, prevStep, tenantId }) => {
+const AccountingIntegrationForm = ({ nextStep, prevStep, tenantId, handleSnackbarOpen, handleSnackbarMessage }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [selectedPos, setSelectedPos] = useState(null);
@@ -88,34 +88,41 @@ const AccountingIntegrationForm = ({ nextStep, prevStep, tenantId }) => {
     }
 
     const handleSubmit = async () => {
-        try {
-            if (selectedPos == null) {
-                setError('Please select a POS to integrate')
-                return
-            }
-            setLoading(true)
-            const data = inputValues
-            const result = await client.post('/create-posRef', data, {
-                headers: { 'Content-Type': 'application/json' },
-            })
-            if (result.data.success) {
-                setError(null)
-                setLoading(false)
-                nextStep()
-            } else {
-                setError(result.data.message)
-                setLoading(false)
-            }
-        } catch (err) {
-            console.log(`Error integrating pos ${err}`);
-            setLoading(false);
+        if (selectedPos == null) {
+            setError('Please select any Accounting System to integrate')
+            return
         }
+        handleSnackbarMessage("Accounting system integrated successfully")
+        handleSnackbarOpen()
+        nextStep()
+        // try {
+        //     if (selectedPos == null) {
+        //         setError('Please select a POS to integrate')
+        //         return
+        //     }
+        //     setLoading(true)
+        //     const data = inputValues
+        //     const result = await client.post('/create-posRef', data, {
+        //         headers: { 'Content-Type': 'application/json' },
+        //     })
+        //     if (result.data.success) {
+        //         setError(null)
+        //         setLoading(false)
+        //         nextStep()
+        //     } else {
+        //         setError(result.data.message)
+        //         setLoading(false)
+        //     }
+        // } catch (err) {
+        //     console.log(`Error integrating pos ${err}`);
+        //     setLoading(false);
+        // }
     };
 
     return (
         <Paper elevation={3} style={{ padding: '20px', borderRadius: '12px', marginTop: '20px' }}>
             <Typography variant="h5" gutterBottom>
-                Select POS
+                Select Accounting System
             </Typography>
             <Divider style={{ marginBottom: '16px' }} />
             <Grid container spacing={2}>

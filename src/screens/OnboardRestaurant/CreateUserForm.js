@@ -58,7 +58,7 @@ const MenuProps = {
     },
 };
 
-const CreateUserForm = ({ nextStep, prevStep, tenantId }) => {
+const CreateUserForm = ({ nextStep, prevStep, tenantId, handleSnackbarOpen, handleSnackbarMessage }) => {
     const [error, setError] = useState('');
     const [roles, setRoles] = useState([]);
     const [loading, setLoading] = useState(false)
@@ -95,7 +95,7 @@ const CreateUserForm = ({ nextStep, prevStep, tenantId }) => {
     }
 
     const handleSkip = async () => {
-        handleNext()
+        nextStep()
     }
 
     const handleCreateUser = async () => {
@@ -111,7 +111,9 @@ const CreateUserForm = ({ nextStep, prevStep, tenantId }) => {
             if (result.data.success) {
                 setError(null)
                 setLoading(false)
-                handleNext()
+                handleSnackbarMessage("User created successfully")
+                handleSnackbarOpen()
+                nextStep()
             } else {
                 setError(result.data.message)
                 setLoading(false)

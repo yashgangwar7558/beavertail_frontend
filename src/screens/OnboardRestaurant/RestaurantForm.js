@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import client from '../../utils/ApiConfig';
+import axios from 'axios';
 import {
     Container,
     Typography,
@@ -68,7 +69,7 @@ const cityStateData = {
     }
 }
 
-const RestaurantForm = ({ nextStep, storeTenantId }) => {
+const RestaurantForm = ({ nextStep, storeTenantId, storeTenant, handleSnackbarOpen, handleSnackbarMessage }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [tenantName, setTenantName] = useState('');
@@ -88,20 +89,102 @@ const RestaurantForm = ({ nextStep, storeTenantId }) => {
         phone: '',
     });
 
+    const [countries, setCountries] = useState([]);
+    const [states, setStates] = useState([]);
+    const [cities, setCities] = useState([]);
+
+    // const API_KEY = 'AIzaSyDnP8I_phTvn6UF2c3F_Do44upfPs7RWCw'
+
+    // useEffect(() => {
+    //     // Fetch countries on mount
+    //     axios.get('https://wft-geo-db.p.rapidapi.com/v1/geo/countries', {
+    //         headers: {
+    //             'x-rapidapi-key': 'c1093c6233mshaea59f31f0bd245p15a48cjsn40562553357c',
+    //             'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com'
+    //         }
+    //     })
+    //         .then(response => {setCountries(response.data.data), console.log(response.data.data)})
+    //         .catch(error => console.error('Error fetching countries:', error));
+    // }, []);
+
+    // useEffect(() => {
+    //     if (country) {
+    //         // Fetch states when country changes
+    //         axios.get(`https://wft-geo-db.p.rapidapi.com/v1/geo/countries/${country}/regions`, {
+    //             headers: {
+    //                 'x-rapidapi-key': 'c1093c6233mshaea59f31f0bd245p15a48cjsn40562553357c',
+    //                 'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com'
+    //             }
+    //         })
+    //             .then(response => setStates(response.data.data), console.log(response.data.data))
+    //             .catch(error => console.error('Error fetching states:', error));
+    //     }
+    // }, [country]);
+   
+
+    // useEffect(() => {
+    //     if (state) {
+    //         // Fetch cities when state changes
+    //         axios.get(`https://wft-geo-db.p.rapidapi.com/v1/geo/regions/${state}/cities`, {
+    //             headers: {
+    //                 'x-rapidapi-key': 'c1093c6233mshaea59f31f0bd245p15a48cjsn40562553357c',
+    //                 'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com'
+    //             }
+    //         })
+    //             .then(response => setCities(response.data.data), console.log(response.data.data))
+    //             .catch(error => console.error('Error fetching cities:', error));
+    //     }
+    // }, [state]);
+
+    // useEffect(() => {
+    //     // Fetch countries on mount
+    //     axios.get(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=&types=(regions)&key=${API_KEY}`)
+    //     .then(response => {
+    //         const countryData = response.data.predictions.map(prediction => prediction.description);
+    //         setCountries(countryData);
+    //     })
+    //     .catch(error => console.error('Error fetching countries:', error));
+    // }, []);
+
+    // useEffect(() => {
+    //     if (country) {
+    //         // Fetch states when a country is selected
+    //         axios.get(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${selectedCountry}&types=(regions)&key=${API_KEY}`)
+    //         .then(response => {
+    //             const stateData = response.data.predictions.map(prediction => prediction.description);
+    //             setStates(stateData);
+    //         })
+    //         .catch(error => console.error('Error fetching states:', error));
+    //     }
+    // }, [country]);
+
+    // useEffect(() => {
+    //     if (state) {
+    //         // Fetch cities when a state is selected
+    //         axios.get(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${selectedState}&types=(cities)&key=${API_KEY}`)
+    //         .then(response => {
+    //             const cityData = response.data.predictions.map(prediction => prediction.description);
+    //             setCities(cityData);
+    //         })
+    //         .catch(error => console.error('Error fetching cities:', error));
+    //     }
+    // }, [state]);
+
+
     const handleAddEmail = (emailType) => {
         if (emailType === 'invoice' && newInvoiceEmail) {
-            setInvoiceEmails([...invoiceEmails, newInvoiceEmail]);
-            setNewInvoiceEmail('');
+            setInvoiceEmails([...invoiceEmails, newInvoiceEmail])
+            setNewInvoiceEmail('')
         }
         if (emailType === 'bill' && newBillEmail) {
-            setBillEmails([...billEmails, newBillEmail]);
-            setNewBillEmail('');
+            setBillEmails([...billEmails, newBillEmail])
+            setNewBillEmail('')
         }
     };
 
     const handleRemoveEmail = (emailType, index) => {
         if (emailType === 'invoice') {
-            setInvoiceEmails(invoiceEmails.filter((_, i) => i !== index));
+            setInvoiceEmails(invoiceEmails.filter((_, i) => i !== index))
         }
         if (emailType === 'bill') {
             setBillEmails(billEmails.filter((_, i) => i !== index));
@@ -124,26 +207,32 @@ const RestaurantForm = ({ nextStep, storeTenantId }) => {
     };
 
     const handleSubmit = async () => {
-        nextStep()
-        // try {
-        //     setLoading(true)
-        //     const data = {tenantName, tenantDescription, address, country, state, city, invoiceEmails, billEmails, contact}
-        //     const result = await client.post('/create-tenant', data, {
-        //         headers: { 'Content-Type': 'application/json' },
-        //     })
-        //     if (result.data.success) {
-        //         setError(null)
-        //         setLoading(false)
-        //         storeTenantId(result.data.tenantId)
-        //         nextStep()
-        //     } else {
-        //         setError(result.data.message)
-        //         setLoading(false);
-        //     }
-        // } catch (err) {
-        //     console.log(`error creating new tenant ${err}`);
-        //     setLoading(false);
-        // }
+        // nextStep()
+        // handleSnackbarMessage("Restaurant created successfully")
+        // handleSnackbarOpen()
+        try {
+            setLoading(true)
+            const data = {tenantName, tenantDescription, address, country, state, city, invoiceEmails, billEmails, contact}
+            const result = await client.post('/create-tenant', data, {
+                headers: { 'Content-Type': 'application/json' },
+            })
+            console.log(result.data.tenant);
+            if (result.data.success) {
+                setError(null)
+                setLoading(false)
+                storeTenantId(result.data.tenant._id)
+                storeTenant(result.data.tenant)
+                handleSnackbarMessage("Restaurant created successfully")
+                handleSnackbarOpen()
+                nextStep()
+            } else {
+                setError(result.data.message)
+                setLoading(false);
+            }
+        } catch (err) {
+            console.log(`error creating new tenant ${err}`);
+            setLoading(false);
+        }
     }
 
     return (
@@ -185,6 +274,10 @@ const RestaurantForm = ({ nextStep, storeTenantId }) => {
                                 getOptionLabel={(option) => option}
                                 renderInput={(params) => <TextField {...params} label="Country" />}
                                 onChange={(event, newValue) => setCountry(newValue)}
+                                // options={countries.map((country) => country.name)}
+                                // getOptionLabel={(option) => option}
+                                // renderInput={(params) => <TextField {...params} label="Country" />}
+                                // onChange={(event, newValue) => setCountry(newValue)}
                             />
                         </FormControl>
                     </Grid>
@@ -195,7 +288,10 @@ const RestaurantForm = ({ nextStep, storeTenantId }) => {
                                 getOptionLabel={(option) => option}
                                 renderInput={(params) => <TextField {...params} label="State" />}
                                 onChange={(event, newValue) => setState(newValue)}
-
+                                // options={states.map((state) => state.name)}
+                                // getOptionLabel={(option) => option}
+                                // renderInput={(params) => <TextField {...params} label="State" />}
+                                // onChange={(event, newValue) => setState(newValue)}
                             />
                         </FormControl>
                     </Grid>
@@ -206,6 +302,10 @@ const RestaurantForm = ({ nextStep, storeTenantId }) => {
                                 getOptionLabel={(option) => option}
                                 renderInput={(params) => <TextField {...params} label="City" />}
                                 onChange={(event, newValue) => setCity(newValue)}
+                                // options={cities.map((city) => city.name)}
+                                // getOptionLabel={(option) => option}
+                                // renderInput={(params) => <TextField {...params} label="City" />}
+                                // onChange={(event, newValue) => setCity(newValue)}
                             />
                         </FormControl>
                     </Grid>

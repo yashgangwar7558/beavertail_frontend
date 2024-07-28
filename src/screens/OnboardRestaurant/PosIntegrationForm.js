@@ -11,7 +11,9 @@ import {
     styled,
     Card,
     CardContent,
-    CardMedia
+    CardMedia,
+    Snackbar,
+    Alert
 } from '@mui/material';
 import poslogo1 from '../../assets/logo/poslogo1.png'
 import poslogo2 from '../../assets/logo/poslogo2.webp'
@@ -55,7 +57,7 @@ const posOptions = [
     { name: 'Toast', logo: poslogo8, description: 'Description for POS 6', fields: [{ label: 'ID', value: '' }, { label: 'Secret Key', value: '' }] },
 ];
 
-const PosIntegrationForm = ({ nextStep, prevStep, tenantId }) => {
+const PosIntegrationForm = ({ nextStep, prevStep, tenantId, handleSnackbarOpen, handleSnackbarMessage }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [selectedPos, setSelectedPos] = useState(null);
@@ -90,7 +92,7 @@ const PosIntegrationForm = ({ nextStep, prevStep, tenantId }) => {
     const handleSubmit = async () => {
         try {
             if (selectedPos == null) {
-                setError('Please select a POS to integrate')
+                setError('Please select any POS to integrate')
                 return
             }
             setLoading(true)
@@ -101,6 +103,8 @@ const PosIntegrationForm = ({ nextStep, prevStep, tenantId }) => {
             if (result.data.success) {
                 setError(null)
                 setLoading(false)
+                handleSnackbarMessage("POS integrated successfully")
+                handleSnackbarOpen()
                 nextStep()
             } else {
                 setError(result.data.message)
@@ -142,7 +146,6 @@ const PosIntegrationForm = ({ nextStep, prevStep, tenantId }) => {
                     </Grid>
                 ))}
             </Grid>
-
 
             {selectedPos && (
                 <>
