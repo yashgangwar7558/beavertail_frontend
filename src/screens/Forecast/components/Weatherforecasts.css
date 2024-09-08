@@ -1,0 +1,167 @@
+.weather-container {
+    background-image: url('https://images.unsplash.com/photo-1723755952827-54aadfcd8bcf?q=80&w=3774&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); /* Add your background image here */
+    background-size: cover;
+    background-position: center;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    color: #fff; /* Ensures text color is visible against the background */
+  }
+  
+  .weather-container h1 {
+    margin-bottom: 10px;
+    padding-top: 20px;
+    font-size: 24px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: auto;
+  }
+  
+  .weather-container .location-icon {
+    margin-right: 10px;
+    width: 24px; /* Adjust size as needed */
+    height: 24px;
+  }
+  
+  .current-weather {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .current-weather img {
+    width: 80px; /* Adjust size as needed */
+    height: 80px;
+    border-radius: 8px; /* Round corners */
+  }
+  
+  .temperature {
+    font-size: 36px;
+    margin-left: 15px;
+    font-weight: bold; /* Optional: make the temperature stand out */
+  }
+  .toggle-button-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 5px;
+  }
+  
+  .toggle-button-container button {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    opacity: 0.3;
+    border-radius: 15px;
+  }
+  
+  .toggle-button-container .active {
+    background: #000000;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(219, 213, 213, 0.2);
+    border-width: 3px;
+    border-color: #000000;
+    opacity: 1;
+    border-radius: 15px;
+  }
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .button-container button {
+    background-color: rgba(255, 255, 255, 0.3); /* Highlight active button */
+    color: #fff; /* White text color */
+    border: none;
+    padding: 10px 20px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    opacity: 0.5;
+  }
+  
+  .button-container button.active {
+    background-color: rgba(255, 255, 255, 0.3); 
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.5); 
+  }
+  
+  .button-container button:hover {
+    background-color: rgba(255, 255, 255, 0.6); 
+    transform: scale(1.05); 
+  }
+  
+  .weather-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .daily-weather, .hourly-weather {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+  
+  .day, .hour {
+    background: rgba(146, 122, 122, 0.5); 
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    color: #fff; 
+    width: 120px; 
+  }
+  
+  .day img, .hour img {
+    width: 60px; 
+    height: 60px;
+    margin-bottom: 5px;
+    border-radius: 8px; 
+  }
+  
+  .day p, .hour p {
+    margin: 5px 0;
+  }
+  .weather-container h1 {
+    margin-bottom: 10px;
+    padding-top: 20px;
+    font-size: 28px; 
+    font-weight: bold; 
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff; 
+  }
+  
+  .location-icon {
+    margin-right: 10px;
+    width: 24px; 
+    height: 24px;
+    color: #fff; 
+  }
+  .weather-container {
+    background-size: cover;
+    background-position: center;
+    color: white; 
+  }
+  
+  
+  
+  
+  
+
+  
+  
+  

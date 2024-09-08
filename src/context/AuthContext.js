@@ -132,6 +132,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     const login = async (username, password, navigate) => {
+        
         setIsLoading(true);
         try {
             if (username.includes(' ')) {

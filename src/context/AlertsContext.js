@@ -12,6 +12,9 @@ export const AlertsProvider = ({ children }) => {
     const [alertsLoading, setAlertsLoading] = useState(false);
     const [alertStatus, setAlertStatus] = useState(true)
 
+    const [extractionProcesses, setExtractionProcesses] = useState([])
+    const [extractionLoading, setExtractionLoading] = useState(false);
+
     const fetchAlerts = async () => {
         try {
             setAlertsLoading(true)
@@ -36,6 +39,61 @@ export const AlertsProvider = ({ children }) => {
         }
     }, [userInfo, alertStatus])
 
+    const fetchExtractionProcesses = async () => {
+        try {
+            setExtractionLoading(true)
+            const result = await client.post('/get-extraction-processes', {
+                headers: { 'Content-Type': 'application/json' },
+            })
+            setExtractionProcesses(result.data.processes)
+            console.log(result.data.processes)
+
+            setExtractionLoading(false)
+        } catch (error) {
+            setExtractionLoading(false)
+            console.log(`getting extraction processes error ${error}`)
+        }
+    }
+
+    useEffect(() => {
+        fetchExtractionProcesses()
+    }, [])
+
+    const retryExtractionProcess = async (processId, tenantId) => {
+        try {
+            const data = { processId: processId, tenantId: tenantId }
+            console.log(data);
+            
+            const result = await client.post('/retry-extraction', data, {
+                headers: {
+                    'content-type': 'application/json'
+                },
+            })
+            if(!result.data.success) {
+                console.log(result.data.message);
+            }
+        } catch (error) {
+            console.log(`getting error retrying extraction process ${error}`)
+        }
+    }
+
+    const deleteExtractionProcess = async (processId, tenantId) => {
+        try {
+            const data = { processId: processId, tenantId: tenantId}
+            
+            const result = await client.post('/delete-extraction', data, {
+                headers: {
+                    'content-type': 'application/json'
+                },
+            })
+            if(!result.data.success) {
+                console.log(result.data.message);
+            }
+        } catch (error) {
+            console.log(`getting error deleting extraction process ${error}`)
+        }
+    }
+
     useEffect(() => {
         const socket = io(Constants.expoConfig.extra.backendUrl, {  // https://35.209.240.116:9091 http://localhost:8080
             path: '/socket.io/',
@@ -44,7 +102,25 @@ export const AlertsProvider = ({ children }) => {
 
         socket.on('newAlert', (newAlert) => {
             setAlerts(prevAlerts => [newAlert, ...prevAlerts])
-            console.log(newAlert)
+        })
+
+        socket.on('newExtractionStatus', (newStatus) => {
+            console.log(newStatus);
+            setExtractionProcesses((prevProcesses) => {
+                return prevProcesses.map((process) => {
+                    if (process.processId === newStatus.processId) {
+                        return {
+                            ...process,
+                            status: newStatus.status,
+                            subStatus: newStatus.subStatus,
+                            startedAt: newStatus.startedAt ? newStatus.startedAt : process.startedAt,
+                            completedAt: newStatus.completedAt ? newStatus.completedAt : '',
+                            error: newStatus.error ? newStatus.error : ''
+                        };
+                    }
+                    return process;
+                });
+            });
         })
 
         return () => {
@@ -74,7 +150,7 @@ export const AlertsProvider = ({ children }) => {
     }
 
     return (
-        <AlertsContext.Provider value={{ fetchAlerts, alerts, setAlerts, alertsLoading, setAlertsLoading, alertStatus, setAlertStatus, discardAlert }}>
+        <AlertsContext.Provider value={{ fetchAlerts, alerts, setAlerts, alertsLoading, setAlertsLoading, alertStatus, setAlertStatus, discardAlert, fetchExtractionProcesses, extractionProcesses, setExtractionProcesses, extractionLoading, setExtractionLoading, retryExtractionProcess, deleteExtractionProcess }}>
             {children}
         </AlertsContext.Provider>
     )

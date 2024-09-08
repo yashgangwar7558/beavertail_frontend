@@ -306,7 +306,7 @@ const MenuItems = (props) => {
                                     <View style={styles.detailsContainer}>
                                         <Text style={{ fontsize: '10px', marginBottom: '10px' }}><span style={styles.boldText}>Type:</span> {selectedRecipe.category}</Text>
                                         <Text style={{ fontsize: '10px', marginBottom: '10px' }}><span style={styles.boldText}>Inventory:</span> {selectedRecipe.inventory ? 'Yes' : 'No'}</Text>
-                                        <Text style={{ fontsize: '10px', marginBottom: '10px' }}><span style={styles.boldText}>Yields:</span> {selectedRecipe.yields[0].quantity} {selectedRecipe.yields[0].unit}</Text>
+                                        <Text style={{ fontsize: '10px', marginBottom: '10px' }}><span style={styles.boldText}>Yields:</span> {selectedRecipe.yields[0]?.quantity} {selectedRecipe.yields[0]?.unit}</Text>
                                         <Text style={{ fontsize: '10px', marginBottom: '10px' }}><span style={styles.boldText}>Shelf Life:</span> 1 Day</Text>
                                         <Text style={{ fontsize: '10px', marginBottom: '10px' }}><span style={styles.boldText}>Method of Preparation:</span></Text>
                                         <Text style={{ fontsize: '10px', marginBottom: '10px' }}>{selectedRecipe.methodPrep}</Text>

@@ -4,6 +4,7 @@ import RestaurantForm from './RestaurantForm';
 import PosIntegrationForm from './PosIntegrationForm';
 import AccountingIntegrationForm from './AccountingIntegrationForm';
 import CreateUserForm from './CreateUserForm';
+import MenuExtractionForm from './MenuExtractionForm';
 import ConfirmationPage from './ConfirmationPage';
 
 const MultiStepForm = () => {
@@ -13,7 +14,7 @@ const MultiStepForm = () => {
     const [snackbarOpen, setSnackbarOpen] = useState(false)
     const [snackbarMessage, setSnackbarMessage] = useState('')
 
-    const steps = ['Restaurant Details', 'Connect your POS', 'Accounting Integration', 'Create User', 'Confirmation'];
+    const steps = ['Restaurant Details', 'Connect your POS', 'Accounting Integration', 'Create User', 'Extract Menu', 'Confirmation'];
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -62,7 +63,8 @@ const MultiStepForm = () => {
             {activeStep === 1 && <PosIntegrationForm nextStep={handleNext} prevStep={handleBack} tenantId={tenantId} handleSnackbarOpen={handleSnackbarOpen} handleSnackbarMessage={handleSnackbarMessage}/>}
             {activeStep === 2 && <AccountingIntegrationForm nextStep={handleNext} prevStep={handleBack} tenantId={tenantId} handleSnackbarOpen={handleSnackbarOpen} handleSnackbarMessage={handleSnackbarMessage}/>}
             {activeStep === 3 && <CreateUserForm nextStep={handleNext} prevStep={handleBack} tenantId={tenantId} handleSnackbarOpen={handleSnackbarOpen} handleSnackbarMessage={handleSnackbarMessage}/>}
-            {activeStep === 4 && <ConfirmationPage handleReset={handleReset} tenantId={tenantId} tenant={tenant} handleSnackbarOpen={handleSnackbarOpen} handleSnackbarMessage={handleSnackbarMessage}/>}
+            {activeStep === 4 && <MenuExtractionForm nextStep={handleNext} prevStep={handleBack} tenantId={tenantId} tenant={tenant} handleSnackbarOpen={handleSnackbarOpen} handleSnackbarMessage={handleSnackbarMessage}/>}
+            {activeStep === 5 && <ConfirmationPage handleReset={handleReset} tenantId={tenantId} tenant={tenant} handleSnackbarOpen={handleSnackbarOpen} handleSnackbarMessage={handleSnackbarMessage}/>}
             {/* {activeStep > 0 && (
                 <Button variant="outlined" onClick={handleReset} style={{ marginTop: '20px' }}>
                     Cancel

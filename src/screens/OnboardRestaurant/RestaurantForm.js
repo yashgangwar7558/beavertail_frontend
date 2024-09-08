@@ -92,49 +92,113 @@ const RestaurantForm = ({ nextStep, storeTenantId, storeTenant, handleSnackbarOp
     const [countries, setCountries] = useState([]);
     const [states, setStates] = useState([]);
     const [cities, setCities] = useState([]);
+    // const [offsetCountries, setOffsetCountries] = useState(0);
+    // const [offsetStates, setOffsetStates] = useState(0);
+    // const [offsetCities, setOffsetCities] = useState(0);
+    // const [hasMoreCountries, setHasMoreCountries] = useState(true);
+    // const [hasMoreStates, setHasMoreStates] = useState(true);
+    // const [hasMoreCities, setHasMoreCities] = useState(true);
 
-    // const API_KEY = 'AIzaSyDnP8I_phTvn6UF2c3F_Do44upfPs7RWCw'
 
+    // // Fetch countries with pagination
     // useEffect(() => {
-    //     // Fetch countries on mount
-    //     axios.get('https://wft-geo-db.p.rapidapi.com/v1/geo/countries', {
-    //         headers: {
-    //             'x-rapidapi-key': 'c1093c6233mshaea59f31f0bd245p15a48cjsn40562553357c',
-    //             'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com'
-    //         }
-    //     })
-    //         .then(response => {setCountries(response.data.data), console.log(response.data.data)})
-    //         .catch(error => console.error('Error fetching countries:', error));
-    // }, []);
+    //     const fetchCountries = async () => {
+    //         try {
+    //             const response = await axios.get(`https://wft-geo-db.p.rapidapi.com/v1/geo/countries?offset=${offsetCountries}&limit=100`, {
+    //                 headers: {
+    //                     'x-rapidapi-key': '6265e76aa5msh89e1c4241644560p151e82jsn4a497c12d4e5',
+    //                     'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com'
+    //                 },
+    //             });
+    //             console.log(response.data.data);
 
+    //             const newCountries = response.data.data;
+    //             setCountries(prevCountries => [...prevCountries, ...newCountries]);
+
+    //             if (newCountries.length > 0) {
+    //                 setOffsetCountries(prevOffset => prevOffset + newCountries.length);
+    //             } else {
+    //                 setHasMoreCountries(false); // No more data
+    //             }
+    //         } catch (error) {
+    //             console.error('Error fetching countries:', error);
+    //         }
+    //     };
+
+    //     if (hasMoreCountries) {
+    //         fetchCountries();
+    //     }
+    // }, [offsetCountries, hasMoreCountries]);
+
+    // // Fetch states when country changes
     // useEffect(() => {
     //     if (country) {
-    //         // Fetch states when country changes
-    //         axios.get(`https://wft-geo-db.p.rapidapi.com/v1/geo/countries/${country}/regions`, {
-    //             headers: {
-    //                 'x-rapidapi-key': 'c1093c6233mshaea59f31f0bd245p15a48cjsn40562553357c',
-    //                 'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com'
-    //             }
-    //         })
-    //             .then(response => setStates(response.data.data), console.log(response.data.data))
-    //             .catch(error => console.error('Error fetching states:', error));
-    //     }
-    // }, [country]);
-   
+    //         const fetchStates = async () => {
+    //             try {
+    //                 const response = await axios.get(`https://wft-geo-db.p.rapidapi.com/v1/geo/countries/${country}/regions`, {
+    //                     headers: {
+    //                         'x-rapidapi-key': '6265e76aa5msh89e1c4241644560p151e82jsn4a497c12d4e5',
+    //                         'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com'
+    //                     },
+    //                     params: {
+    //                         offset: offsetStates,
+    //                         limit: 100 // Adjust limit as needed
+    //                     }
+    //                 });
 
+    //                 const newStates = response.data.data;
+    //                 setStates(prevStates => [...prevStates, ...newStates]);
+
+    //                 if (newStates.length > 0) {
+    //                     setOffsetStates(prevOffset => prevOffset + newStates.length);
+    //                 } else {
+    //                     setHasMoreStates(false); // No more data
+    //                 }
+    //             } catch (error) {
+    //                 console.error('Error fetching states:', error);
+    //             }
+    //         };
+
+    //         if (hasMoreStates) {
+    //             fetchStates();
+    //         }
+    //     }
+    // }, [country, offsetStates, hasMoreStates]);
+
+    // // Fetch cities when state changes
     // useEffect(() => {
     //     if (state) {
-    //         // Fetch cities when state changes
-    //         axios.get(`https://wft-geo-db.p.rapidapi.com/v1/geo/regions/${state}/cities`, {
-    //             headers: {
-    //                 'x-rapidapi-key': 'c1093c6233mshaea59f31f0bd245p15a48cjsn40562553357c',
-    //                 'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com'
+    //         const fetchCities = async () => {
+    //             try {
+    //                 const response = await axios.get(`https://wft-geo-db.p.rapidapi.com/v1/geo/regions/${state}/cities`, {
+    //                     headers: {
+    //                         'x-rapidapi-key': '6265e76aa5msh89e1c4241644560p151e82jsn4a497c12d4e5',
+    //                         'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com'
+    //                     },
+    //                     params: {
+    //                         offset: offsetCities,
+    //                         limit: 100 // Adjust limit as needed
+    //                     }
+    //                 });
+
+    //                 const newCities = response.data.data;
+    //                 setCities(prevCities => [...prevCities, ...newCities]);
+
+    //                 if (newCities.length > 0) {
+    //                     setOffsetCities(prevOffset => prevOffset + newCities.length);
+    //                 } else {
+    //                     setHasMoreCities(false); // No more data
+    //                 }
+    //             } catch (error) {
+    //                 console.error('Error fetching cities:', error);
     //             }
-    //         })
-    //             .then(response => setCities(response.data.data), console.log(response.data.data))
-    //             .catch(error => console.error('Error fetching cities:', error));
+    //         };
+
+    //         if (hasMoreCities) {
+    //             fetchCities();
+    //         }
     //     }
-    // }, [state]);
+    // }, [state, offsetCities, hasMoreCities]);
 
     // useEffect(() => {
     //     // Fetch countries on mount
@@ -233,6 +297,10 @@ const RestaurantForm = ({ nextStep, storeTenantId, storeTenant, handleSnackbarOp
             console.log(`error creating new tenant ${err}`);
             setLoading(false);
         }
+    }
+
+    const handleSkip = async () => {
+        nextStep()
     }
 
     return (
@@ -403,6 +471,9 @@ const RestaurantForm = ({ nextStep, storeTenantId, storeTenant, handleSnackbarOp
                 <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
                     <StyledButtonTrans variant="outlined" onClick={handleCancel} style={{ marginRight: '10px' }}>
                         Cancel
+                    </StyledButtonTrans>
+                    <StyledButtonTrans variant="outlined" onClick={handleSkip} style={{ marginRight: '10px' }}>
+                        Skip
                     </StyledButtonTrans>
                     <StyledButtonFill variant="contained" onClick={handleSubmit}>
                         Create

@@ -16,6 +16,7 @@ import SignIn from '../../screens/SignIn';
 import SignUp from '../../screens/SignUp';
 import AnalyticsSales from '../../screens/AnalyticsSales';
 import AnalyticsPurchases from '../../screens/AnalyticsPurchases';
+import Forecast from '../../screens/Forecast';
 import MenuBuilder from '../../screens/MenuBuilder';
 import MenuItems from '../../screens/MenuItems';
 import Ingredients from '../../screens/Ingredients';
@@ -43,6 +44,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { useNavigate } from 'react-router'
 import LoadingScreen from '../LoadingScreen/LoadingScreen.js';
+import MenuExtraction from '../../screens/MenuExtraction/MenuExtraction.js';
 
 const Content = styled.main`
     margin: 0;
@@ -78,6 +80,7 @@ const Navigation = () => {
     { path: '/home', component: Dashboard },
     { path: '/analytics-sales', component: AnalyticsSales },
     { path: '/analytics-purchases', component: AnalyticsPurchases },
+    { path: '/forecast', component: Forecast },
     { path: '/menubuilder', component: MenuBuilder },
     { path: '/menu', component: MenuItems },
     { path: '/ingredients', component: Ingredients },
@@ -94,6 +97,7 @@ const Navigation = () => {
     { path: '/settings/user-management', component: UserManagement },
     { path: '/settings/create-user', component: CreateUser },
     { path: '/superadmin/onboarding', component: OnboardRestaurant },
+    { path: '/superadmin/menu/extraction', component: MenuExtraction },
     { path: '/superadmin/restaurants', component: ManageRestaurants },
     { path: '/superadmin/users', component: ManageUsers },
   ];

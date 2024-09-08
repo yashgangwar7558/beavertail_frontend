@@ -1,0 +1,21 @@
+.charts-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin: 40px;
+    width: auto;
+    gap: 20px; /* Add space between charts */
+  }
+  
+  .chart-item {
+    flex: 1 1 45%;
+    min-width: 300px; 
+    max-width: 45%;
+    margin: 10px;
+    background-color: #fff; 
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 0 30px rgba(1,41,112,0.1);
+  }
+  

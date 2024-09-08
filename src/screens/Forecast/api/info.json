@@ -1,0 +1,28 @@
+{
+    "cards":[
+        {
+            "_id":1,
+            "name":"Forecasted Sales",
+            "icon":"bi bi-coin",
+            "amount":3246,
+            "percentage":0.12,
+            "active":true
+        },
+        {
+            "_id":2,
+            "name":"Orders",
+            "icon":"bi bi-cart",
+            "amount":145,
+            "percentage":0.08,
+            "active":false
+        },
+        {
+            "_id":3,
+            "name":"Guests",
+            "icon":"bi bi-people",
+            "amount":1244,
+            "percentage":-0.11,
+            "active":false
+        }
+    ]
+}

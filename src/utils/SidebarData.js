@@ -13,6 +13,8 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
 import AddBusinessOutlinedIcon from '@mui/icons-material/AddBusinessOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
+import StorageIcon from '@mui/icons-material/Storage';
+import SsidChartIcon from '@mui/icons-material/SsidChart';
 
 const iconSize = '25px';
 
@@ -68,6 +70,11 @@ export const SidebarData = [
     //     icon: <HistoryRounded sx={{ fontSize: '22px' }} />,
     // },
     {
+        title: 'Forecast',
+        path: '/forecast',
+        icon: <SsidChartIcon sx={{ fontSize: iconSize }} />,
+    },
+    {
         title: 'Insights - Sales',
         path: '/analytics-sales',
         icon: <AutoGraphOutlinedIcon sx={{ fontSize: iconSize }} />,
@@ -86,6 +93,11 @@ export const SidebarData = [
         title: 'Onboard Restaurant',
         path: '/superadmin/onboarding',
         icon: <AddBusinessOutlinedIcon sx={{ fontSize: iconSize }} />,
+    },
+    {
+        title: 'Menu Extraction',
+        path: '/superadmin/menu/extraction',
+        icon: <StorageIcon sx={{ fontSize: iconSize }} />,
     },
     {
         title: 'Manage Restaurants',

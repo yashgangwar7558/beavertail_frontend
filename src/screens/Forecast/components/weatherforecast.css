@@ -1,0 +1,66 @@
+.card-wf {
+    background-color: #fff; /* Light background for the card */
+    border: 1px solid #dee2e6; /* Light border color */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); /* Subtle shadow */
+    margin: 1rem auto; /* Centered with margin */
+    max-width: 800px; /* Maximum width of the card */
+    margin-top: 1px;
+  }
+  
+  .card-title {
+    font-size: 1.25rem; /* Slightly larger font size */
+    font-weight: 600; /* Semi-bold text */
+    color: #343a40; /* Dark text color */
+    margin-bottom: 0.5rem; /* Space below the title */
+    text-align: center; /* Center the title */
+  }
+  
+  .table {
+    width: 100%; /* Full width */
+    margin-bottom: 1rem; /* Space at the bottom */
+    color: #212529; /* Text color */
+  }
+  .table:hover{
+    cursor: pointer;
+    color: #212529;
+  }
+  
+  .table thead th {
+    background-color: #e9ecef; /* Light gray background for headers */
+    color: #495057; /* Darker text for headers */
+    text-align: center; /* Center text */
+    font-weight: bold; /* Bold text */
+    padding: 0.75rem; /* Padding for headers */
+  }
+  
+  .table tbody td {
+    text-align: center; /* Center text */
+    vertical-align: middle; /* Center content vertically */
+    padding: 0.75rem; /* Padding for cells */
+  }
+  
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05); /* Light background for odd rows */
+  }
+  
+  .table-hover tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.075); /* Slightly darker background on hover */
+  }
+  
+  @media (max-width: 576px) {
+    .card-wf {
+      margin: 0.5rem; /* Reduce margin on small screens */
+    }
+  
+    .card-body {
+      padding: 1rem; /* Reduce padding on small screens */
+    }
+  
+    .table thead th,
+    .table tbody td {
+      padding: 0.5rem; /* Reduce padding in table cells */
+    }
+  }
+  
+  
