@@ -87,7 +87,7 @@ function CFchart({ filter }) {
       const options = {
         chart: {
           type: 'bar',
-          height: 320,
+          height: 250,
           stacked: true, // Enable stacked bars
           toolbar: {
             show: false
@@ -108,7 +108,7 @@ function CFchart({ filter }) {
           },
           offsetX: -6,
           style: {
-            fontSize: '12px',
+            fontSize: '8px',
             colors: ['#fff']
           }
         },

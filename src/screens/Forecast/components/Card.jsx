@@ -25,7 +25,7 @@ function Card({card}) {
     const ordercard = {
         "_id": 2,
         "name": "Orders",
-        "icon": "bi bi-cart",
+        "icon": "bi bi-cart2",
         "amount": 145,
         "percentage": 0.08,
         "active": false,

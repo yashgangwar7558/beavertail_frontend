@@ -90,7 +90,7 @@ function COchart({ filter }) {
       const options = {
         chart: {
           type: 'bar',
-          height: 320,
+          height: 250,
           stacked: true,
           toolbar: {
             show: false
@@ -108,7 +108,7 @@ function COchart({ filter }) {
           enabled: true,
           offsetX: -6,
           style: {
-            fontSize: '12px',
+            fontSize: '8px',
             colors: ['#fff']
           }
         },

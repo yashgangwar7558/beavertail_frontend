@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CardFilter from './CardFilter';
 import './card.css';
 import data from '../api/csvjson_with_guests.json'
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 function ForecastedSalesCard(props) {
     const [filter, setFilter] = useState('Daily');
@@ -115,7 +116,7 @@ function ForecastedSalesCard(props) {
     const card = {
         "_id": 1,
         "name": "Forecasted Sales",
-        "icon": "bi bi-coin",
+        "icon": "bi bi-cash-coin",
         "amount": filteredAmount.toFixed(2),
         "percentage": percentageChange.toFixed(2),
         "active": true,
@@ -131,7 +132,7 @@ function ForecastedSalesCard(props) {
                         {card.name}<span>| {filter}</span>
                     </h5>
                     <div className="d-flex align-items-center">
-                        <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                        <div className="card-icon rounded-circle d-flex align-items-center justify-content-center" >
                             <i className={card.icon}></i>
                         </div>
                         <div className="ps-3">

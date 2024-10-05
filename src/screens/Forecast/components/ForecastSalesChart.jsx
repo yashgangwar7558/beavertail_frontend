@@ -17,7 +17,7 @@ function ForecastSalesChart({ filter }) {
     ],
     options: {
       chart: {
-        height: 300,
+        height: 200,
         type: 'area',
         toolbar: {
           show: false,

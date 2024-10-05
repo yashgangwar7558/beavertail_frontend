@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import CardFilter from './CardFilter'
 import './card.css'
 import data from '../api/csvjson_with_guests.json'
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 function OrdersCard(props) {
   const [filter, setFilter] = useState('Daily')
@@ -117,7 +118,7 @@ function OrdersCard(props) {
             <span>| {filter}</span>
           </h5>
           <div className="d-flex align-items-center">
-            <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
+            <div className="card-icon3 rounded-circle d-flex align-items-center justify-content-center">
               <i className={card.icon}></i>
             </div>
             <div className="ps-3">

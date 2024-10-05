@@ -6,16 +6,18 @@
   
   .info-card {
     background: #fff;
-    border-radius: 8px;
     padding: 20px;
     flex: 1 1 calc(33.333% - 40px); /* Adjusts to 3 columns */
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
     margin-bottom: 20px;
     display: flex;
     align-items: center; /* Align content horizontally */
-    justify-content: space-between; /* Space between icon and text */
-    min-width: 200px; /* Ensures minimum width */
+    justify-content: center; /* Space between icon and text */
+    min-width: 250px; /* Ensures minimum width */
     transition: all 0.3s ease;
+    border-radius: 20px;
+    height: 130px;
+  
   }
   
   .info-card:hover {
@@ -23,19 +25,25 @@
   }
   
   .info-card h6 {
-    font-size: 28px;
+    font-size: 16px;
     color: #012970;
     font-weight: 700;
     margin: 0;
     padding: 0;
     text-align: left; /* Align text to the left */
   }
+
+  .info-card h5{
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700 ;
+  }
   
   .card-icon {
-    font-size: 32px;
+    font-size: 40px;
     line-height: 0;
-    width: 64px;
-    height: 64px;
+    width: 60px;
+    height: 60px;
     flex-shrink: 0;
     flex-grow: 0;
     display: flex;
@@ -43,22 +51,64 @@
     justify-content: center;
     border-radius: 50%;
     margin-right: 10px;
+    margin-bottom: 20px;  
   }
-  
-  .sales-card .card-icon {
-    color: #4154f1;
+
+  .card-icon2{
+    color: rgb(212, 112, 142);
+    font-size: 40px;
+    line-height: 0;
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-bottom: 20px; 
     background: #f6f6fe;
   }
+
+  .card-icon3{
+    color: rgb(64, 97, 168);
+    font-size: 40px;
+    line-height: 0;
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-bottom: 20px; 
+    background: #f6f6fe;
+  }
+
   
+  .sales-card .card-icon {
+    color: #63bd85;
+    background: #f6f6fe;
+    
+  }
+  
+  .sales-card{
+    font-size: 14px;
+  }
+
   .forecastedSales .card-icon {
     color: #2eca6a;
     background: #e0f8e9;
   }
   
-  .customers-card .card-icon {
+  .Guests .card-icon {
     color: #ff771d;
     background: #ffecdf;
   }
+
   
   /* Media Queries for Responsiveness */
   @media (max-width: 992px) {
@@ -78,8 +128,8 @@
     }
   
     .card-icon {
-      width: 48px;
-      height: 48px; /* Smaller icon size */
+      width: 40px;
+      height: 40px; /* Smaller icon size */
       font-size: 24px; /* Smaller icon font size */
     }
   }

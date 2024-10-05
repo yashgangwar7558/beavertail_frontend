@@ -16,29 +16,7 @@
     margin-bottom: 10px;
   }
   
-  .date-picker-group {
-    display: flex;
-    align-items: center;
-    margin-right: 20px;
-    margin-left: 30px;
-  }
-  
-  .date-picker-group label {
-    margin-right: 20px;
-    display: flex;
-    align-items: center;
-    font-size: 24px;
-    margin-bottom: 0;
-    font-weight: 400;
-    color: #012970;
-  }
-  
-  .date-picker {
-    margin-left: 5px;
-    border-radius: 5px;
-    border-width: 1px;
-    font-size: 20px;
-  }
+
   .button-group {
     display: flex;
     align-items: center;
@@ -52,42 +30,49 @@
   }
   
   .btn-daily {
-    background-color: #4CAF50;
+    background-color: rgb(71, 191, 147);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
+    height: auto;
+    width: auto;
     cursor: pointer;
+    margin-left: 20px;
   }
   .button-group .btn-daily:hover {
-    background-color: #0f7e15;
+    background-color: rgb(71, 191, 147);
     transform: scale(1.05);
     color: white;
   }
   
   .btn-weekly {
-    background-color: #b808b8;
+    background-color: rgb(71, 191, 147);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
+    height: auto;
+    width: auto;
   }
 
   .button-group .btn-weekly:hover {
-    background-color: #9b31e2;
+    background-color: rgb(71, 191, 147);
     transform: scale(1.05);
     color: white;
   }
   
   .btn-monthly {
-    background-color: #f44336;
+    background-color: rgb(71, 191, 147);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
+    height: auto;
+    width: auto;
   }
 
   .button-group .btn-monthly:hover {
-    background-color: #dd3b1e;
+    background-color: rgb(71, 191, 147);
     transform: scale(1.05);
     color: white;
   }

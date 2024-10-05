@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
-import data from '../api/staffjson.json'
+import data from '../api/staffjson.json';
+import './StaffSchedule.css';
 
 const StaffSchedule = () => {
   const [staffData, setStaffData] = useState([]);
@@ -11,15 +12,15 @@ const StaffSchedule = () => {
     //   .then((response) => response.json())
     //   .then((data) => setStaffData(data))
     //   .catch((error) => console.error('Error fetching data:', error));
-      setStaffData(data.staffs)
+    setStaffData(data.staffs);
   }, []);
 
-  // Function to get the next 7 days starting from today
-  const getNext7Days = () => {
+  // Function to get the next 12 days starting from today
+  const getNext12Days = () => {
     const today = new Date();
     const days = [];
 
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 12; i++) {
       const nextDay = new Date(today);
       nextDay.setDate(today.getDate() + i);
       days.push(nextDay);
@@ -28,7 +29,7 @@ const StaffSchedule = () => {
     return days;
   };
 
-  const next7Days = getNext7Days();
+  const next12Days = getNext12Days();
 
   const shifts = ['Morning', 'Afternoon', 'Evening', 'Night'];
 
@@ -38,6 +39,14 @@ const StaffSchedule = () => {
       (staff) => staff.tranDdate.startsWith(dayStr) && staff.shiftCategory === shift
     );
     return matchingShift ? matchingShift.noOfStaff : 0;
+  };
+
+  // Function to format the date as mm/dd/yyyy
+  const formatDate = (date) => {
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const day = String(date.getDate()).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${month}/${day}/${year}`;
   };
 
   return (
@@ -55,15 +64,14 @@ const StaffSchedule = () => {
             </tr>
           </thead>
           <tbody>
-            {next7Days.map((day, index) => {
-              const dayStr = day.toISOString().split('T')[0]; // Format date as yyyy-mm-dd
+            {next12Days.map((day, index) => {
               return (
                 <tr key={index}>
-                  <td>{dayStr}</td>
-                  <td>{getScheduleForDay(dayStr, 'Morning')}</td>
-                  <td>{getScheduleForDay(dayStr, 'Afternoon')}</td>
-                  <td>{getScheduleForDay(dayStr, 'Evening')}</td>
-                  <td>{getScheduleForDay(dayStr, 'Night')}</td>
+                  <td style={{ width: '80%' }}>{formatDate(day)}</td>
+                  <td>{getScheduleForDay(day.toISOString().split('T')[0], 'Morning')}</td>
+                  <td>{getScheduleForDay(day.toISOString().split('T')[0], 'Afternoon')}</td>
+                  <td>{getScheduleForDay(day.toISOString().split('T')[0], 'Evening')}</td>
+                  <td>{getScheduleForDay(day.toISOString().split('T')[0], 'Night')}</td>
                 </tr>
               );
             })}
@@ -75,6 +83,8 @@ const StaffSchedule = () => {
 };
 
 export default StaffSchedule;
+
+
 
 
 

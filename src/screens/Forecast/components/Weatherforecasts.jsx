@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Weatherforecasts.css';
-import { FaMapMarkerAlt } from 'react-icons/fa'; // Importing a location icon from react-icons
+import { FaMapMarkerAlt } from 'react-icons/fa';
 
 const Weather = () => {
   const [weatherData, setWeatherData] = useState(null);
-  const [location, setLocation] = useState('Delhi');  // Default location
-  const [isHourly, setIsHourly] = useState(false);  // Track whether hourly or daily is selected
-  const [isCelsius, setIsCelsius] = useState(true); // Track temperature unit (Celsius/Fahrenheit)
-  const [backgroundImage, setBackgroundImage] = useState(''); // State for background image
+  const [location, setLocation] = useState('Boston');  
+  const [isHourly, setIsHourly] = useState(false);  
+  const [isCelsius, setIsCelsius] = useState(true); 
+  const [backgroundImage, setBackgroundImage] = useState(''); 
   const API_KEY = 'ccc8b7f30f2b8290435879d3d4264887';
   const MAX_HOURS = 5;
   const MAX_DAYS = 5;
 
-  // Function to fetch weather data
   const fetchWeatherData = () => {
     axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${location}&units=metric&appid=${API_KEY}`)
       .then(response => {
@@ -24,20 +23,18 @@ const Weather = () => {
 
   useEffect(() => {
     fetchWeatherData();
-    updateBackgroundImage(); // Set initial background image
+    updateBackgroundImage();
 
     const intervalId = setInterval(() => {
       fetchWeatherData();
-      updateBackgroundImage(); // Update background image every hour
-    }, 3600000); // Update every hour
+      updateBackgroundImage();
+    }, 3600000); 
 
     return () => clearInterval(intervalId);
   }, [location]);
 
-  // Function to determine background image based on time of day
   const updateBackgroundImage = () => {
     const currentHour = new Date().getHours();
-
     if (currentHour >= 6 && currentHour < 12) {
       setBackgroundImage('morning.jpg');
     } else if (currentHour >= 12 && currentHour < 17) {
@@ -49,15 +46,12 @@ const Weather = () => {
     }
   };
 
-  // Function to get the starting index based on the current time
   const getStartingIndex = () => {
     const currentTime = new Date();
-
     if (weatherData) {
       for (let i = 0; i < weatherData.list.length; i++) {
         const forecastTime = new Date(weatherData.list[i].dt_txt);
-
-        if (forecastTime > currentTime) {  // Only show future forecasts
+        if (forecastTime > currentTime) {
           return i;
         }
       }
@@ -66,16 +60,13 @@ const Weather = () => {
   };
 
   const getWeatherIcon = (iconCode) => {
-    // Return the path to the icon based on the weather condition code
     return `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
   };
 
-  // Convert temperature to Fahrenheit
   const convertToFahrenheit = (celsius) => {
     return Math.round((celsius * 9/5) + 32);
   };
 
-  // Get hourly data with up to 5 future hours
   const getHourlyData = () => {
     if (weatherData) {
       const currentTime = new Date();
@@ -89,15 +80,13 @@ const Weather = () => {
     return [];
   };
 
-  // Get daily data with up to 5 future days including today
   const getDailyData = () => {
     if (weatherData) {
       const currentTime = new Date();
       const startIndex = getStartingIndex();
       const uniqueDays = [];
       const dailyData = [];
-      // Collect data for unique days
-      for (let i = startIndex; i < weatherData.list.length; i += 8) { // Every 8 hours
+      for (let i = startIndex; i < weatherData.list.length; i += 8) {
         const item = weatherData.list[i];
         const date = new Date(item.dt_txt).toLocaleDateString();
         const forecastTime = new Date(item.dt_txt);
@@ -142,7 +131,7 @@ const Weather = () => {
       </div>
       <div className="current-weather">
         <img src={getWeatherIcon(weatherData.list[0].weather[0].icon)} alt={weatherData.list[0].weather[0].description} />
-        <p className="temperature">
+        <p className="temperature-C">
           {isCelsius 
             ? `${Math.round(weatherData.list[0].main.temp)}°C` 
             : `${convertToFahrenheit(weatherData.list[0].main.temp)}°F`
@@ -158,7 +147,7 @@ const Weather = () => {
           <div className="hourly-weather">
             {hourlyData.map((hour, index) => (
               <div key={index} className="hour">
-                <p>{new Date(hour.dt_txt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</p>
+                <p>{new Date(hour.dt_txt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}</p> {/* Changed hour12 to false for 24-hour format */}
                 <img src={getWeatherIcon(hour.weather[0].icon)} alt={hour.weather[0].description} />
                 <p>
                   {isCelsius 
@@ -193,6 +182,7 @@ const Weather = () => {
 };
 
 export default Weather;
+
 
 
 

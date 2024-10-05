@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import ReportCharts from './ReportCharts';
-
+import './Reports.css'
 function Reports(props) {
   const [filter, setFilter] = useState('Daily');
   const handleFilterChange = filter => {
