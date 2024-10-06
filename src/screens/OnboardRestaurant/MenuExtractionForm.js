@@ -48,10 +48,10 @@ const MenuExtractionForm = ({ nextStep, prevStep, tenantId, tenant, handleSnackb
             handleSnackbarMessage("Started extracting menu...")
             handleSnackbarOpen()
             const data = new FormData()
-            // data.append('tenantId', tenantId)
-            // data.append('tenantName', tenant.tenantName)
-            data.append('tenantId', '663fb81d7176f3acc181bda9')
-            data.append('tenantName', 'Xero Degree')
+            data.append('tenantId', tenantId)
+            data.append('tenantName', tenant.tenantName)
+            // data.append('tenantId', '663fb81d7176f3acc181bda9')
+            // data.append('tenantName', 'Xero Degree')
             data.append('menuFile', file)
             const result = await client.post('/extract-menu', data, {
                 headers: {
