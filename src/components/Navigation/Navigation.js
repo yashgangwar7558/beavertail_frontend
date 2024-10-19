@@ -45,6 +45,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { useNavigate } from 'react-router'
 import LoadingScreen from '../LoadingScreen/LoadingScreen.js';
 import MenuExtraction from '../../screens/MenuExtraction/MenuExtraction.js';
+import Shift4Management from '../../screens/Shift4Management';
 
 const Content = styled.main`
     margin: 0;
@@ -100,6 +101,7 @@ const Navigation = () => {
     { path: '/superadmin/menu/extraction', component: MenuExtraction },
     { path: '/superadmin/restaurants', component: ManageRestaurants },
     { path: '/superadmin/users', component: ManageUsers },
+    { path: '/superadmin/shift4', component: Shift4Management },
   ];
 
   const hasPermissionForRoute = (routePath) => {

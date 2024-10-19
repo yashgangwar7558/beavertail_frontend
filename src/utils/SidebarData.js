@@ -108,5 +108,10 @@ export const SidebarData = [
         title: 'Manage Users',
         path: '/superadmin/users',
         icon: <GroupOutlinedIcon sx={{ fontSize: iconSize }} />,
+    },
+    {
+        title: 'Shift4 Management',
+        path: '/superadmin/shift4',
+        icon: <GroupOutlinedIcon sx={{ fontSize: iconSize }} />,
     }
 ]
