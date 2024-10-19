@@ -300,14 +300,14 @@ const SignUp = ({ navigation }) => {
                 <p className='error-msg'>{error}</p>
               ) : null}
 
-              <div className="button-container">
-                <Button type="submit" className='register-button' variant='contained'
+              <div className="button-container-signup">
+                <Button type="submit" className='register-button-signup' variant='contained'
                   autoFocus
                   focusRipple={false}
                   onKeyDown={handleKeyDown}
                   onClick={() => register(username, password, confirmPassword, firstName, lastName, email, mobileNo, address, rolesAssigned, tenantId, status, navigate)}>Register User</Button>
-                <h4 className="line"><span>Or</span></h4>
-                <Button type="submit" className='login-button' variant='contained' onClick={() => { navigate('/signin'), setError('') }}>Login</Button>
+                <h4 className="line-signup"><span>Or</span></h4>
+                <Button type="submit" className='login-button-signup' variant='contained' onClick={() => { navigate('/signin'), setError('') }}>Login</Button>
               </div>
             </StyledEngineProvider>
           </Box>

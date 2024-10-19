@@ -123,7 +123,7 @@ input:-webkit-autofill:active {
   font-size: 14px;
 }
 
-.button-container {
+.button-container-signup {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -131,7 +131,7 @@ input:-webkit-autofill:active {
   margin-top: 30px;
 }
 
-.register-button {
+.register-button-signup {
   width: 38%;
   height: 50px;
   border-radius: 12px;
@@ -150,7 +150,7 @@ input:-webkit-autofill:active {
   }
 }
 
-.login-button {
+.login-button-signup {
   width: 38%;
   height: 50px;
   border-radius: 12px;
@@ -169,7 +169,7 @@ input:-webkit-autofill:active {
   }
 }
 
-.line {
+.line-signup {
   width: 37%;
   text-align: center;
   border-bottom: 1px solid #111111;
@@ -177,7 +177,7 @@ input:-webkit-autofill:active {
   padding: 0;
 }
 
-.line span {
+.line-signup span {
   background-color: rgb(255, 255, 255);
   padding: 0 10px;
   color: rgb(14, 13, 13)
