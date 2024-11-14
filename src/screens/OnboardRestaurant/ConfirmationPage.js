@@ -41,14 +41,17 @@ const ConfirmationPage = ({ handleReset, tenantId, tenant, handleSnackbarOpen, h
         handleSnackbarOpen()
     };
 
-    const handleProceed = () => {
-        if (mailSent) {
-            handleSnackbarMessage("Onboading process completed")
-            handleSnackbarOpen()
-            handleReset()
-        } else {
-            setError("Please send confirmation mail to Restaurant")
-        }
+    const handleComplete = () => {
+        // if (mailSent) {
+        //     handleSnackbarMessage("Onboading process completed")
+        //     handleSnackbarOpen()
+        //     handleReset()
+        // } else {
+        //     setError("Please send confirmation mail to Restaurant")
+        // }
+        handleSnackbarMessage("Onboading process completed!")
+        handleSnackbarOpen()
+        handleReset()
     };
 
     return (
@@ -67,21 +70,21 @@ const ConfirmationPage = ({ handleReset, tenantId, tenant, handleSnackbarOpen, h
                 Restaurant can use this mailbox to send invoices and billing details to get them processed automatically.
             </Typography>
             <Grid container spacing={2} style={{ marginTop: '20px' }}>
-                <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center' }}>
+                {/* <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center' }}>
                     <StyledLink
                         onClick={!mailSent ? handleSendEmail : undefined}
                         isActive={!mailSent}>
                         Mail Onboarding Details to Restaurant
                     </StyledLink>
-                </Grid>
+                </Grid> */}
                 <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
                     {error && (
                         <Typography variant="body2" color="error" style={{ marginTop: '16px', marginRight: '10px' }}>
                             {error}
                         </Typography>
                     )}
-                    <StyledButton variant="contained" onClick={handleProceed}>
-                        Proceed
+                    <StyledButton variant="contained" onClick={handleComplete}>
+                        Complete
                     </StyledButton>
                 </Grid>
             </Grid>

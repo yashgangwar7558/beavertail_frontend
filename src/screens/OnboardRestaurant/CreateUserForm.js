@@ -218,20 +218,24 @@ const CreateUserForm = ({ nextStep, prevStep, tenantId, handleSnackbarOpen, hand
                     />
                 </Grid>
             </Grid>
-            {error && (
+            {error ? (
                 <Typography variant="body2" color="error" style={{ marginTop: '16px' }}>
                     {error}
                 </Typography>
+            ) : (
+                <Typography variant="body2" color="error" style={{ marginTop: '16px' }}>
+                    * All fields are mandatory.
+                </Typography>
             )}
             <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
-                <StyledButtonTrans variant="outlined" onClick={handleBack} style={{ marginRight: '10px' }}>
+                {/* <StyledButtonTrans variant="outlined" onClick={handleBack} style={{ marginRight: '10px' }}>
                     Back
-                </StyledButtonTrans>
+                </StyledButtonTrans> */}
                 <StyledButtonTrans variant="outlined" onClick={handleSkip} style={{ marginRight: '10px' }}>
                     Skip
                 </StyledButtonTrans>
                 <StyledButtonFill variant="contained" onClick={handleCreateUser} style={{ marginRight: '10px' }}>
-                    Create
+                    Next
                 </StyledButtonFill>
             </div>
         </Paper>

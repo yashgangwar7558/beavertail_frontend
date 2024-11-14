@@ -14,7 +14,7 @@ const MultiStepForm = () => {
     const [snackbarOpen, setSnackbarOpen] = useState(false)
     const [snackbarMessage, setSnackbarMessage] = useState('')
 
-    const steps = ['Restaurant Details', 'Connect your POS', 'Accounting Integration', 'Create User', 'Extract Menu', 'Confirmation'];
+    const steps = ['Restaurant Details', 'Supported POS', 'Supported Accounting Systems', 'Create User', 'Extract Menu', 'Confirmation'];
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);

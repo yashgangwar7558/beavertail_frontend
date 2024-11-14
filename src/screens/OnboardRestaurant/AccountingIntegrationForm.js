@@ -52,7 +52,7 @@ const posOptions = [
     { name: 'M3', logo: accountlogo5, description: 'Description for POS 4', fields: [{ label: 'Key', value: '' }, { label: 'Secret', value: '' }] },
     { name: 'Netsuite', logo: accountlogo6, description: 'Description for POS 5', fields: [{ label: 'Token', value: '' }] },
     { name: 'Restaurant365', logo: accountlogo7, description: 'Description for POS 6', fields: [{ label: 'ID', value: '' }, { label: 'Secret Key', value: '' }] },
-    { name: 'DataPlus', logo: accountlogo8, description: 'Description for POS 6', fields: [{ label: 'ID', value: '' }, { label: 'Secret Key', value: '' }] },
+    // { name: 'DataPlus', logo: accountlogo8, description: 'Description for POS 6', fields: [{ label: 'ID', value: '' }, { label: 'Secret Key', value: '' }] },
 ];
 
 const AccountingIntegrationForm = ({ nextStep, prevStep, tenantId, handleSnackbarOpen, handleSnackbarMessage }) => {
@@ -64,12 +64,13 @@ const AccountingIntegrationForm = ({ nextStep, prevStep, tenantId, handleSnackba
     const handlePosSelection = (pos) => {
         setError(null)
         setSelectedPos(pos);
-        const initialValues = pos.fields.reduce((acc, field) => {
-            acc[field.key] = field.value;
-            return acc;
-        }, {});
-        initialValues['tenantId'] = tenantId
-        setInputValues(initialValues);
+        
+        // const initialValues = pos.fields.reduce((acc, field) => {
+        //     acc[field.key] = field.value;
+        //     return acc;
+        // }, {});
+        // initialValues['tenantId'] = tenantId
+        // setInputValues(initialValues);
     };
 
     const handleInputChange = (key, value) => {
@@ -92,7 +93,7 @@ const AccountingIntegrationForm = ({ nextStep, prevStep, tenantId, handleSnackba
             setError('Please select any Accounting System to integrate')
             return
         }
-        handleSnackbarMessage("Accounting system integrated successfully")
+        handleSnackbarMessage("Accounting system noted successfully")
         handleSnackbarOpen()
         nextStep()
         // try {
@@ -122,7 +123,7 @@ const AccountingIntegrationForm = ({ nextStep, prevStep, tenantId, handleSnackba
     return (
         <Paper elevation={3} style={{ padding: '20px', borderRadius: '12px', marginTop: '20px' }}>
             <Typography variant="h5" gutterBottom>
-                Select Accounting System
+                Supported Accounting Systems
             </Typography>
             <Divider style={{ marginBottom: '16px' }} />
             <Grid container spacing={2}>
@@ -148,10 +149,27 @@ const AccountingIntegrationForm = ({ nextStep, prevStep, tenantId, handleSnackba
                         </Card>
                     </Grid>
                 ))}
+                <Grid item xs={12} sm={3}>
+                    <Card
+                        onClick={() => handlePosSelection({ name: 'Other', logo: accountlogo8, description: 'Description for POS 6', fields: [{ label: 'ID', value: '' }, { label: 'Secret Key', value: '' }] })}
+                        style={{
+                            cursor: 'pointer',
+                            border: selectedPos && selectedPos.name === 'Other' ? '3px solid #47bf93' : 'none',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '5px',
+                            height: 110,
+                            // width: 180
+                        }}
+                    >
+                        <Typography>Other</Typography>
+                    </Card>
+                </Grid>
             </Grid>
 
 
-            {selectedPos && (
+            {/* {selectedPos && (
                 <>
                     <Typography variant="h6" gutterBottom style={{ marginTop: '20px' }}>
                         {selectedPos.name} Integration
@@ -170,7 +188,7 @@ const AccountingIntegrationForm = ({ nextStep, prevStep, tenantId, handleSnackba
                         ))}
                     </Grid>
                 </>
-            )}
+            )} */}
 
             {error && (
                 <Typography variant="body2" color="error" style={{ marginTop: '16px' }}>
@@ -179,14 +197,14 @@ const AccountingIntegrationForm = ({ nextStep, prevStep, tenantId, handleSnackba
             )}
 
             <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
-                <StyledButtonTrans variant="outlined" onClick={handleBack} style={{ marginRight: '10px' }}>
+                {/* <StyledButtonTrans variant="outlined" onClick={handleBack} style={{ marginRight: '10px' }}>
                     Back
-                </StyledButtonTrans>
+                </StyledButtonTrans> */}
                 <StyledButtonTrans variant="outlined" onClick={handleSkip} style={{ marginRight: '10px' }}>
                     Skip
                 </StyledButtonTrans>
                 <StyledButtonFill variant="outlined" onClick={handleSubmit} style={{ marginRight: '10px' }}>
-                    Create
+                    Next
                 </StyledButtonFill>
             </div>
         </Paper>

@@ -49,10 +49,9 @@ const StyledButtonFill = styled(Button)({
 const posOptions = [
     { name: 'Shift4', logo: poslogo1, description: 'Best-in-breed, holistic, end-to-end', fields: [{ label: 'API Name', key: 'posName', value: 'shift4' }, { label: 'POS Id', key: 'posId', value: '6686b472dacd2ac64371ce9r' }, { label: 'Location Id', key: 'identifier', value: '' }] },
     { name: 'POSitouch', logo: poslogo2, description: 'Description for POS 2', fields: [{ label: 'Access Token', value: '' }] },
-    { name: '7Shifts', logo: poslogo3, description: 'Description for POS 3', fields: [{ label: 'Client ID', value: '' }, { label: 'Client Secret', value: '' }, { label: 'Endpoint URL', value: '' }] },
+    { name: 'Harbour Touch', logo: poslogo6, description: 'Description for POS 6', fields: [{ label: 'ID', value: '' }, { label: 'Secret Key', value: '' }] },
     { name: 'Dinnerware', logo: poslogo4, description: 'Description for POS 4', fields: [{ label: 'Key', value: '' }, { label: 'Secret', value: '' }] },
     { name: 'Clover', logo: poslogo5, description: 'Description for POS 5', fields: [{ label: 'Token', value: '' }] },
-    { name: 'Harbour Touch', logo: poslogo6, description: 'Description for POS 6', fields: [{ label: 'ID', value: '' }, { label: 'Secret Key', value: '' }] },
     { name: 'Lightspeed', logo: poslogo7, description: 'Description for POS 6', fields: [{ label: 'ID', value: '' }, { label: 'Secret Key', value: '' }] },
     { name: 'Toast', logo: poslogo8, description: 'Description for POS 6', fields: [{ label: 'ID', value: '' }, { label: 'Secret Key', value: '' }] },
 ];
@@ -66,12 +65,12 @@ const PosIntegrationForm = ({ nextStep, prevStep, tenantId, handleSnackbarOpen, 
     const handlePosSelection = (pos) => {
         setError(null)
         setSelectedPos(pos);
-        const initialValues = pos.fields.reduce((acc, field) => {
-            acc[field.key] = field.value;
-            return acc;
-        }, {});
-        initialValues['tenantId'] = tenantId
-        setInputValues(initialValues);
+        // const initialValues = pos.fields.reduce((acc, field) => {
+        //     acc[field.key] = field.value;
+        //     return acc;
+        // }, {});
+        // initialValues['tenantId'] = tenantId
+        // setInputValues(initialValues);
     };
 
     const handleInputChange = (key, value) => {
@@ -90,36 +89,44 @@ const PosIntegrationForm = ({ nextStep, prevStep, tenantId, handleSnackbarOpen, 
     }
 
     const handleSubmit = async () => {
-        try {
-            if (selectedPos == null) {
-                setError('Please select any POS to integrate')
-                return
-            }
-            setLoading(true)
-            const data = inputValues
-            const result = await client.post('/create-posRef', data, {
-                headers: { 'Content-Type': 'application/json' },
-            })
-            if (result.data.success) {
-                setError(null)
-                setLoading(false)
-                handleSnackbarMessage("POS integrated successfully")
-                handleSnackbarOpen()
-                nextStep()
-            } else {
-                setError(result.data.message)
-                setLoading(false)
-            }
-        } catch (err) {
-            console.log(`Error integrating pos ${err}`);
-            setLoading(false);
+        // try {
+        //     if (selectedPos == null) {
+        //         setError('Please select any POS to integrate')
+        //         return
+        //     }
+        //     setLoading(true)
+        //     const data = inputValues
+        //     console.log(data);
+        //     const result = await client.post('/create-posRef', data, {
+        //         headers: { 'Content-Type': 'application/json' },
+        //     })
+        //     if (result.data.success) {
+        //         setError(null)
+        //         setLoading(false)
+        //         handleSnackbarMessage("POS integrated successfully")
+        //         handleSnackbarOpen()
+        //         nextStep()
+        //     } else {
+        //         setError(result.data.message)
+        //         setLoading(false)
+        //     }
+        // } catch (err) {
+        //     console.log(`Error integrating pos ${err}`);
+        //     setLoading(false);
+        // }
+        if (selectedPos == null) {
+            setError('Please select any POS to integrate')
+            return
         }
+        handleSnackbarMessage("POS noted successfully")
+        handleSnackbarOpen()
+        nextStep()
     };
 
     return (
         <Paper elevation={3} style={{ padding: '20px', borderRadius: '12px', marginTop: '20px' }}>
             <Typography variant="h5" gutterBottom>
-                Select POS
+                Supported POS
             </Typography>
             <Divider style={{ marginBottom: '16px' }} />
             <Grid container spacing={2}>
@@ -145,9 +152,26 @@ const PosIntegrationForm = ({ nextStep, prevStep, tenantId, handleSnackbarOpen, 
                         </Card>
                     </Grid>
                 ))}
+                <Grid item xs={12} sm={3}>
+                    <Card
+                        onClick={() => handlePosSelection({ name: 'Other', logo: poslogo8, description: 'Description for POS 6', fields: [{ label: 'ID', value: '' }, { label: 'Secret Key', value: '' }] })}
+                        style={{
+                            cursor: 'pointer',
+                            border: selectedPos && selectedPos.name === 'Other' ? '3px solid #47bf93' : 'none',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '5px',
+                            height: 110,
+                            // width: 180
+                        }}
+                    >
+                        <Typography>Other</Typography>
+                    </Card>
+                </Grid>
             </Grid>
 
-            {selectedPos && (
+            {/* {selectedPos && (
                 <>
                     <Typography variant="h6" gutterBottom style={{ marginTop: '20px' }}>
                         {selectedPos.name} Integration
@@ -166,7 +190,7 @@ const PosIntegrationForm = ({ nextStep, prevStep, tenantId, handleSnackbarOpen, 
                         ))}
                     </Grid>
                 </>
-            )}
+            )} */}
 
             {error && (
                 <Typography variant="body2" color="error" style={{ marginTop: '16px' }}>
@@ -175,14 +199,14 @@ const PosIntegrationForm = ({ nextStep, prevStep, tenantId, handleSnackbarOpen, 
             )}
 
             <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
-                <StyledButtonTrans variant="outlined" onClick={handleBack} style={{ marginRight: '10px' }}>
+                {/* <StyledButtonTrans variant="outlined" onClick={handleBack} style={{ marginRight: '10px' }}>
                     Back
-                </StyledButtonTrans>
+                </StyledButtonTrans> */}
                 <StyledButtonTrans variant="outlined" onClick={handleSkip} style={{ marginRight: '10px' }}>
                     Skip
                 </StyledButtonTrans>
                 <StyledButtonFill variant="outlined" onClick={handleSubmit} style={{ marginRight: '10px' }}>
-                    Create
+                    Next
                 </StyledButtonFill>
             </div>
         </Paper>

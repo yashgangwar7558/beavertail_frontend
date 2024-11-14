@@ -71,7 +71,7 @@ const Shift4Management = () => {
     setLoading(true);
     try {
       const data = { tenantId };
-      const result = await client.post(`/mark-tenant-inactive`, data, {
+      const result = await client.post(`/mark-tenant-inactive-shift4`, data, {
         headers: { 'Content-Type': 'application/json' },
       });
       if (result.data.success) {

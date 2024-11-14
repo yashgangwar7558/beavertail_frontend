@@ -22,15 +22,18 @@ const PosSimulator = (props) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [selectedRecipe, setSelectedRecipe] = useState({});
+    const [taxPercent, setTaxPercent] = useState('');
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const [billData, setBillData] = useState({
         tenantId: userInfo.user.tenant,
+        billPosRef: '',
         billNumber: '',
         customerName: '',
         billingDate: null,
         itemsOrdered: [],
+        discountAmount: 0,
         total: '',
-        taxPercent: 10,
+        taxAmount: 0,
         totalPayable: ''
     });
 
@@ -58,7 +61,8 @@ const PosSimulator = (props) => {
 
     useEffect(() => {
         const randomBillNumber = 'BILL-' + Math.floor(100000 + Math.random() * 900000);
-        setBillData({ ...billData, billNumber: randomBillNumber });
+        const randomBillPosRefNumber = 'beavertail_inbuilt_pos_' + Math.floor(100000 + Math.random() * 900000);
+        setBillData({ ...billData, billNumber: randomBillNumber, billPosRef: randomBillPosRefNumber});
     }, []);
 
     const toggleSearchDropdown = () => {
@@ -90,6 +94,7 @@ const PosSimulator = (props) => {
                 quantity: '',
                 menuPrice: recipe.menuPrice,
                 total: '',
+                totalPayable: ''
             }],
         });
         setSearchTerm('');
@@ -103,6 +108,7 @@ const PosSimulator = (props) => {
         if (field === 'quantity') {
             const quantity = updatedItems[index]['quantity'] || 0;
             updatedItems[index]['total'] = (quantity * updatedItems[index]['menuPrice']).toFixed(2);
+            updatedItems[index]['totalPayable'] = (quantity * updatedItems[index]['menuPrice']).toFixed(2);
         }
         setBillData({ ...billData, itemsOrdered: updatedItems })
     };
@@ -129,27 +135,23 @@ const PosSimulator = (props) => {
         }))
     };
 
-
-    const handleTaxChange = (text) => {
-        setBillData({ ...billData, taxPercent: text });
-    };
-
     const calculateTotalPayableAmount = () => {
         const totalAmount = billData.itemsOrdered.reduce((sum, item) => {
             const itemTotal = parseFloat(item.total) || 0;
             return sum + itemTotal;
         }, 0)
-        const payableAmount = totalAmount + ((totalAmount * billData.taxPercent) / 100)
+        const payableAmount = totalAmount + ((totalAmount * taxPercent) / 100)
 
         setBillData((prevBillData) => ({
             ...prevBillData,
             totalPayable: payableAmount.toFixed(2),
+            taxAmount: (totalAmount * taxPercent) / 100
         }))
     }
 
     useEffect(() => {
         calculateTotalPayableAmount();
-    }, [billData.taxPercent])
+    }, [taxPercent])
 
     useEffect(() => {
         calculateSubTotalAmount()
@@ -159,6 +161,7 @@ const PosSimulator = (props) => {
     const handleSubmit = async () => {
         try {
             setLoading(true)
+            console.log(billData);
             const result = await client.post('/process-bill', billData, {
                 headers: { 'Content-Type': 'application/json' },
             })
@@ -166,11 +169,13 @@ const PosSimulator = (props) => {
                 await setBillData({
                     tenantId: userInfo.user.tenant,
                     billNumber: 'BILL-' + Math.floor(100000 + Math.random() * 900000),
+                    billPosRef: 'beavertail_inbuilt_pos_' + Math.floor(100000 + Math.random() * 900000),
                     customerName: '',
                     billingDate: null,
                     itemsOrdered: [],
+                    discountAmount: 0,
                     total: '',
-                    taxPercent: 10,
+                    taxAmount: 0,
                     totalPayable: ''
                 });
                 // navigate('/foodcost')
@@ -341,10 +346,10 @@ const PosSimulator = (props) => {
                         style={[styles.input]}
                         keyboardType='numeric'
                         maxLength={5}
-                        value={billData.taxPercent}
+                        value={taxPercent}
                         onChangeText={(text) => {
                             if (/^\d*\.?\d*$/.test(text)) {
-                                handleTaxChange(text)
+                                setTaxPercent(text)
                             }
                         }}
                     />

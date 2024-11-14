@@ -9,10 +9,10 @@ export const TopPurchasesValueWise = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const currentDate = new Date();
-                const currentDay = new Date(currentDate);
-                const dayBeforeSevenDays = new Date(currentDate);
-                dayBeforeSevenDays.setDate(currentDate.getDate() - 6);
+                const currentDate = new Date()
+                const currentDay = new Date(currentDate)
+                const dayBeforeSevenDays = new Date(currentDate)
+                dayBeforeSevenDays.setDate(currentDate.getDate() - 6)
                 const data = {
                     tenantId: userInfo.user.tenant,
                     startDate: dayBeforeSevenDays,
@@ -21,7 +21,8 @@ export const TopPurchasesValueWise = () => {
                 const result = await client.post('/get-perday-invoices', data, {
                     headers: { 'Content-Type': 'application/json' },
                 })
-                setDayWiseInvoices(result.data.invoices)
+                const updatedInvoices = result.data.invoices.slice(1);
+                setDayWiseInvoices(updatedInvoices)
             } catch (error) {
                 console.log(`Error fetching daywise invoices data: ${error}`)
             }

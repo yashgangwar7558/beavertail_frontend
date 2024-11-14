@@ -45,8 +45,9 @@ const MenuExtractionForm = ({ nextStep, prevStep, tenantId, tenant, handleSnackb
     const handleExtract = async () => {
         try {
             setLoading(true)
-            handleSnackbarMessage("Started extracting menu...")
             handleSnackbarOpen()
+            handleSnackbarMessage("Started extracting menu...")
+            nextStep()
             const data = new FormData()
             data.append('tenantId', tenantId)
             data.append('tenantName', tenant.tenantName)
@@ -83,7 +84,7 @@ const MenuExtractionForm = ({ nextStep, prevStep, tenantId, tenant, handleSnackb
     return (
         <Paper elevation={3} style={{ padding: '20px', borderRadius: '12px', marginTop: '20px' }}>
             <Typography variant="h5" gutterBottom>
-                Extract Recipes from Menu
+                Upload Menu to Extract (Optional)
             </Typography>
             <Divider style={{ marginBottom: '16px' }} />
             <div {...getRootProps({ className: 'dropzone' })} style={{ border: '2px dashed #ccc', padding: '20px', textAlign: 'center' }}>
@@ -98,14 +99,14 @@ const MenuExtractionForm = ({ nextStep, prevStep, tenantId, tenant, handleSnackb
                 </Typography>
             )}
             <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
-                <StyledButtonTrans variant="outlined" onClick={handleBack} style={{ marginRight: '10px' }}>
+                {/* <StyledButtonTrans variant="outlined" onClick={handleBack} style={{ marginRight: '10px' }}>
                     Back
-                </StyledButtonTrans>
+                </StyledButtonTrans> */}
                 <StyledButtonTrans variant="outlined" onClick={handleSkip} style={{ marginRight: '10px' }}>
                     Skip
                 </StyledButtonTrans>
                 <StyledButtonFill variant="contained" onClick={handleExtract} style={{ marginRight: '10px' }}>
-                    Extract
+                    Next
                 </StyledButtonFill>
             </div>
         </Paper>

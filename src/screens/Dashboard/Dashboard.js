@@ -370,7 +370,7 @@ const Dashboard = (props) => {
                   topCategoriesSalesMonth.map((item, index) => (
                     <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
                       <TableCell>{item.category}</TableCell>
-                      <TableCell>${item.value}</TableCell>
+                      <TableCell>${Number(item.value).toFixed(1)}</TableCell>
                     </TableRow>
                   ))
                 )}
@@ -403,7 +403,7 @@ const Dashboard = (props) => {
                   topCategoriesSalesToday.map((item, index) => (
                     <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
                       <TableCell>{item.category}</TableCell>
-                      <TableCell>${item.value}</TableCell>
+                      <TableCell>${Number(item.value).toFixed(1)}</TableCell>
                     </TableRow>
                   ))
                 )}
@@ -436,7 +436,7 @@ const Dashboard = (props) => {
                   topItemsSalesMonth.map((item, index) => (
                     <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
                       <TableCell>{item.item}</TableCell>
-                      <TableCell>${item.value}</TableCell>
+                      <TableCell>${Number(item.value).toFixed(1)}</TableCell>
                     </TableRow>
                   ))
                 )}
@@ -469,7 +469,7 @@ const Dashboard = (props) => {
                   topItemsSalesToday.map((item, index) => (
                     <TableRow key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : '#f2f0f0' }}>
                       <TableCell>{item.item}</TableCell>
-                      <TableCell>${item.value}</TableCell>
+                      <TableCell>${Number(item.value).toFixed(1)}</TableCell>
                     </TableRow>
                   ))
                 )}

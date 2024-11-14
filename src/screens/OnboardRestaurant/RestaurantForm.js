@@ -54,20 +54,108 @@ const AutocompleteStyled = styled(Autocomplete)({
 });
 
 const cityStateData = {
-    countries: ['India', 'USA', 'Canada'],
+    countries: ['India', 'USA', 'United Kingdom', 'Canada', 'Australia'],
     states: {
-        'India': ['New York', 'California'],
-        'USA': ['Illinois', 'Texas'],
-        'Canada': ['Arizona']
+        'India': [
+            'Andhra Pradesh', 'Karnataka', 'Maharashtra', 'Tamil Nadu', 'West Bengal'
+        ],
+        'USA': [
+            'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado',
+            'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho',
+            'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
+            'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
+            'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada',
+            'New Hampshire', 'New Jersey', 'New Mexico', 'New York',
+            'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon',
+            'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
+            'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington',
+            'West Virginia', 'Wisconsin', 'Wyoming'
+        ],
+        'United Kingdom': ['England', 'Scotland', 'Wales', 'Northern Ireland'],
+        'Canada': ['Alberta', 'Ontario', 'Quebec', 'British Columbia', 'Manitoba'],
+        'Australia': ['New South Wales', 'Queensland', 'Victoria', 'Western Australia', 'South Australia']
     },
     cities: {
-        'New York': ['New York City', 'Buffalo', 'Rochester'],
+        // India
+        'Andhra Pradesh': ['Visakhapatnam', 'Vijayawada', 'Guntur'],
+        'Karnataka': ['Bangalore', 'Mysore', 'Mangalore'],
+        'Maharashtra': ['Mumbai', 'Pune', 'Nagpur'],
+        'Tamil Nadu': ['Chennai', 'Coimbatore', 'Madurai'],
+        'West Bengal': ['Kolkata', 'Darjeeling', 'Siliguri'],
+
+        // USA (all states and sample cities)
+        'Alabama': ['Birmingham', 'Montgomery', 'Mobile'],
+        'Alaska': ['Anchorage', 'Juneau', 'Fairbanks'],
+        'Arizona': ['Phoenix', 'Tucson', 'Mesa'],
+        'Arkansas': ['Little Rock', 'Fayetteville', 'Fort Smith'],
         'California': ['Los Angeles', 'San Francisco', 'San Diego'],
+        'Colorado': ['Denver', 'Colorado Springs', 'Aurora'],
+        'Connecticut': ['Hartford', 'New Haven', 'Stamford'],
+        'Delaware': ['Wilmington', 'Dover', 'Newark'],
+        'Florida': ['Miami', 'Orlando', 'Tampa'],
+        'Georgia': ['Atlanta', 'Augusta', 'Savannah'],
+        'Hawaii': ['Honolulu', 'Hilo', 'Kailua'],
+        'Idaho': ['Boise', 'Meridian', 'Idaho Falls'],
         'Illinois': ['Chicago', 'Aurora', 'Naperville'],
+        'Indiana': ['Indianapolis', 'Fort Wayne', 'Evansville'],
+        'Iowa': ['Des Moines', 'Cedar Rapids', 'Davenport'],
+        'Kansas': ['Wichita', 'Overland Park', 'Kansas City'],
+        'Kentucky': ['Louisville', 'Lexington', 'Bowling Green'],
+        'Louisiana': ['New Orleans', 'Baton Rouge', 'Shreveport'],
+        'Maine': ['Portland', 'Lewiston', 'Bangor'],
+        'Maryland': ['Baltimore', 'Frederick', 'Rockville'],
+        'Massachusetts': ['Boston', 'Worcester', 'Springfield'],
+        'Michigan': ['Detroit', 'Grand Rapids', 'Warren'],
+        'Minnesota': ['Minneapolis', 'Saint Paul', 'Rochester'],
+        'Mississippi': ['Jackson', 'Gulfport', 'Southaven'],
+        'Missouri': ['Kansas City', 'St. Louis', 'Springfield'],
+        'Montana': ['Billings', 'Missoula', 'Great Falls'],
+        'Nebraska': ['Omaha', 'Lincoln', 'Bellevue'],
+        'Nevada': ['Las Vegas', 'Reno', 'Henderson'],
+        'New Hampshire': ['Manchester', 'Nashua', 'Concord'],
+        'New Jersey': ['Newark', 'Jersey City', 'Paterson'],
+        'New Mexico': ['Albuquerque', 'Las Cruces', 'Santa Fe'],
+        'New York': ['New York City', 'Buffalo', 'Rochester'],
+        'North Carolina': ['Charlotte', 'Raleigh', 'Greensboro'],
+        'North Dakota': ['Fargo', 'Bismarck', 'Grand Forks'],
+        'Ohio': ['Columbus', 'Cleveland', 'Cincinnati'],
+        'Oklahoma': ['Oklahoma City', 'Tulsa', 'Norman'],
+        'Oregon': ['Portland', 'Eugene', 'Salem'],
+        'Pennsylvania': ['Philadelphia', 'Pittsburgh', 'Allentown'],
+        'Rhode Island': ['Providence', 'Cranston', 'Warwick'],
+        'South Carolina': ['Columbia', 'Charleston', 'Greenville'],
+        'South Dakota': ['Sioux Falls', 'Rapid City', 'Aberdeen'],
+        'Tennessee': ['Nashville', 'Memphis', 'Knoxville'],
         'Texas': ['Houston', 'Dallas', 'Austin'],
-        'Arizona': ['Phoenix', 'Tucson', 'Mesa']
+        'Utah': ['Salt Lake City', 'Provo', 'West Valley City'],
+        'Vermont': ['Burlington', 'South Burlington', 'Rutland'],
+        'Virginia': ['Virginia Beach', 'Norfolk', 'Chesapeake'],
+        'Washington': ['Seattle', 'Spokane', 'Tacoma'],
+        'West Virginia': ['Charleston', 'Huntington', 'Morgantown'],
+        'Wisconsin': ['Milwaukee', 'Madison', 'Green Bay'],
+        'Wyoming': ['Cheyenne', 'Casper', 'Laramie'],
+
+        // United Kingdom
+        'England': ['London', 'Manchester', 'Birmingham'],
+        'Scotland': ['Edinburgh', 'Glasgow', 'Aberdeen'],
+        'Wales': ['Cardiff', 'Swansea', 'Newport'],
+        'Northern Ireland': ['Belfast', 'Derry', 'Lisburn'],
+
+        // Canada
+        'Alberta': ['Calgary', 'Edmonton', 'Red Deer'],
+        'Ontario': ['Toronto', 'Ottawa', 'Hamilton'],
+        'Quebec': ['Montreal', 'Quebec City', 'Laval'],
+        'British Columbia': ['Vancouver', 'Victoria', 'Kelowna'],
+        'Manitoba': ['Winnipeg', 'Brandon', 'Steinbach'],
+
+        // Australia
+        'New South Wales': ['Sydney', 'Newcastle', 'Wollongong'],
+        'Queensland': ['Brisbane', 'Gold Coast', 'Cairns'],
+        'Victoria': ['Melbourne', 'Geelong', 'Ballarat'],
+        'Western Australia': ['Perth', 'Fremantle', 'Bunbury'],
+        'South Australia': ['Adelaide', 'Mount Gambier', 'Whyalla']
     }
-}
+};
 
 const RestaurantForm = ({ nextStep, storeTenantId, storeTenant, handleSnackbarOpen, handleSnackbarMessage }) => {
     const [loading, setLoading] = useState(false);
@@ -92,148 +180,6 @@ const RestaurantForm = ({ nextStep, storeTenantId, storeTenant, handleSnackbarOp
     const [countries, setCountries] = useState([]);
     const [states, setStates] = useState([]);
     const [cities, setCities] = useState([]);
-    // const [offsetCountries, setOffsetCountries] = useState(0);
-    // const [offsetStates, setOffsetStates] = useState(0);
-    // const [offsetCities, setOffsetCities] = useState(0);
-    // const [hasMoreCountries, setHasMoreCountries] = useState(true);
-    // const [hasMoreStates, setHasMoreStates] = useState(true);
-    // const [hasMoreCities, setHasMoreCities] = useState(true);
-
-
-    // // Fetch countries with pagination
-    // useEffect(() => {
-    //     const fetchCountries = async () => {
-    //         try {
-    //             const response = await axios.get(`https://wft-geo-db.p.rapidapi.com/v1/geo/countries?offset=${offsetCountries}&limit=100`, {
-    //                 headers: {
-    //                     'x-rapidapi-key': '6265e76aa5msh89e1c4241644560p151e82jsn4a497c12d4e5',
-    //                     'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com'
-    //                 },
-    //             });
-    //             console.log(response.data.data);
-
-    //             const newCountries = response.data.data;
-    //             setCountries(prevCountries => [...prevCountries, ...newCountries]);
-
-    //             if (newCountries.length > 0) {
-    //                 setOffsetCountries(prevOffset => prevOffset + newCountries.length);
-    //             } else {
-    //                 setHasMoreCountries(false); // No more data
-    //             }
-    //         } catch (error) {
-    //             console.error('Error fetching countries:', error);
-    //         }
-    //     };
-
-    //     if (hasMoreCountries) {
-    //         fetchCountries();
-    //     }
-    // }, [offsetCountries, hasMoreCountries]);
-
-    // // Fetch states when country changes
-    // useEffect(() => {
-    //     if (country) {
-    //         const fetchStates = async () => {
-    //             try {
-    //                 const response = await axios.get(`https://wft-geo-db.p.rapidapi.com/v1/geo/countries/${country}/regions`, {
-    //                     headers: {
-    //                         'x-rapidapi-key': '6265e76aa5msh89e1c4241644560p151e82jsn4a497c12d4e5',
-    //                         'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com'
-    //                     },
-    //                     params: {
-    //                         offset: offsetStates,
-    //                         limit: 100 // Adjust limit as needed
-    //                     }
-    //                 });
-
-    //                 const newStates = response.data.data;
-    //                 setStates(prevStates => [...prevStates, ...newStates]);
-
-    //                 if (newStates.length > 0) {
-    //                     setOffsetStates(prevOffset => prevOffset + newStates.length);
-    //                 } else {
-    //                     setHasMoreStates(false); // No more data
-    //                 }
-    //             } catch (error) {
-    //                 console.error('Error fetching states:', error);
-    //             }
-    //         };
-
-    //         if (hasMoreStates) {
-    //             fetchStates();
-    //         }
-    //     }
-    // }, [country, offsetStates, hasMoreStates]);
-
-    // // Fetch cities when state changes
-    // useEffect(() => {
-    //     if (state) {
-    //         const fetchCities = async () => {
-    //             try {
-    //                 const response = await axios.get(`https://wft-geo-db.p.rapidapi.com/v1/geo/regions/${state}/cities`, {
-    //                     headers: {
-    //                         'x-rapidapi-key': '6265e76aa5msh89e1c4241644560p151e82jsn4a497c12d4e5',
-    //                         'x-rapidapi-host': 'wft-geo-db.p.rapidapi.com'
-    //                     },
-    //                     params: {
-    //                         offset: offsetCities,
-    //                         limit: 100 // Adjust limit as needed
-    //                     }
-    //                 });
-
-    //                 const newCities = response.data.data;
-    //                 setCities(prevCities => [...prevCities, ...newCities]);
-
-    //                 if (newCities.length > 0) {
-    //                     setOffsetCities(prevOffset => prevOffset + newCities.length);
-    //                 } else {
-    //                     setHasMoreCities(false); // No more data
-    //                 }
-    //             } catch (error) {
-    //                 console.error('Error fetching cities:', error);
-    //             }
-    //         };
-
-    //         if (hasMoreCities) {
-    //             fetchCities();
-    //         }
-    //     }
-    // }, [state, offsetCities, hasMoreCities]);
-
-    // useEffect(() => {
-    //     // Fetch countries on mount
-    //     axios.get(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=&types=(regions)&key=${API_KEY}`)
-    //     .then(response => {
-    //         const countryData = response.data.predictions.map(prediction => prediction.description);
-    //         setCountries(countryData);
-    //     })
-    //     .catch(error => console.error('Error fetching countries:', error));
-    // }, []);
-
-    // useEffect(() => {
-    //     if (country) {
-    //         // Fetch states when a country is selected
-    //         axios.get(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${selectedCountry}&types=(regions)&key=${API_KEY}`)
-    //         .then(response => {
-    //             const stateData = response.data.predictions.map(prediction => prediction.description);
-    //             setStates(stateData);
-    //         })
-    //         .catch(error => console.error('Error fetching states:', error));
-    //     }
-    // }, [country]);
-
-    // useEffect(() => {
-    //     if (state) {
-    //         // Fetch cities when a state is selected
-    //         axios.get(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${selectedState}&types=(cities)&key=${API_KEY}`)
-    //         .then(response => {
-    //             const cityData = response.data.predictions.map(prediction => prediction.description);
-    //             setCities(cityData);
-    //         })
-    //         .catch(error => console.error('Error fetching cities:', error));
-    //     }
-    // }, [state]);
-
 
     const handleAddEmail = (emailType) => {
         if (emailType === 'invoice' && newInvoiceEmail) {
@@ -276,7 +222,7 @@ const RestaurantForm = ({ nextStep, storeTenantId, storeTenant, handleSnackbarOp
         // handleSnackbarOpen()
         try {
             setLoading(true)
-            const data = {tenantName, tenantDescription, address, country, state, city, invoiceEmails, billEmails, contact}
+            const data = { tenantName, tenantDescription, address, country, state, city, invoiceEmails, billEmails, contact }
             const result = await client.post('/create-tenant', data, {
                 headers: { 'Content-Type': 'application/json' },
             })
@@ -342,10 +288,10 @@ const RestaurantForm = ({ nextStep, storeTenantId, storeTenant, handleSnackbarOp
                                 getOptionLabel={(option) => option}
                                 renderInput={(params) => <TextField {...params} label="Country" />}
                                 onChange={(event, newValue) => setCountry(newValue)}
-                                // options={countries.map((country) => country.name)}
-                                // getOptionLabel={(option) => option}
-                                // renderInput={(params) => <TextField {...params} label="Country" />}
-                                // onChange={(event, newValue) => setCountry(newValue)}
+                            // options={countries.map((country) => country.name)}
+                            // getOptionLabel={(option) => option}
+                            // renderInput={(params) => <TextField {...params} label="Country" />}
+                            // onChange={(event, newValue) => setCountry(newValue)}
                             />
                         </FormControl>
                     </Grid>
@@ -356,10 +302,10 @@ const RestaurantForm = ({ nextStep, storeTenantId, storeTenant, handleSnackbarOp
                                 getOptionLabel={(option) => option}
                                 renderInput={(params) => <TextField {...params} label="State" />}
                                 onChange={(event, newValue) => setState(newValue)}
-                                // options={states.map((state) => state.name)}
-                                // getOptionLabel={(option) => option}
-                                // renderInput={(params) => <TextField {...params} label="State" />}
-                                // onChange={(event, newValue) => setState(newValue)}
+                            // options={states.map((state) => state.name)}
+                            // getOptionLabel={(option) => option}
+                            // renderInput={(params) => <TextField {...params} label="State" />}
+                            // onChange={(event, newValue) => setState(newValue)}
                             />
                         </FormControl>
                     </Grid>
@@ -370,10 +316,10 @@ const RestaurantForm = ({ nextStep, storeTenantId, storeTenant, handleSnackbarOp
                                 getOptionLabel={(option) => option}
                                 renderInput={(params) => <TextField {...params} label="City" />}
                                 onChange={(event, newValue) => setCity(newValue)}
-                                // options={cities.map((city) => city.name)}
-                                // getOptionLabel={(option) => option}
-                                // renderInput={(params) => <TextField {...params} label="City" />}
-                                // onChange={(event, newValue) => setCity(newValue)}
+                            // options={cities.map((city) => city.name)}
+                            // getOptionLabel={(option) => option}
+                            // renderInput={(params) => <TextField {...params} label="City" />}
+                            // onChange={(event, newValue) => setCity(newValue)}
                             />
                         </FormControl>
                     </Grid>
@@ -463,18 +409,22 @@ const RestaurantForm = ({ nextStep, storeTenantId, storeTenant, handleSnackbarOp
                         />
                     </Grid>
                 </Grid>
-                {error && (
+                {error ? (
                     <Typography variant="body2" color="error" style={{ marginTop: '16px' }}>
                         {error}
+                    </Typography>
+                ) : (
+                    <Typography variant="body2" color="error" style={{ marginTop: '16px' }}>
+                        * All fields are mandatory.
                     </Typography>
                 )}
                 <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
                     <StyledButtonTrans variant="outlined" onClick={handleCancel} style={{ marginRight: '10px' }}>
                         Cancel
                     </StyledButtonTrans>
-                    <StyledButtonTrans variant="outlined" onClick={handleSkip} style={{ marginRight: '10px' }}>
+                    {/* <StyledButtonTrans variant="outlined" onClick={handleSkip} style={{ marginRight: '10px' }}>
                         Skip
-                    </StyledButtonTrans>
+                    </StyledButtonTrans> */}
                     <StyledButtonFill variant="contained" onClick={handleSubmit}>
                         Create
                     </StyledButtonFill>
